@@ -7,9 +7,6 @@
   text-align: center; 
   
 }
-
-
-/* nav */
 .nav-pills-step {
   display: flex;
   list-style: none;
@@ -17,8 +14,6 @@
   justify-content: center;
   align-items: center; 
 }
-
-
 .nav-item {
   background-color: #f0f0f0;
   padding: 10px;
@@ -26,12 +21,10 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .nav-item.active {
   background-color: #3a3a4a;
   color: white;
 }
-
 .num {
   margin-right: 5px;
 }
@@ -43,8 +36,6 @@
   height: 100vh;
   margin-top: 8%;
 } 
-
-
 .pscheck-box1{
   padding-bottom: 15px;
   font-size: 15px;
@@ -61,7 +52,7 @@
 
 .nextBtt{
   margin-top: 20px;
-  background-color: rgb(189, 92, 92);
+  background-color:#1877F2;
   border-radius: 25px;
 }
 

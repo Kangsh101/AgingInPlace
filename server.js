@@ -35,6 +35,7 @@ connection.connect((err) => {
   console.log('DB 연결 성공');
 });
 
+//회원가입
 app.post('/api/signup', (req, res) => {
   const { username, password, email, name, birthdate, gender, phoneNumber,role} = req.body;
 
@@ -51,7 +52,7 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
-
+//로그인
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -74,31 +75,112 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-
-
-
-app.get('/api/userinfo', (req, res) => {
-  const userId = req.session.userId;
-  if (!userId) {
-    res.status(401).send('로그인이 필요합니다.');
-    return;
-  }
-
-  const query = `SELECT email, phoneNumber, birthdate, gender, name, role FROM members WHERE id = ?`;
-  connection.query(query, [userId], (err, result) => {
-    if (err) {
-      console.error('사용자 정보 조회 실패: ' + err.stack);
-      res.status(500).json({ error: '사용자 정보 조회 실패' });
+// 아이디
+app.post('/findUser', (req, res) => {
+  const { name, email } = req.body;
+  connection.query('SELECT username FROM members WHERE name = ? AND email = ?', [name, email], (error, results, fields) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
       return;
     }
-    if (result.length === 0) {
-      res.status(404).json({ error: '사용자 정보를 찾을 수 없습니다.' });
+    if (results.length === 0) {
+      res.status(404).json({ error: 'User not found' });
       return;
     }
-
-    res.status(200).json(result[0]); 
+    const username = results[0].username;
+    res.json({ username });
   });
 });
+
+app.post('/findUserPhone', (req, res) => {
+  const { name, phoneNumber } = req.body;
+  connection.query('SELECT username FROM members WHERE name = ? AND phoneNumber = ?', [name, phoneNumber], (error, results, fields) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    const username = results[0].username;
+    res.json({ username });
+  });
+});
+
+// 비번
+
+app.post('/findUser1', (req, res) => {
+  const { name, email } = req.body;
+  connection.query('SELECT password FROM members WHERE name = ? AND email = ?', [name, email], (error, results, fields) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    const password  = results[0].password ;
+    res.json({ password  });
+  });
+});
+
+app.post('/findUserPhone2', (req, res) => {
+  const { name, phoneNumber } = req.body;
+  connection.query('SELECT password FROM members WHERE name = ? AND phoneNumber = ?', [name, phoneNumber], (error, results, fields) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    const password  = results[0].password ;
+    res.json({ password  });
+  });
+});
+
+
+
+
+
+
+
+//내정보 아직 안됌
+// server/routes/user.js
+
+
+const router = express.Router();
+
+router.get('/userinfo', (req, res) => {
+    if (req.session.userId) {
+        const query = `SELECT id, username, email, phoneNumber, gender, name, role FROM members WHERE id = ?`;
+        connection.query(query, [req.session.userId], (err, result) => {
+            if (err) {
+                console.error('사용자 정보 조회 실패: ' + err.stack);
+                res.status(500).send('사용자 정보 조회 실패');
+                return;
+            }
+            if (result.length === 0) {
+                res.status(404).send('사용자 정보를 찾을 수 없음');
+                return;
+            }
+            res.status(200).json(result[0]);
+        });
+    } else {
+        res.status(401).send('인증되지 않은 사용자');
+    }
+});
+
+
+module.exports = router;
+
+
+
+
+
 
 
 app.get('*', function(req, res) {

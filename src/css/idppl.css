@@ -53,28 +53,32 @@
     
 }
 .idfieldname{
-    width: 28%; 
-    padding: 3%; 
-    margin: 6% 0 3.5% 0; 
+    width: 35%; 
+    padding: 2%; 
+    margin: 6% 0 5% 1%; 
     border: 1px solid #ccc;
     border-radius: 8px; 
     box-sizing: border-box; 
 }
+
 .idfield2{
-    width: 44%; 
-    padding: 3%;
-    margin-bottom: 60px; 
+    width: 46%; 
+    padding: 2%;
+    margin: -1% 0 8% 2%; 
     border: 1px solid #ccc; 
     border-radius: 8px; 
     box-sizing: border-box; 
 }
 .fieldbtt{
-    margin-left: 20px;
-    width: 46%;
+    margin: -5px 0 0 20px;
+    width: 28%;
     height: 3%;
     font-size: 15px;
     background-color: #848383;
     border-radius: 8px;
+}
+.Idpplemail{
+    white-space: nowrap;
 }
 .fieldbtt1{
     margin-left: 5%;
@@ -94,25 +98,45 @@
     margin: 1% 0 0 33%;
 }
 .inzzm{
-    width: 30%; 
-    padding: 3%;
+    width: 30%;
+    padding: 2%;
 
     border: 1px solid #ccc;
     border-radius: 8px;
     box-sizing: border-box; 
-    margin: 1% 0 0 35%;
+    margin: 7% 0 0 33%;
 }
+
 .golgol{
     margin: 0 1% 0 1% ;
 }
 
 .idbttckck{
-    width: 45%;
-    margin: 8% 0 0 33%;
-    background-color: rgb(189, 92, 92);
+    width: 32%;
+    height: 10%;
+    margin: 8% 0 0 0%;
+    background-color:#1877F2;
     
 }
-
+.Idpplgood{
+    width: 50%;
+    height: 10%;
+}
+.Idpplgood button{
+    background-color:#1877F2;
+    margin-top: 10px;
+}
+.namanane{
+    font-weight: bold;
+}
+.Idpplgoodtext1{
+    font-weight: bold;
+    color: white;
+}
+.Idpplgoodtext{
+    font-weight: bold;
+    color: white;
+}
 .idbox{
     width: 100%;
     background-color: #fff;

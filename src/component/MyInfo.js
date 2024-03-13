@@ -1,41 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../css/MyInfo.css';
 
 function MyInfo() {
-    const [userInfo, setUserInfo] = useState(null);
+    const [user, setUser] = useState({
+        username: '',
+        email: '',
+        phoneNumber: '',
+        gender: '',
+        name: '',
+        role: ''
+    });
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('/api/userinfo');
-                if (!response.ok) {
-                    throw new Error('사용자 정보를 가져오는데 실패했습니다.');
+                const response = await axios.get('/userinfo');
+                if (response.status === 200) {
+                    const userData = response.data;
+                    setUser(userData); 
+                } else {
+                    console.error('Failed to fetch user info');
                 }
-                const userData = await response.json();
-                setUserInfo(userData);
             } catch (error) {
-                console.error(error);
+                console.error('Error fetching user info:', error);
             }
         };
 
         fetchUserInfo();
-
     }, []); 
+
     return (
         <div className='myinfo-container'>
             <div className='myinfo-title'>
                 <strong>내 정보 페이지</strong>
             </div>
-            {userInfo && (
-                <div className='user-info'>
-                    <p><strong>Email:</strong> {userInfo.email}</p>
-                    <p><strong>Phone Number:</strong> {userInfo.phoneNumber}</p>
-                    <p><strong>Birthdate:</strong> {userInfo.birthdate}</p>
-                    <p><strong>Gender:</strong> {userInfo.gender}</p>
-                    <p><strong>Name:</strong> {userInfo.name}</p>
-                    <p><strong>Role:</strong> {userInfo.role}</p>
+            <div className='myinfo-context-container'>
+                <div>
+                    <strong>아이디</strong>
+                    <span>{user.username}</span>
                 </div>
-            )}
+                <div>
+                    <strong>이름</strong>
+                    <span>{user.name}</span>
+                </div>
+                <div>
+                    <strong>이메일</strong>
+                    <span>{user.email}</span>
+                </div>
+                <div>
+                    <strong>전화번호</strong>
+                    <span>{user.phoneNumber}</span>
+                </div>
+                <div>
+                    <strong>성별</strong>
+                    <span>{user.gender}</span>
+                </div>
+                <div>
+                    <strong>역할</strong>
+                    <span>{user.role}</span>
+                </div>
+            </div>
         </div>
     );
 }
