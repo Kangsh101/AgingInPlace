@@ -21,7 +21,7 @@ const Main = () => {
               onClick={() => handleSectionClick('whatIsDementia')}
               className={selectedSection === 'whatIsDementia' ? 'active' : ''}
             >
-              치매란?
+              석현이란?
             </button>
             <button
               onClick={() => handleSectionClick('causes')}
