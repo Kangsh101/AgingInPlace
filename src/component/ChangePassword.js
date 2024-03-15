@@ -47,15 +47,7 @@ function ChangePassword() {
             <div className='changepw-context-container'>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <input
-                            type="password"
-                            id="currentPassword"
-                            placeholder='현재 비밀번호'
-                            name="currentPassword"
-                            value={currentPassword}
-                            onChange={handleChange}
-                            required
-                        />
+                        <input type="password" id="currentPassword" placeholder='현재 비밀번호'  name="currentPassword" value={currentPassword} onChange={handleChange} required />
                     </div>
                     <div>
                         <input

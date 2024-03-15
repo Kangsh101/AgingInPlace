@@ -1,34 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import '../css/MyInfo.css';
 
-function MyInfo() {
-    const [user, setUser] = useState({
-        username: '',
-        email: '',
-        phoneNumber: '',
-        gender: '',
-        name: '',
-        role: ''
-    });
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await axios.get('/userinfo');
-                if (response.status === 200) {
-                    const userData = response.data;
-                    setUser(userData); 
-                } else {
-                    console.error('Failed to fetch user info');
-                }
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-            }
-        };
-
-        fetchUserInfo();
-    }, []); 
+function MyInfo({ userInfo }) {
+    const user = userInfo[0];
 
     return (
         <div className='myinfo-container'>
@@ -36,31 +11,29 @@ function MyInfo() {
                 <strong>내 정보 페이지</strong>
             </div>
             <div className='myinfo-context-container'>
-                <div>
-                    <strong>아이디</strong>
-                    <span>{user.username}</span>
-                </div>
-                <div>
-                    <strong>이름</strong>
-                    <span>{user.name}</span>
-                </div>
-                <div>
-                    <strong>이메일</strong>
-                    <span>{user.email}</span>
-                </div>
-                <div>
-                    <strong>전화번호</strong>
-                    <span>{user.phoneNumber}</span>
-                </div>
-                <div>
-                    <strong>성별</strong>
-                    <span>{user.gender}</span>
-                </div>
-                <div>
-                    <strong>역할</strong>
-                    <span>{user.role}</span>
-                </div>
+                {user ? (
+                    <>
+                        <div>
+                            <p><strong>성별 : </strong> <span>{user.gender}</span> </p>
+                        </div>
+                        <div>
+                            <p><strong>이름</strong> <span>{user.name}</span> </p>
+                        </div>
+                        <div>
+                            <p><strong>역할</strong><span>{user.role}</span></p>                 
+                        </div>
+                        <div>
+                            <p><strong>번호</strong> <span>{user.phoneNumber}</span> </p>    
+                        </div>
+                        <div>
+                            <p><strong>생일</strong> <span>{user.birthdate}</span> </p>           
+                        </div>
+                    </>
+                ) : (
+                    <div>로그인 해주세요 유저정보를 찾을 수 없음.</div>
+                )}
             </div>
+            
         </div>
     );
 }

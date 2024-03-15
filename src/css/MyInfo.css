@@ -1,5 +1,5 @@
- .myinfo-container {
-     background-color: white;
+.myinfo-container {
+     background-color: rgb(255, 0, 0);
      width: 50%;
      height: auto;
      display: flex;
@@ -20,6 +20,7 @@
     .myinfo-context-container input {
         width: 100%;
         margin-right: 0;
+
     } 
 }
 

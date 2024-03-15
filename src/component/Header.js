@@ -1,10 +1,19 @@
 import React from 'react';
-import { Link} from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 import '../css/Header.css';
 
-const Header = ({ isLoggedIn, onLogout }) => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
+  const navigate = useNavigate(); 
+
   const handleLogout = async () => {
-    window.location.href = '/main';
+    try {
+      setIsLoggedIn(false); 
+      localStorage.removeItem('isLoggedIn'); 
+      navigate('/main');
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+      alert('로그아웃에 실패했습니다.');
+    }
   };
 
   return (
@@ -16,9 +25,8 @@ const Header = ({ isLoggedIn, onLogout }) => {
       </div>
       <nav className="nav-container">
         <ul>
-          <li className='Header-nav'><Link to="/Contents">프로그램 콘텐츠</Link></li>
+          <li className='Header-nav'><Link to="/contents">프로그램 콘텐츠</Link></li>
           <li className='Header-nav'><Link to="/page2">커뮤니티</Link></li>
-          
         </ul>
       </nav>
       <div className="auth-buttons">

@@ -27,11 +27,13 @@
   }
   
   .content {
+    
     position: relative;
     margin-left: 15%;
     float: center;
     margin-top: -50px;
-    padding: 10px 50px;
+    padding: 10px 100px;
+    height: 700px;
   }
   
   .sidebar ul {

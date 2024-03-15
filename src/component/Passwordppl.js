@@ -66,7 +66,7 @@ const Passwordppl = () => {
   };
 
   const handleFindUserPhone = () => {
-    fetch('/findUserPhone1', {
+    fetch('/findUserPhone2', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ const Passwordppl = () => {
           <div>
           {searched && (
               <div >
-                <p className='namanane'>아이디 : {foundPassword}</p>
+                <p className='namanane'>비밀번호 : {foundPassword}</p>
                 <div className='Idpplgood'>                 
                     <button><Link to="/Idppl" className='Idpplgoodtext1'>아이디 찾기</Link></button>
                     <button><Link to="/Login"className='Idpplgoodtext' >로그인</Link></button>

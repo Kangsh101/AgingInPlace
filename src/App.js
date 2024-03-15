@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './component/Header';
 import Login from './component/Login';
@@ -22,17 +22,32 @@ import Cmsfaq from './admin/Cmsfaq'
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    if (storedIsLoggedIn) {
+      setIsLoggedIn(JSON.parse(storedIsLoggedIn));
+    }
+  }, []);
+  
+
   const handleLogin = (loginStatus) => {
     setIsLoggedIn(loginStatus);
+    localStorage.setItem('isLoggedIn', JSON.stringify(loginStatus));
   };
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
+    window.location.href = '/main';
+  };
+  
 
   return (
     <BrowserRouter>
       <div className="App">
-        <Header isLoggedIn={isLoggedIn} />
+      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/login" element={<Login onLogin={handleLogin}  />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/Idppl" element={<Idppl />} />
           <Route path="/Passwordppl" element={<Passwordppl />} />
@@ -43,6 +58,7 @@ function App() {
           <Route path="/main" element={<Main />} />
           <Route path="/MyPage" element={<MyPage />} />
           <Route path="/contents" element={<Contents />} />
+
 
 
           <Route path="/cms/*" element={<CmsLayout />} />
