@@ -148,31 +148,9 @@ app.post('/findUserPhone2', (req, res) => {
 
 
 
-//내정보 아직 안됌
-// server/routes/user.js
 
 
-const router = express.Router();
 
-router.get('/userinfo', (req, res) => {
-    if (req.session.userId) {
-        const query = `SELECT id, username, email, phoneNumber, gender, name, role FROM members WHERE id = ?`;
-        connection.query(query, [req.session.userId], (err, result) => {
-            if (err) {
-                console.error('사용자 정보 조회 실패: ' + err.stack);
-                res.status(500).send('사용자 정보 조회 실패');
-                return;
-            }
-            if (result.length === 0) {
-                res.status(404).send('사용자 정보를 찾을 수 없음');
-                return;
-            }
-            res.status(200).json(result[0]);
-        });
-    } else {
-        res.status(401).send('인증되지 않은 사용자');
-    }
-});
 
 
 module.exports = router;
