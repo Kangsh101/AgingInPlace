@@ -1,6 +1,6 @@
 module.exports = { 
     apps: [{
-      name    : "newReact",	
+      name    : "aginginplace-web",	
       script  : "npm",
       args    : "start"
     }]
