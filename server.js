@@ -241,7 +241,7 @@ app.post('/findUserPhone2', (req, res) => {
     res.json({ password  });
   });
 });
-
+// 로그인 여부 확인 api
 app.get('/api/checklogin', (req, res) => {
   if (req.session.userId) {
     res.status(200).json({ isLoggedIn: true });
@@ -251,7 +251,7 @@ app.get('/api/checklogin', (req, res) => {
 });
 
 
-
+// QnA 게시판 등록 api
 app.post('/api/post', (req, res) => {
   const { title, content } = req.body;
   const userId = req.session.userId;
@@ -286,7 +286,7 @@ app.post('/api/post', (req, res) => {
   });
 });
 
-
+// QnA 게시판만 검색 API
 app.get('/api/qnaposts', (req, res) => {
   const query = `SELECT * FROM boards WHERE board_type = 'QnA'`;
 
@@ -301,7 +301,7 @@ app.get('/api/qnaposts', (req, res) => {
   });
 });
 
-
+// 검색 기능.
 app.post('/api/search-posts', (req, res) => {
   const { searchType, searchKeyword } = req.body;
   let query = "";
@@ -372,11 +372,6 @@ app.get('/api/getUserName', (req, res) => {
   }
 });
 
-
-
-
-
-
 // QnA 게시글 삭제
 app.delete('/api/qnaposts/:id', (req, res) => {
   const postId = req.params.id;
@@ -393,10 +388,72 @@ app.delete('/api/qnaposts/:id', (req, res) => {
 });
 
 
+// 공지사항 쪽 server
 
+// 공지사항 등록 api
+app.post('/api/addNotice', (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.session.userId; 
+  const query = `SELECT name FROM members WHERE id = ?`;
 
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('사용자 이름 조회 중 오류 발생:', err);
+      res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
+      return;
+    }
 
+    if (result.length === 0) {
+      console.error('사용자를 찾을 수 없습니다.');
+      res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+      return;
+    }
 
+    const name = result[0].name;
+
+    const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, '공지사항', 'N', ?, NOW())`;
+
+    connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error('공지사항 저장 중 오류 발생:', insertErr);
+        res.status(500).json({ error: '공지사항 저장 중 오류 발생' });
+        return;
+      }
+      console.log('공지사항이 성공적으로 저장되었습니다.');
+      res.status(200).json({ message: '공지사항이 성공적으로 저장되었습니다.' });
+    });
+  });
+});
+// 공지사항 조회 api
+app.get('/api/notices', (req, res) => {
+  const query = `SELECT * FROM boards WHERE board_type = '공지사항' ORDER BY create_at DESC`;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching notices from database:', err);
+      res.status(500).json({ error: 'Error fetching notices from database' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+//게시글 삭제
+app.delete('/api/notices/:id', (req, res) => {
+  const postId = req.params.id;
+
+  connection.query('DELETE FROM boards WHERE board_id = ?', postId, (error, results) => {
+    if (error) {
+      console.error('게시글 삭제 실패:', error);
+      res.status(500).json({ success: false, message: '게시글 삭제 실패' });
+    } else {
+      console.log('게시글 삭제 성공');
+      res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+    }
+  });
+});
+
+// 공지사항
 
 
 

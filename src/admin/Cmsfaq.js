@@ -58,7 +58,7 @@ const Cmss = () => {
           <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
           <button className="Cmss-button">검색</button>
         </div>
-        <Link to="">
+        <Link to="/faqup">
              <button className="cms-FAQ">FAQ 등록</button>
         </Link>
 
