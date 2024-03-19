@@ -3,30 +3,34 @@ import { Link } from 'react-router-dom';
 import '../css/Page2.css';
 import '../css/Page4.css';
 
-const QnAPage = () => {
+const Notice = () => {
   const [posts, setPosts] = useState([
-    { id: 1, set:'공지사항', title: '오늘의 공지', author: '매니저', date: '2024-01-01' },
-    { id: 2, set:'공지사항', title: '내일의 공지', author: '관리자', date: '2024-01-02' },
-    { id: 3, set:'공지사항', title: '약 복 공지', author: '매니저', date: '2024-01-03' },
-    { id: 4, set:'공지사항', title: '알림', author: '관리자', date: '2024-01-04' },
+    { id: 1, set:'공지사항', title: '오늘의 공지', author: '매니저', date: '2024-01-01', description: '공지사항 내용입니다.' },
+    { id: 2, set:'공지사항', title: '내일의 공지', author: '관리자', date: '2024-01-02', description: '공지사항 내용입니다.' },
+    { id: 3, set:'공지사항', title: '약 복 공지', author: '매니저', date: '2024-01-03', description: '공지사항 내용입니다.' },
+    { id: 4, set:'공지사항', title: '알림', author: '관리자', date: '2024-01-04', description: '공지사항 내용입니다.' },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
+  const [selectedPostIndex, setSelectedPostIndex] = useState(null);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  const handleClick = (index) => {
+    setSelectedPostIndex(index === selectedPostIndex ? null : index);
+  };
 
   return (
     <div>
       <div className="qna-page">
         <nav className="qna-navigation">
           <sapn className="qna-nav-ALL">전체</sapn>
-          <Link to="/Page2" className="qna-nav-item">QnA게시판</Link>
-          <Link to="/Page4" className="qna-nav-item-Q">공지사항</Link>
-          <Link to="/Page5" className="qna-nav-item">자주묻는질문</Link>
+          <Link to="/qnapage" className="qna-nav-item">QnA게시판</Link>
+          <Link to="/notice" className="qna-nav-item-Q">공지사항</Link>
+          <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
         </nav>
       </div>
 
@@ -54,14 +58,21 @@ const QnAPage = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map(post => (
-              <tr key={post.id}>
-                <td>{post.id}</td>
-                <td>{post.set}</td>
-                <td>{post.title}</td>
-                <td>{post.author}</td>
-                <td>{post.date}</td>
-              </tr>
+            {posts.map((post, index) => (
+              <React.Fragment key={post.id}>
+                <tr onClick={() => handleClick(index)}>
+                  <td>{post.id}</td>
+                  <td>{post.set}</td>
+                  <td>{post.title}</td>
+                  <td>{post.author}</td>
+                  <td>{post.date}</td>
+                </tr>
+                {selectedPostIndex === index && (
+                  <tr>
+                    <td colSpan="5">{post.description}</td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
@@ -86,7 +97,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   return (
     <div className="pagebtt">
       {pageNumbers.map(number => (
-        <button  key={number} onClick={() => paginate(number)}>
+        <button key={number} onClick={() => paginate(number)}>
           {number}
         </button>
       ))}
@@ -94,4 +105,4 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   );
 };
 
-export default QnAPage;
+export default Notice;

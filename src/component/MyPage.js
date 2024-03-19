@@ -13,12 +13,12 @@ function MyPage() {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get(`/api/customers`, { withCredentials: true });
+                const response = await axios.get(`/api/userinfo`, { withCredentials: true });
                 if (response.status === 200) {
                     const userData = response.data;
                    
                     setUserInfo(userData);
-                    console.log('유저정보:', userData); 
+                    
                 } else {
                     console.error('Failed to fetch user info');
                 }

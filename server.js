@@ -93,11 +93,34 @@ app.post('/api/login', (req, res) => {
 
 
 
-app.get('/api/customers', (req, res) => {
+// 사용자 정보 업데이트
+app.post('/api/updateuserinfo', (req, res) => {
+  const userId = req.session.userId;
+  const { name, gender, phoneNumber, role, email } = req.body;
+
+  connection.query(
+    "UPDATE members SET name = ?, gender = ?, phoneNumber = ?, role = ?, email = ? WHERE id = ?",
+    [name, gender, phoneNumber, role, email, userId],
+    (err, result) => {
+      if (err) {
+        console.error('사용자 정보 업데이트 실패:', err);
+        res.status(500).send('사용자 정보 업데이트 실패');
+        return;
+      }
+      console.log('사용자 정보가 성공적으로 업데이트되었습니다.');
+      res.status(200).send('사용자 정보가 성공적으로 업데이트되었습니다.');
+    }
+  );
+});
+
+
+
+// 내정보 유저정보 가져오기
+app.get('/api/userinfo', (req, res) => {
   const userId = req.session.userId; 
 
   connection.query(
-    "SELECT gender, name, role, phoneNumber, birthdate FROM members WHERE id = ?;",
+    "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
     [userId], 
     (err, rows, fields) => {
       if (err) {
@@ -107,6 +130,42 @@ app.get('/api/customers', (req, res) => {
       }
       res.send(rows);
     }
+  );
+});
+
+
+// 비밀번호 변경
+app.post('/api/changepassword', (req, res) => {
+  const userId = req.session.userId;
+  const { currentPassword, newPassword } = req.body;
+
+  connection.query(
+      "SELECT * FROM members WHERE id = ? AND password = ?",
+      [userId, currentPassword],
+      (err, result) => {
+          if (err) {
+              console.error('비밀번호 변경 실패: ' + err.stack);
+              res.status(500).send('비밀번호 변경 실패');
+              return;
+          }
+          if (result.length === 0) {
+              res.status(401).send('현재 비밀번호가 올바르지 않습니다.');
+              return;
+          }
+
+          connection.query(
+              "UPDATE members SET password = ? WHERE id = ?",
+              [newPassword, userId],
+              (updateErr, updateResult) => {
+                  if (updateErr) {
+                      console.error('비밀번호 업데이트 실패: ' + updateErr.stack);
+                      res.status(500).send('비밀번호 업데이트 실패');
+                      return;
+                  }
+                  res.status(200).send('비밀번호가 성공적으로 변경되었습니다.');
+              }
+          );
+      }
   );
 });
 
@@ -183,18 +242,163 @@ app.post('/findUserPhone2', (req, res) => {
   });
 });
 
-
-
-
-app.get('/api/members', (req, res) => {
-  connection.query(
-    "SELECT * FROM MEMBERS",
-    (err,rows,fileds) => {
-      res.send(rows);
-    }
-  )
-  
+app.get('/api/checklogin', (req, res) => {
+  if (req.session.userId) {
+    res.status(200).json({ isLoggedIn: true });
+  } else {
+    res.status(200).json({ isLoggedIn: false });
+  }
 });
+
+
+
+app.post('/api/post', (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.session.userId;
+  const query = `SELECT name FROM members WHERE id = ?`;
+
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('사용자 이름 조회 중 오류 발생:', err);
+      res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
+      return;
+    }
+
+    if (result.length === 0) {
+      console.error('사용자를 찾을 수 없습니다.');
+      res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+      return;
+    }
+
+    const name = result[0].name;
+
+    const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, 'QnA', 'Y', ?, NOW())`;
+
+    connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error('글 저장 중 오류 발생:', insertErr);
+        res.status(500).json({ error: '글 저장 중 오류 발생' });
+        return;
+      }
+      console.log('글이 성공적으로 저장되었습니다.');
+      res.status(200).json({ message: '글이 성공적으로 저장되었습니다.' });
+    });
+  });
+});
+
+
+app.get('/api/qnaposts', (req, res) => {
+  const query = `SELECT * FROM boards WHERE board_type = 'QnA'`;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('QNA 게시글 조회 중 오류 발생:', err);
+      res.status(500).json({ error: 'QNA 게시글 조회 중 오류 발생' });
+      return;
+    }
+    
+    res.status(200).json(results);
+  });
+});
+
+
+app.post('/api/search-posts', (req, res) => {
+  const { searchType, searchKeyword } = req.body;
+  let query = "";
+  if (searchType === "title") {
+    query = `SELECT * FROM boards WHERE board_type = 'QnA' AND title LIKE '%${searchKeyword}%'`;
+  } else if (searchType === "author") {
+    query = `SELECT * FROM boards WHERE board_type = 'QnA' AND name LIKE '%${searchKeyword}%'`;
+  } else {
+    res.status(400).json({ error: '유효하지 않은 검색 조건입니다.' });
+    return;
+  }
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.error('검색 중 오류 발생:', err);
+      res.status(500).json({ error: '검색 중 오류 발생' });
+      return;
+    }
+
+    res.status(200).json(result); 
+  });
+});
+
+
+app.get('/api/qnaposts/:postId', (req, res) => {
+  const postId = req.params.postId;
+  const query = `SELECT * FROM boards WHERE board_id = ?`;
+
+  connection.query(query, [postId], (err, result) => {
+    if (err) {
+      console.error('게시글 조회 중 오류 발생:', err);
+      res.status(500).json({ error: '게시글 조회 중 오류 발생' });
+      return;
+    }
+
+    if (result.length === 0) {
+      console.error('해당 ID의 게시글을 찾을 수 없습니다.');
+      res.status(404).json({ error: '해당 ID의 게시글을 찾을 수 없습니다.' });
+      return;
+    }
+
+    const post = result[0];
+    res.status(200).json(post);
+  });
+});
+
+
+// server.js
+app.get('/api/getUserName', (req, res) => {
+  if (req.session.userId) {
+    const query = 'SELECT name FROM members WHERE id = ?';
+    connection.query(query, [req.session.userId], (err, result) => {
+      if (err) {
+        console.error('사용자 이름 조회 중 오류 발생:', err);
+        res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
+        return;
+      }
+      if (result.length === 0) {
+        console.error('해당 ID의 사용자를 찾을 수 없습니다.');
+        res.status(404).json({ error: '해당 ID의 사용자를 찾을 수 없습니다.' });
+        return;
+      }
+      const userName = result[0].name;
+      res.status(200).json({ userName: userName });
+    });
+  } else {
+    res.status(200).json({ userName: null });
+  }
+});
+
+
+
+
+
+
+// QnA 게시글 삭제
+app.delete('/api/qnaposts/:id', (req, res) => {
+  const postId = req.params.id;
+
+  connection.query('DELETE FROM boards WHERE board_id = ?', postId, (error, results) => {
+    if (error) {
+      console.error('게시글 삭제 실패:', error);
+      res.status(500).json({ success: false, message: '게시글 삭제 실패' });
+    } else {
+      console.log('게시글 삭제 성공');
+      res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+    }
+  });
+});
+
+
+
+
+
+
+
+
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -207,22 +411,6 @@ app.post('/api/logout', (req, res) => {
     res.status(200).send('로그아웃 성공');
   });
 });
-
-
-
-
-
-// app.get('/api/userinfo', (req, res) => {
-//   res.send([
-//     {
-//     'gender' : '여자',
-//     'name' : '강암이',
-//     'role' : '환자',
-//     'phoneNumber': '01033402939',
-//     'birthdate' : '2010-01-12'
-//   }])
-    
-// });
 
 
 app.get('/', (req, res) => {

@@ -27,9 +27,9 @@ const FaqPage = () => {
       <div className="qna-page">
         <nav className="qna-navigation">
           <sapn className="qna-nav-ALL">전체</sapn>
-          <Link to="/Page2" className="qna-nav-item">QnA게시판</Link>
-          <Link to="/Page4" className="qna-nav-item">공지사항</Link>
-          <Link to="/Page5" className="qna-nav-item-Q">자주묻는질문</Link>
+          <Link to="/qnapage" className="qna-nav-item">QnA게시판</Link>
+          <Link to="/notice" className="qna-nav-item">공지사항</Link>
+          <Link to="/faqpage" className="qna-nav-item-Q">자주묻는질문</Link>
         </nav>
       </div>
       <div className='page5555'>

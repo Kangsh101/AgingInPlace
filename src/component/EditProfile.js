@@ -1,15 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../css/EditProfile.css';
 
 const EditProfile = () => {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('남성');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [classification, setClassification] = useState('환자');
+  const [role, setRole] = useState('환자');
   const [email, setEmail] = useState('');
+  const [userInfo, setUserInfo] = useState(null); 
 
-  const handleSave = () => {
-    console.log("Saved:", { name, gender, phoneNumber, classification, email });
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get('/api/userinfo', { withCredentials: true });
+        if (response.status === 200) {
+          const userInfo = response.data[0]; 
+          setName(userInfo.name);
+          setGender(userInfo.gender);
+          setPhoneNumber(userInfo.phoneNumber);
+          setRole(userInfo.role);
+          setEmail(userInfo.email);
+          setUserInfo(userInfo); 
+        } else {
+          console.error('Failed to fetch user info');
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
+    if (userInfo !== null) {
+      setEmail(userInfo.email);
+    }
+  }, [userInfo]);
+
+  const handleSave = async () => {
+    try {
+      const response = await axios.post('/api/updateuserinfo', {
+        name,
+        gender: gender, 
+        phoneNumber,
+        role: role,
+        email
+      });
+      if (response.status === 200) {
+        console.log('사용자 정보가 성공적으로 업데이트되었습니다.');
+        alert('사용자 정보가 성공적으로 업데이트되었습니다.')
+      }
+    } catch (error) {
+      console.error('사용자 정보 업데이트 실패:', error);
+      alert('사용자 정보 업데이트 실패.')
+    }
   };
 
   return (
@@ -41,7 +86,7 @@ const EditProfile = () => {
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <strong>분류</strong>
-        <select value={classification} onChange={(e) => setClassification(e.target.value)}>
+        <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="환자">환자</option>
           <option value="보호자">보호자</option>
         </select>
@@ -51,7 +96,7 @@ const EditProfile = () => {
         <input className='editprofile-emailinput'
           type="text"
           id="email"
-          value={email}
+          value={email} 
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>

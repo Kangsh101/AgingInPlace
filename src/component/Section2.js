@@ -70,14 +70,21 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   };
 
   const handleGenderChange = (e) => {
-    setGender(e.target.value);
-    handleInputChange({ target: { name: 'gender', value: e.target.value } });
+    const selectedGender = e.target.value;
+    const genderInKorean = selectedGender === 'male' ? '남성' : '여성';
+    setGender(selectedGender);
+    handleInputChange({ target: { name: 'gender', value: genderInKorean } });
   };
+  
 
   const handleRoleChange = (e) => {
-    setRole(e.target.value);
-    handleInputChange({ target: { name: 'role', value: e.target.value } });
+    const selectedRole = e.target.value;
+    const roleInKorean = selectedRole === 'patient' ? '환자' : '보호자';
+    setRole(selectedRole);
+    handleInputChange({ target: { name: 'role', value: roleInKorean } });
   };
+  
+  
 
   return (
     <div className='section-container'>
@@ -121,13 +128,13 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           <div className='genderradio-container'>
             <div className='gender-radio1'>
               <label>
-                <input type="radio" name="gender" value="male" checked={gender === 'male'} onChange={handleGenderChange} />
+                <input type="radio" name="gender" value="남성" checked={gender === '남성'} onChange={handleGenderChange} />
                 남자
               </label>
             </div>
             <div className='gender-radio'>
               <label>
-                <input type="radio" name="gender" value="female" checked={gender === 'female'} onChange={handleGenderChange} />
+                <input type="radio" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange} />
                 여자
               </label>
             </div>
@@ -135,13 +142,13 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           <div className='typeradio-container'>
             <div className='type-radio1'>
               <label>
-                <input type="radio" name="role" value="patient" checked={role === 'patient'} onChange={handleRoleChange} />
+                <input type="radio" name="role" value="환자" checked={role === '환자'} onChange={handleRoleChange} />
                 환자
               </label>
             </div>
             <div className='type-radio'>
               <label>
-                <input type="radio" name="role" value="guardian" checked={role === 'guardian'} onChange={handleRoleChange} />
+                <input type="radio" name="role" value="보호자" checked={role === '보호자'} onChange={handleRoleChange} />
                 보호자
               </label>
             </div>

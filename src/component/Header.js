@@ -7,9 +7,19 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
 
   const handleLogout = async () => {
     try {
-      setIsLoggedIn(false); 
-      localStorage.removeItem('isLoggedIn'); 
-      navigate('/main');
+
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+      });
+  
+      if (response.ok) {
+      
+        setIsLoggedIn(false); 
+        localStorage.removeItem('isLoggedIn'); 
+        navigate('/main'); 
+      } else {
+        throw new Error('로그아웃 실패');
+      }
     } catch (error) {
       console.error('로그아웃 오류:', error);
       alert('로그아웃에 실패했습니다.');
@@ -26,7 +36,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
       <nav className="nav-container">
         <ul>
           <li className='Header-nav'><Link to="/contents">프로그램 콘텐츠</Link></li>
-          <li className='Header-nav'><Link to="/page2">커뮤니티</Link></li>
+          <li className='Header-nav'><Link to="/qnapage">커뮤니티</Link></li>
         </ul>
       </nav>
       <div className="auth-buttons">

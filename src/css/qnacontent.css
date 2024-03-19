@@ -1,0 +1,130 @@
+.qnacontent-container{
+    margin:3% 0 0 19%;
+    width: 700px;
+    height: 700px;
+    border: 1px solid rgb(113, 113, 113);
+    border-radius: 8px;
+    overflow-wrap: break-word;
+}
+
+.qnacontent{
+    margin-top: 10%;
+}
+
+.qna-title-line {
+    border: 0;
+    border-top: 1px solid #585757; 
+    margin-top: 10px; 
+  }
+.QnA-content {
+    height: 200px;
+    margin-right: 10px;
+    white-space: pre-wrap;
+    overflow: auto; 
+}
+/* .QnA-content {
+    height: auto;
+    margin-right: 10px;
+    white-space: pre-wrap; 
+} */
+
+.QnA-comments span{
+    font-weight: bold;
+    font-size: 18px;
+}
+.qnacontent-container {
+    text-align: left;
+  }
+  
+.QnA-category{
+    font-size: 12px;
+    color: rgb(69, 69, 69);
+}
+.QnA-author{
+    margin: 20px 0 0px 0;
+}
+.QnA-author span{
+    margin-right: 8px;
+  }
+.QnA-title{
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 30px;
+}
+.QnA-authortext{
+    font-size: 15px;
+    font-weight: bold;
+}
+.QnA-commentDate{
+    margin-left: 35px;
+    font-size: 12px;
+}
+.QnA-main{
+    margin-right: 7%;
+}
+.QnA-commentInput,
+.QnA-content,
+.QnA-comments2,
+.QnA-comments,
+.QnA-author{
+    margin-left: 30px;
+    font-size: 15px;
+} 
+.QnA-contentBtt{
+    margin-top: 20px;
+    margin-right: 5%;
+}
+
+.QnA-contentBtt button{
+    margin-right: 10px;
+}
+
+.QnA-Input{
+    width: 500px;
+    height: 70px;
+}
+
+
+.QnA-Btt1{
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color:#7a8faa;
+    margin-left: 10px;
+}
+.QnA-Btt1:hover {
+    background-color: #67a3e3;
+}
+.QnA-Btt {
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color:#1877F2;
+    margin-left: 10px;
+  }
+  
+  .QnA-Btt3:hover,
+  .QnA-Btt:hover {
+    background-color: #0056b3;
+  }
+.QnA-Btt3{
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color:#1877F2;
+    margin-left: 10px;
+    font-size: 12px;
+    width: 95px;
+    height: 35px;
+}
+
+.Date-Btt{
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color:#1877F2;
+    margin-left: 10px;
+    font-size: 12px;
+    width: 95px;
+    height: 35px;
+}
