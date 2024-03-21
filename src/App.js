@@ -47,21 +47,21 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/login" element={<Login onLogin={handleLogin}  />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/Idppl" element={<Idppl />} />
-          <Route path="/Passwordppl" element={<Passwordppl />} />
-          <Route path="/qnapage" element={<QnAPage />} />
-          <Route path="/qnaup" element={<QnAUp />} />
-          <Route path="/notice" element={<Notice />} />
-          <Route path="/faqpage" element={<FaqPage />} />
-          <Route path="/main" element={<Main />} />
-          <Route path="/MyPage" element={<MyPage />} />
-          <Route path="/contents" element={<Contents />} />
-          <Route path="/qnacontent/:id" element={<QnAContent />} />
+          <Route path="/login" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
+          <Route path="/signup" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
+          <Route path="/Idppl" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
+          <Route path="/Passwordppl" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Passwordppl /><Footer /></>} />
+          <Route path="/qnapage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAPage /><Footer /></>} />
+          <Route path="/qnaup" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAUp /><Footer /></>} />
+          <Route path="/notice" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Notice /><Footer /></>} />
+          <Route path="/faqpage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><FaqPage /><Footer /></>} />
+          <Route path="/main" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
+          <Route path="/MyPage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
+          <Route path="/contents" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
+          <Route path="/qnacontent/:id" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
 
 
           <Route path="/faqup" element={<FaqUp />} />
@@ -74,7 +74,7 @@ function App() {
 
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
-        <Footer />
+ 
       </div>
     </BrowserRouter>
   );

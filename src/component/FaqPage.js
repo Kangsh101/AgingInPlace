@@ -1,32 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Faq.css';
 import '../css/Page5.css';
 
 const FaqPage = () => {
+  const [faqItems, setFaqItems] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/faq') // FAQ API 엔드포인트로 교체하세요.
+      .then(response => response.json())
+      .then(data => setFaqItems(data))
+      .catch(error => console.error('FAQ 데이터 가져오는 중 오류 발생:', error));
+  }, []);
 
   const [answersVisible, setAnswersVisible] = useState([]);
 
-  const toggleAnswer = (index) => {
+  const toggleAnswer = index => {
     const newAnswersVisible = [...answersVisible];
     newAnswersVisible[index] = !newAnswersVisible[index];
     setAnswersVisible(newAnswersVisible);
   };
 
-  const faqItems = [
-    { question: 'Q 질문 : 치매 예방 알림 확인은 어디서 할 수 있나요?', answer: 'A 답변 : 워치 앱을 켜서 확인하시면 됩니다. 워치 앱을 켜서 확인하시면 됩니다2.워치 앱을 켜서 확인하시면 됩니다3' },
-    { question: 'Q 질문 : 치매 예방 알림 확인은 어디서 할 수 있나요?', answer: 'A 답변 : 워치 앱을 켜서 확인하시면 됩니다. 워치 앱을 켜서 확인하시면 됩니다2.워치 앱을 켜서 확인하시면 됩니다3' },
-    { question: 'Q 질문 : 치매 예방 알림 확인은 어디서 할 수 있나요?', answer: 'A 답변 : 워치 앱을 켜서 확인하시면 됩니다. 워치 앱을 켜서 확인하시면 됩니다2.워치 앱을 켜서 확인하시면 됩니다3' },
-    { question: 'Q 질문 : 치매 예방 알림 확인은 어디서 할 수 있나요?', answer: 'A 답변 : 워치 앱을 켜서 확인하시면 됩니다. 워치 앱을 켜서 확인하시면 됩니다2.워치 앱을 켜서 확인하시면 됩니다3' },
-    { question: 'Q 질문 2', answer: "A 답변 2 답변 2 답변 2 답변 2 답변 2 답변 2 답변 2 답변 2 답변 2 답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2" },
-   
-  ];
-
   return (
     <div>
       <div className="qna-page">
         <nav className="qna-navigation">
-          <sapn className="qna-nav-ALL">전체</sapn>
+          <span className="qna-nav-ALL">전체</span>
           <Link to="/qnapage" className="qna-nav-item">QnA게시판</Link>
           <Link to="/notice" className="qna-nav-item">공지사항</Link>
           <Link to="/faqpage" className="qna-nav-item-Q">자주묻는질문</Link>
@@ -50,10 +49,10 @@ const FaqPage = () => {
         {faqItems.map((item, index) => (
           <div key={index} className="faq-item">
             <div className="faq-question" onClick={() => toggleAnswer(index)}>
-              {item.question}
+              Q : {item.title}
             </div>
             <div className="faq-answer" onClick={() => toggleAnswer(index)}>
-              {answersVisible[index] ? item.answer : item.answer.substring(0, 40)}
+              A : {answersVisible[index] ? item.content : item.content.substring(0, 40)}
             </div>
           </div>
         ))}

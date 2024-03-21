@@ -455,7 +455,65 @@ app.delete('/api/notices/:id', (req, res) => {
 
 // 공지사항
 
+//FAQ 쪽 server
+//FAQ 등록 API
+app.post('/api/addFaQ', (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.session.userId; 
+  const query = `SELECT name FROM members WHERE id = ?`;
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('사용자 이름 조회 중 오류 발생:', err);
+      res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
+      return;
+    }
+    if (result.length === 0) {
+      console.error('사용자를 찾을 수 없습니다.');
+      res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+      return;
+    }
+    const name = result[0].name;
+    const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, 'FAQ', 'N', ?, NOW())`;
+    connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error('공지사항 저장 중 오류 발생:', insertErr);
+        res.status(500).json({ error: '공지사항 저장 중 오류 발생' });
+        return;
+      }
+      console.log('공지사항이 성공적으로 저장되었습니다.');
+      res.status(200).json({ message: '공지사항이 성공적으로 저장되었습니다.' });
+    });
+  });
+});
 
+//FAQ 조회 API
+app.get('/api/faq', (req, res) => {
+  const query = `SELECT * FROM boards WHERE board_type = 'FAQ' ORDER BY create_at DESC`;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching notices from database:', err);
+      res.status(500).json({ error: 'Error fetching notices from database' });
+      return;
+    }
+    res.json(results);
+  });
+});
+//FAQ 게시글 삭제 .
+app.delete('/api/faq/:id', (req, res) => {
+  const postId = req.params.id;
+
+  connection.query('DELETE FROM boards WHERE board_id = ?', postId, (error, results) => {
+    if (error) {
+      console.error('게시글 삭제 실패:', error);
+      res.status(500).json({ success: false, message: '게시글 삭제 실패' });
+    } else {
+      console.log('게시글 삭제 성공');
+      res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+    }
+  });
+});
+//FAQ.
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {

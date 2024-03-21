@@ -25,7 +25,9 @@ const NoticeUp = () => {
       console.error('글 등록 중 오류 발생:', error);
     });
   };
-
+  const handleBack = () =>{
+    naviga('/cmss')
+  }
   return (
     <div className="qnaplus">
       <h2 className='aaaaaa'>공지사항</h2>
@@ -38,7 +40,7 @@ const NoticeUp = () => {
         <input type="text" value={content} onChange={(e) => setContent(e.target.value)} />
       </div>
       <div className="button-group">
-        <button className="cancel-button">취소</button>
+        <button className="cancel-button" onClick={handleBack} >취소</button>
         <button className="save-button" onClick={handleSubmit}>글 등록</button>
       </div>
     </div>

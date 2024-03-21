@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Link, Route, Routes ,useLocation} from 'react-router-dom';
 import '../css/Cms.css';
-import Useradd from './Useradd';
 
 const Cmss = () => {
-  const [posts, setPosts] = useState([
-    { id: 1, Q: '질문1',A: '답변1'},
-    { id: 2, Q: '질문2',A: '답변2'},
-    { id: 3, Q: '질문3',A: '답변3'},
-    { id: 4, Q: '질문4',A: '답변4'},
-    { id: 5, Q: '질문5',A: '답변5'},
-    { id: 6, Q: '질문6',A: '답변6'},
-    { id: 7, Q: '질문7',A: '답변7'},
-    { id: 8, Q: '질문8',A: '답변8'},
-
-
-  ]);
+  const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5); 
+  const [selectedPostIndex, setSelectedPostIndex] = useState(null);
 
+  const handleClick = (index) => {
+    setSelectedPostIndex(index);
+  };
+  useEffect(() => {
+    fetch('/api/faq')
+      .then(response => response.json())
+      .then(data => {
+        const postsWithNumbers = data.reverse().map((post, index) => ({
+          ...post,
+          number: index + 1,
+          create_at: formatDate(post.create_at)
+        }));
+        setPosts(postsWithNumbers);
+      })
+      .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
+  }, []);
+
+  const handleDelete = (id, index) => {
+    fetch(`/api/notices/${id}`, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      if (response.ok) {
+        const updatedPosts = [...posts];
+        updatedPosts.splice(index, 1);
+        setPosts(updatedPosts);
+      }
+    })
+    .catch(error => console.error('게시글을 삭제하는 중 에러 발생:', error));
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toISOString().split('T')[0];
+    return formattedDate;
+  };
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -27,9 +51,8 @@ const Cmss = () => {
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
+
   const location = useLocation(); 
-
-
   return (
     <>
       <div className="sidebar">
@@ -75,14 +98,29 @@ const Cmss = () => {
             </tr>
           </thead>
           <tbody >
-            {currentPosts.map(post => (
-              <tr key={post.id}>
-                <td>{post.id}</td>
-                <td>{post.Q}</td>
-                <td>{post.A}</td>
-
-              </tr>
-            ))}
+          {posts.map((post, index) => (
+                <React.Fragment key={post.id}>
+                  <tr onClick={() => handleClick(index)}>
+                    <td>{post.number}</td>
+                    <td>{post.title}</td>
+                    <td>{post.content}</td>
+                  </tr>
+                  {selectedPostIndex === index && (
+                    <tr className='sang-trtag'>
+                      <td colSpan="5">
+                        <div className="selected-post">
+                          <p className='sang-title'>{post.title}</p>
+                          <p className='sang-description'>{post.content}</p>
+                          <div className='sang-bttcon'>
+                            <button className='sang-btt'>게시글 수정</button>
+                            <button className='sang-btt' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
           </tbody>
         </table>
         
