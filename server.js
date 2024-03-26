@@ -28,11 +28,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 const connection = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'kangsh',
-  password: '3360',
-  port :3306,
-  database: 'aginginplace'
+
 });
 
 app.use((req, res, next) => {
@@ -561,6 +557,39 @@ app.get('/api/checkRole', (req, res) => {
     res.status(200).json({ role });
   });
 });
+
+
+// 유저 비활성하
+app.put('/api/deactivateUser/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  const query = `UPDATE members SET is_active = 0 WHERE id = ?`;
+
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('비활성화 오류:', err);
+      res.status(500).send('서버 오류');
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+// 유저 활성화
+app.put('/api/activateUser/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  const query = `UPDATE members SET is_active = 1 WHERE id = ?`;
+
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('활성화 오류:', err);
+      res.status(500).send('서버 오류');
+    } else {
+      res.sendStatus(200); 
+    }
+  });
+});
+
 
 
 

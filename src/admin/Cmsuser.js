@@ -53,7 +53,35 @@ const Cmsuser = () => {
       </div>
     );
   }
+  const handleDeactivateUser = (userId) => {
+    fetch(`/api/deactivateUser/${userId}`, {
+      method: 'PUT',
+      credentials: 'include',
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('비활성화 되었습니다.');
+      } else {
+        console.log('비활성화 실패 오류')
+      }
+    })
+    .catch(error => console.error('사용자 비활성화 오류:', error));
+  };
 
+  const handleActivateUser = (userId) => {
+    fetch(`/api/activateUser/${userId}`, {
+      method: 'PUT',
+      credentials: 'include',
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('활성화 되었습니다.');
+      } else {
+        console.log('활성화 실패 오류');
+      }
+    })
+    .catch(error => console.error('사용자 활성화 오류:', error));
+  };
   return (
     <>
       <div className="sidebar">
@@ -112,8 +140,8 @@ const Cmsuser = () => {
                           <p>생년월일 : {user.birthdate}</p>
                           <p>전화번호 : {user.phoneNumber}</p>
                           <p>가입일 : {user.joinDate}</p>
-                          <button>활성화</button>
-                          <button>비활성화</button>
+                          <button className='cmsuser-bttt' onClick={()=> handleActivateUser(user.id)}>활성화</button>
+                          <button className='cmsuser-btt' onClick={() => handleDeactivateUser(user.id)}>비활성화</button>
                         </div>
                       </td>
                     </tr>
