@@ -64,41 +64,32 @@ const EditProfile = () => {
             </div>
       <div className='editprofile-context-container'>
         <div className='editprofile-row'>
-        <strong>이름</strong>
-        <input className='editprofile-nameinput'
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <strong>성별</strong>
-        <select value={gender} onChange={(e) => setGender(e.target.value)}>
+        <strong className='Profile-strong'>이름 :</strong>
+        <input className='editprofile-nameinput'  type="text"  id="name"  value={name}onChange={(e) => setName(e.target.value)}  />
+
+      </div>
+      <div>
+      <strong className='Profile-strong'>분류 : </strong>
+        <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="환자">환자</option>
+          <option value="보호자">보호자</option>
+        </select>
+      </div>
+      <div>
+      <strong className='Profile-strong'>성별 : </strong>
+        <select value={gender} className='Profile-type' onChange={(e) => setGender(e.target.value) }>
           <option value="남성">남성</option>
           <option value="여성">여성</option>
         </select>
       </div>
       <div className='editprofile-row'>
-        <strong>전화번호</strong>
-        <input className='editprofile-numberinput'
-          type="text"
-          id="phoneNumber"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-        <strong>분류</strong>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="환자">환자</option>
-          <option value="보호자">보호자</option>
-        </select>
+        <strong className='Profile-strong'>전화번호 :</strong>
+        <input className='editprofile-numberinput'  type="text"  id="phoneNumber" value={phoneNumber}  onChange={(e) => setPhoneNumber(e.target.value)} />
+
         </div>
       <div className='editprofile-row'>
-        <strong>이메일</strong>
-        <input className='editprofile-emailinput'
-          type="text"
-          id="email"
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <strong className='Profile-strong'>이메일 : </strong>
+        <input className='editprofile-emailinput' type="text" id="email" value={email}  onChange={(e) => setEmail(e.target.value)} />
       </div>
       <button onClick={handleSave}>저장</button>
     </div>

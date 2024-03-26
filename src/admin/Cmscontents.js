@@ -3,7 +3,7 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmscontents.css';
 
-const Cmss = () => {
+const Cmscontents = () => {
   const [posts, setPosts] = useState([
     { id: 1, type: '콘텐츠',title: '우울', author: '관리자', date: '2024-01-01',description:'우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명  ' },
     { id: 2, type: '콘텐츠2',title: '수면장애', author: '매니저', date: '2024-01-21' },
@@ -30,8 +30,8 @@ const Cmss = () => {
           <li className={`cms-item ${location.pathname === "/Cmscontents" ? "cms-active" : ""}`}>
             <Link to="/Cmscontents">프로그램 컨텐츠</Link>
           </li>
-          <li className={`cms-item ${location.pathname === "/Cmss" ? "cms-active" : ""}`}>
-            <Link to="/Cmss">게시판 관리</Link>
+          <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}>
+            <Link to="/Cms">게시판 관리</Link>
           </li>
           <li className={`cms-item ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}>
             <Link to="/Cmsuser">사용자 관리</Link>
@@ -125,4 +125,4 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   );
 };
 
-export default Cmss;
+export default Cmscontents;

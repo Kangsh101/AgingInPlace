@@ -136,12 +136,26 @@
   text-align: center; 
   text-decoration: none; 
   display: inline-block; 
-  font-size: 16px; 
+  font-size: 18px; 
   cursor: pointer; 
-  border-radius: 5px; 
+  border-radius: 20px; 
   margin-top: 20px;
+  font-weight: bold;
 }
-
+.Section-btt{
+  background-color:#1877F2;
+  color: rgb(255, 255, 255); 
+  border: none; 
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 18px; 
+  cursor: pointer; 
+  border-radius: 20px; 
+  margin-top: 20px;
+  font-weight: bold;
+}
 
 
 

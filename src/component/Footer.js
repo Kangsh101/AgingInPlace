@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="footer-container">
       <div className="upper-section">
         <p className='abcds'>공지사항</p>
-        <Link to="/Page4" className='babago'>바로가기</Link>
+        <Link to="/notice" className='babago'>바로가기</Link>
       </div>
       <div className='abcds'>
         <span className='fooati'>Dementia Prevention System</span>

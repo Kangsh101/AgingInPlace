@@ -48,12 +48,31 @@
   color: red;
   font-weight: bold;
 }
-
+.Section-btt{
+  padding: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  border: 0 none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  color: #fff;
+  margin-top: 10px;
+  background-color: dodgerblue;
+}
 
 .nextBtt{
+  padding: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  border: 0 none;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: dodgerblue;
   margin-top: 20px;
   background-color:#1877F2;
-  border-radius: 25px;
+  border-radius: 20px;
 }
 
 .Allcheckdss{

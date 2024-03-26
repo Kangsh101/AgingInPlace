@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import '../css/Page3.css';
+import '../css/FaqUp.css';
 
 const NoticeUp = () => {
   const [title, setTitle] = useState('');
@@ -32,15 +32,15 @@ const NoticeUp = () => {
   }
 
   return (
-    <div className="qnaplus">
+    <div className="FaqUp-container">
       <h2 className='aaaaaa'>FAQ 등록</h2>
-      <div className="form-group">
+      <div className="FaqUp-label">
         <label>Q:</label>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
-      <div className="form-group">
+      <div className="FaqUp-label1">
         <label>A:</label>
-        <input type="text" value={content} onChange={(e) => setContent(e.target.value)} />
+        <textarea type="text" value={content} onChange={(e) => setContent(e.target.value)} />
       </div>
       <div className="button-group">
         <button className="cancel-button" onClick={handleBack}>취소</button>

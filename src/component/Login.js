@@ -11,34 +11,47 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!username || !password) {
       alert('아이디와 비밀번호를 입력하세요.');
       return;
     }
-  
+
     try {
       const response = await axios.post('/api/login', {
         username,
         password
       });
-  
+    
       if (response.status === 200) {
         const user = response.data;
         if (user) {
-          onLogin(true); 
-          navigate('/main'); 
+          if (user.is_active === 1) {
+            onLogin(true);
+            navigate('/main');
+          } else {
+            alert('비활성화된 계정입니다.');
+          }
         } else {
           alert('아이디 또는 비밀번호를 확인하세요.');
+        }
+      } else if (response.status === 401) {
+        const errorMessage = response.data;
+        if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
+          alert('아이디 또는 비밀번호를 확인하세요.');
+        } else if (errorMessage === '비활성화된 계정입니다') {
+          alert('비활성화된 계정입니다.');
+        } else {
+          alert('서버 오류가 발생했습니다.');
         }
       } else {
         alert('서버 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('로그인 오류:', error);
-      alert('아이디 또는 비밀번호를 확인하세요.');
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
-  };
+  }       
 
   return (
     <div className='login-container'>
@@ -66,7 +79,7 @@ const Login = ({ onLogin }) => {
                     비밀번호 찾기
                   </Link>
                 </div>
-                <button  type="submit" className="btn-primary">
+                <button  type="submit" className="login-btt">
                   로그인
                 </button>
               </form>

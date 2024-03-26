@@ -50,7 +50,7 @@ function ChangePassword() {
     return (
         <div className="changepw-container">
             <div className='changepw-title'>
-                <strong >비밀번호 변경 페이지</strong>
+                <strong >비밀번호 변경</strong>
             </div>
             <div className='changepw-notification'>
                 <p>
@@ -73,7 +73,7 @@ function ChangePassword() {
                         <strong className='passwordChange3'>비밀번호 확인 : </strong>
                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder='새 비밀번호 확인' value={confirmPassword} onChange={handleChange} required />
                     </div>
-                    <button type="submit">변경</button>
+                    <button type="submit" className='ChangeBtt'>변경</button>
                 </form>
                 {message && <p className="message" style={{ color: messageColor }}>{message}</p>}
             </div>

@@ -1,29 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
+import '../css/Cmsuser.css';
 
 const Cmsuser = () => {
-  const [posts] = useState([
-    { id: 1, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 2, type: '환자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 3, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 4, type: '환자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 5, type: '환자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 6, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 7, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 8, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-    { id: 9, type: '보호자', name: '강석현', birth:'00.01.23', gender:'남', phone:'010-3360-4932', date: '2024-01-01' },
-  ]);
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(7); 
+  const [postsPerPage] = useState(7);
+  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); 
+
+  useEffect(() => {
+    fetch('/api/checkRole', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.role !== 'admin') {
+        setIsAdmin(false);
+      } else {
+        setIsAdmin(true); 
+      }
+    })
+    .catch(error => console.error('권한 확인 실패:', error));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/cmsusers')
+      .then(response => response.json())
+      .then(data => setUsers(data.map(user => ({ ...user, joinDate: user.joinDate.split('T')[0],
+            birthdate: user.birthdate.split('T')[0] 
+    }))))
+      .catch(error => console.error('Error fetching users:', error));
+  }, []);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = users.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const location = useLocation(); 
+  const location = useLocation();
+  const handleUserClick = (index) => {
+    setSelectedUserIndex(selectedUserIndex === index ? null : index); 
+  };
+
+  if (!isAdmin) {
+    return (
+      <div>
+        <h1>권한이 없습니다.</h1>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -32,7 +61,7 @@ const Cmsuser = () => {
         <h2>관리자 페이지</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
-          <li className="cms-item"><Link to="/Cmss">게시판 관리</Link></li>
+          <li className="cms-item"><Link to="/Cms">게시판 관리</Link></li>
           <li className={`cms-item ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
@@ -41,8 +70,8 @@ const Cmsuser = () => {
           <h2>사용자 관리</h2>
           <div className="Cmss-options">
             <select className="Cmss-select">
-              <option value="환자">환자</option>
-              <option value="보호자">보호자</option>
+              <option value="환자">성함</option>
+              <option value="보호자">타입</option>
             </select>
             <input type="text" placeholder="사용자 정보를 입력해주세요." className="Cmss-search" />
             <button className="Cmss-button">검색</button>
@@ -53,31 +82,49 @@ const Cmsuser = () => {
             <thead>
               <tr>
                 <th>No</th>
-                <th>분류</th>
+                <th>아이디</th>
+                <th>타입</th>
                 <th>성함</th>
-                <th>생년월일</th>
                 <th>성별</th>
-                <th>전화번호</th>
                 <th>가입일</th>
               </tr>
             </thead>
             <tbody>
-              {currentPosts.map(post => (
-                <tr key={post.id}>
-                  <td>{post.id}</td>
-                  <td>{post.type}</td>
-                  <td>{post.name}</td>
-                  <td>{post.birth}</td>
-                  <td>{post.gender}</td>
-                  <td>{post.phone}</td>
-                  <td>{post.date}</td>
-                </tr>
+              {currentPosts.map((user, index) => (
+                <React.Fragment key={index}>
+                  <tr onClick={() => handleUserClick(index)}>
+                    <td>{index + 1}</td>
+                    <td>{user.username}</td>
+                    <td>{user.role}</td>
+                    <td>{user.name}</td>
+                    <td>{user.gender}</td>
+                    <td>{user.joinDate}</td>
+                  </tr>
+                  {selectedUserIndex === index && ( 
+                    <tr>
+                      <td colSpan="5">
+                        <div className="user-details">
+                          <p>아이디 : {user.username} </p>
+                          <p>타입 : {user.role}</p>
+                          <p>이름 : {user.name}</p>
+                          <p>성별 : {user.gender}</p>
+                          <p>이메일 : {user.email}</p>
+                          <p>생년월일 : {user.birthdate}</p>
+                          <p>전화번호 : {user.phoneNumber}</p>
+                          <p>가입일 : {user.joinDate}</p>
+                          <button>활성화</button>
+                          <button>비활성화</button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
           <Pagination
             postsPerPage={postsPerPage}
-            totalPosts={posts.length}
+            totalPosts={users.length}
             paginate={paginate}
           />
         </div>

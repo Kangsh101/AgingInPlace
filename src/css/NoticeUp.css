@@ -1,0 +1,44 @@
+
+.NoticeUp-container{
+    margin: 0 auto;
+    width: 30%;
+    padding: 80px;
+    margin-left: 33%;
+}
+
+.NoticeUp-container h2{
+    color: #0f1813; 
+    margin-bottom: 50px; 
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.NoticeUp-label{
+    margin-bottom: 15px;
+}
+.NoticeUp-label input[type="text"]{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow-y: auto;
+
+}
+.NoticeUp-label label{
+    display: block;
+    margin-bottom: 5px;
+    
+}
+.NoticeUp-label1 textarea[type="text"]{
+    width: 100%;
+    height: 30vh;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow-y: auto;
+    
+}
+.NoticeUp-label label{
+    display: block;
+    margin-bottom: 5px;
+}

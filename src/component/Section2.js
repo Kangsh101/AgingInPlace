@@ -71,10 +71,10 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
 
   const handleGenderChange = (e) => {
     const selectedGender = e.target.value;
-    const genderInKorean = selectedGender === 'male' ? '남성' : '여성';
     setGender(selectedGender);
-    handleInputChange({ target: { name: 'gender', value: genderInKorean } });
+    handleInputChange({ target: { name: 'gender', value: selectedGender } });
   };
+  
   
 
   const handleRoleChange = (e) => {

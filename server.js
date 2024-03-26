@@ -53,7 +53,7 @@ connection.connect((err) => {
 app.post('/api/signup', (req, res) => {
   const { username, password, email, name, birthdate, gender, phoneNumber,role} = req.body;
 
-  const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber,role) VALUES (?,?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`;
 
   connection.query(query, [username, password, email, name, birthdate, gender,  phoneNumber,role], (err, result) => {
     if (err) {
@@ -83,6 +83,10 @@ app.post('/api/login', (req, res) => {
       return;
     }
     const user = result[0];
+    if (user.is_active !== 1) {
+      res.status(401).send('비활성화된 계정입니다');
+      return;
+    }
     req.session.userId = user.id; 
 
     console.log('세션에 저장된 기본키:', req.session.userId);
@@ -129,6 +133,21 @@ app.get('/api/userinfo', (req, res) => {
         return;
       }
       res.send(rows);
+    }
+  );
+});
+
+// 관리자 페이지에 사용자 정보 가져오기
+app.get('/api/cmsusers', (req, res) => {
+  connection.query(
+    "SELECT id, username, email, name, birthdate, gender, phoneNumber, role, joinDate FROM members WHERE role = '환자' OR role = '보호자'",
+    (err, rows, fields) => {
+      if (err) {
+        console.error('사용자 정보 조회 실패: ' + err.stack);
+        res.status(500).send('사용자 정보 조회 실패');
+        return;
+      }
+      res.json(rows);
     }
   );
 });
@@ -514,6 +533,36 @@ app.delete('/api/faq/:id', (req, res) => {
   });
 });
 //FAQ.
+
+// 관리자인지 확인하고 접근 하도록 하기 위한
+app.get('/api/checkRole', (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    res.status(401).send('세션이 만료되었습니다.');
+    return;
+  }
+
+  const query = `SELECT role FROM members WHERE id = ?`;
+
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('역할 확인 실패:', err.stack);
+      res.status(500).send('역할 확인 실패');
+      return;
+    }
+
+    if (result.length === 0) {
+      res.status(404).send('사용자를 찾을 수 없습니다.');
+      return;
+    }
+
+    const role = result[0].role;
+    res.status(200).json({ role });
+  });
+});
+
+
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {

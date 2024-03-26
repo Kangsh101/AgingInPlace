@@ -13,7 +13,6 @@ import FaqPage from './component/FaqPage';
 import MyPage from './component/MyPage';
 import Contents from './component/Contents';
 import Cms from './admin/Cms';
-import Cmss from './admin/Cmss';
 import Cmscontents from './admin/Cmscontents';
 import Cmsuser from './admin/Cmsuser';
 import Cmsfaq from './admin/Cmsfaq'
@@ -49,7 +48,7 @@ function App() {
       <div className="App">
       
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
           <Route path="/login" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
           <Route path="/signup" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
           <Route path="/Idppl" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
@@ -69,7 +68,6 @@ function App() {
           <Route path="/cms" element={<Cms />} />
           <Route path="/cmsuser" element={<Cmsuser />} />
           <Route path="/cmsfaq" element={<Cmsfaq />} />
-          <Route path="/cmss" element={<Cmss />} />
           <Route path="/Cmscontents" element={<Cmscontents />} />
 
           <Route path="/cms/*" element={<CmsLayout />} />
@@ -87,7 +85,6 @@ const CmsLayout = () => {
       <Route path="/cms" element={<Cms />} />
       <Route path="/cmsuser" element={<Cmsuser />} />
       <Route path="/cmsfaq" element={<Cmsfaq />} />
-      <Route path="/cmss" element={<Cmss />} />
       <Route path="/Cmscontents" element={<Cmscontents />} />
     </Routes>
   );

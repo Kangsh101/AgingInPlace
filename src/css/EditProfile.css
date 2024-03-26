@@ -1,7 +1,7 @@
 .editprofile-container {
     background-color: white;
-    width: 55%;
-    height: 50vh;
+    width: 50%;
+    height: 60vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
@@ -9,14 +9,18 @@
     align-items: center; 
     flex-direction: column;
     margin-left: 5%;
+    border-radius: 30px;
 }
-
+.Profile-strong{
+    margin:0 10px 0 10px;
+}
 .editprofile-title strong {
-    font-size: 38px;
+    font-size: 30px;
     font-weight: bolder;
     display: block;
     text-align: center; 
     padding: 0 30px;
+    
 }
 
 .editprofile-context-container {
@@ -40,7 +44,11 @@
     margin-right: 20px;
 }
 
-.editprofile-context-container div select, 
+
+
+
+
+.editprofile-context-container div select,
 .editprofile-context-container div input {
     flex: 1;
     height: 30px;
@@ -69,10 +77,12 @@
     transition: opacity 0.5s ease;
     opacity: 0.7;
 }
-
+.Profile-type{
+    
+}
 @media only screen and (max-width: 1100px) {
     .editprofile-container {
-        width: 130%;
+        width: 100%;
     }
 
     .editprofile-context-container div label {
@@ -88,5 +98,8 @@
         font-size: 26px;
         width: 100%;
         margin-left: 10%;
+    }
+    .editprofile-nameinput{
+        width: 20px;
     }
 }

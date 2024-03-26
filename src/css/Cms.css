@@ -85,6 +85,9 @@ th:last-child {
   font-size: 1px; 
 }
 
+.Cmss-content table td {
+  word-wrap: break-word;
+}
 
 
 
@@ -97,11 +100,22 @@ th:last-child {
   
 }
 
+.Cmss-content .sang-title,
+.Cmss-content .sang-description {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+
 .Cmss-content th,
 .Cmss-content td {
   padding: 0px; 
   text-align: center; 
   border: none; 
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .Cmss-content th {

@@ -2,7 +2,7 @@ import React, { useState ,useEffect} from 'react';
 import { Link, Route, Routes ,useLocation} from 'react-router-dom';
 import '../css/Cms.css';
 
-const Cmss = () => {
+const Cmsfaq = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5); 
@@ -60,7 +60,7 @@ const Cmss = () => {
         <h2>관리자 페이지</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
-          <li className={`cms-item ${location.pathname === "/Cmss" ? "cms-active" : ""}`}><Link to="/Cmss">게시판 관리</Link></li>
+          <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
           <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
@@ -68,7 +68,7 @@ const Cmss = () => {
 
       <div className="Cmss-header">
         <div className='Cmss-chch'>
-          <Link to="/Cmss"><button className='chchbtt'>공지사항 게시판</button></Link>
+          <Link to="/Cms"><button className='chchbtt'>공지사항 게시판</button></Link>
           <Link to="/Cmsfaq"><button className='chchbtt1'>FAQ 게시판</button></Link>
         </div>
 
@@ -157,4 +157,4 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   );
 };
 
-export default Cmss;
+export default Cmsfaq;
