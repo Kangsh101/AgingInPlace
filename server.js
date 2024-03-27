@@ -403,7 +403,7 @@ app.delete('/api/qnaposts/:id', (req, res) => {
 });
 
 
-// 공지사항 쪽 server
+
 
 // 공지사항 등록 api
 app.post('/api/addNotice', (req, res) => {
@@ -492,11 +492,11 @@ app.post('/api/addFaQ', (req, res) => {
     connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
       if (insertErr) {
         console.error('공지사항 저장 중 오류 발생:', insertErr);
-        res.status(500).json({ error: '공지사항 저장 중 오류 발생' });
+        res.status(500).json({ error: 'FAQ 저장 중 오류 발생' });
         return;
       }
-      console.log('공지사항이 성공적으로 저장되었습니다.');
-      res.status(200).json({ message: '공지사항이 성공적으로 저장되었습니다.' });
+      console.log('FAQ 이 성공적으로 저장되었습니다.');
+      res.status(200).json({ message: 'FAQ 페이지가 성공적으로 저장되었습니다.' });
     });
   });
 });

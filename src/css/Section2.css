@@ -70,6 +70,13 @@
   color: red;
 }
 
+.gender-container,
+.typeradio-container {
+  display: flex;
+  justify-content: space-around; /* 라디오 버튼을 수평으로 일정한 간격으로 정렬 */
+  margin-bottom: 20px; /* 라디오 버튼과 다음 컨텐츠 간의 간격을 조정 */
+}
+
 .Section2-field,
 .select-field {
   margin-right: 0px;
@@ -178,6 +185,14 @@
    font-weight: bold;
   } */
   
+
+.type-radio3{
+  margin-left: 30px;
+}
+.type-radio2{
+  margin-left: -30px;
+}
+  .type-radio2,
   .type-radio1,
   .type-radio,
   .gender-radio,
@@ -194,6 +209,7 @@
 .typeradio-container,
 .genderradio-container{
   display: flex;
+  margin-bottom: 10px;
 }
 .type-radio1,
 .gender-radio1{
@@ -202,7 +218,7 @@
 }
 .type-radio,
 .gender-radio{
-  margin-left: -42%;
+  margin-left: -40%;
 }
   .gender-radio input[type="radio"]:checked + label,
   .type-radio input[type="radio"]:checked + label {
@@ -223,6 +239,7 @@
     display: inline-block;
     margin-right: 10px;
   }
+  
 }
 
 

@@ -20,6 +20,7 @@ import QnAUp from './component/QnAUp';
 import QnAContent from './component/QnAContent';
 import FaqUp from './admin/FaqUp';
 import NoticeUp from './admin/NoticeUp';
+import NoticeUpdate from './admin/NoticeUpdate';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,6 +69,7 @@ function App() {
           <Route path="/cms" element={<Cms />} />
           <Route path="/cmsuser" element={<Cmsuser />} />
           <Route path="/cmsfaq" element={<Cmsfaq />} />
+          <Route path="/noticeupdate" element={<NoticeUpdate />} />
           <Route path="/Cmscontents" element={<Cmscontents />} />
 
           <Route path="/cms/*" element={<CmsLayout />} />
