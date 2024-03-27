@@ -129,13 +129,13 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             <div className='gender-radio1'>
               <label>
                 <input type="radio" name="gender" value="남성" checked={gender === '남성'} onChange={handleGenderChange} />
-                남자
+                남성
               </label>
             </div>
             <div className='gender-radio'>
               <label>
                 <input type="radio" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange} />
-                여자
+                여성
               </label>
             </div>
           </div>
@@ -150,6 +150,12 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
               <label>
                 <input type="radio" name="role" value="보호자" checked={role === '보호자'} onChange={handleRoleChange} />
                 보호자
+              </label>
+            </div>
+            <div className='type-radio2'>
+              <label>
+                <input type="radio" name="role" value="일반인" checked={role === '일반인'} onChange={handleRoleChange} />
+                일반인
               </label>
             </div>
           </div>
