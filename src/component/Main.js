@@ -21,7 +21,7 @@ const Main = () => {
               onClick={() => handleSectionClick('whatIsDementia')}
               className={selectedSection === 'whatIsDementia' ? 'active' : ''}
             >
-              정민테스트용 글자바꿈?
+              정민이란?
             </button>
             <button
               onClick={() => handleSectionClick('causes')}
