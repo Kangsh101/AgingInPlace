@@ -73,8 +73,8 @@
 .gender-container,
 .typeradio-container {
   display: flex;
-  justify-content: space-around; /* 라디오 버튼을 수평으로 일정한 간격으로 정렬 */
-  margin-bottom: 20px; /* 라디오 버튼과 다음 컨텐츠 간의 간격을 조정 */
+  justify-content: space-around; 
+  margin-bottom: 20px; 
 }
 
 .Section2-field,
@@ -199,12 +199,12 @@
   .gender-radio1{
     border: 1px solid #c1c0c0;
     border-radius: 8px;
-    font-size: 25px;
+    font-size: 20px;
     color: #2f2f2f;
- 
+    padding: 5px 0 5px 0;
     background-color:  #ffffff;
-    width: 100px;
-    height: 40px;
+    width: 85px;
+    height: 28px;
   }
 .typeradio-container,
 .genderradio-container{
