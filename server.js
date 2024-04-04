@@ -26,7 +26,7 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-const connection = require('./src/database/db');
+const connection = require('./src/db');
 
 
 app.use((req, res, next) => {
