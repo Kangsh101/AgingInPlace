@@ -7,7 +7,7 @@ const FaqPage = () => {
   const [faqItems, setFaqItems] = useState([]);
 
   useEffect(() => {
-    fetch('/api/faq') // FAQ API 엔드포인트로 교체하세요.
+    fetch('/api/faq') 
       .then(response => response.json())
       .then(data => setFaqItems(data))
       .catch(error => console.error('FAQ 데이터 가져오는 중 오류 발생:', error));
