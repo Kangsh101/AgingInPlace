@@ -26,10 +26,8 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'build')));
 
 
+const connection = require('./src/db');
 
-const connection = mysql.createConnection({
-
-});
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
