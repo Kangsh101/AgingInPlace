@@ -119,11 +119,39 @@ app.post('/api/android/login', (req, res) => {
 
     console.log('세션에 저장된 기본키:', req.session.userId);
 
-    res.status(200).json(user);
+    res.status(200).json({ userId: user.id });
   });
 });
 
+//안드로이드 사용자 정보 가져오기
+app.get('/api/android/userinfo', (req, res) => {
+  const userId = req.session.userId;
+  const sessionId = req.headers.sessionId;
 
+
+    connection.query(
+      "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
+      [userId], 
+      (err, rows, fields) => {
+        if (err) {
+          console.error('회원 정보 조회 실패: ' + err.stack);
+          res.status(500).send('회원 정보 조회 실패');
+          return;
+        }
+
+        const user = rows[0];
+        const userInfo = {
+          gender: user.gender,
+          name: user.name,
+          role: user.role,
+          phoneNumber: user.phoneNumber,
+          birthdate: user.birthdate,
+          email: user.email
+        };
+        res.status(200).json(userInfo);
+      }
+    );
+});
 
 
 // 사용자 정보 업데이트
@@ -152,6 +180,7 @@ app.post('/api/updateuserinfo', (req, res) => {
 app.get('/api/userinfo', (req, res) => {
   const userId = req.session.userId; 
 
+ console.log('현재 로그인된 사용자의 세션 ID:', userId);
   connection.query(
     "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
     [userId], 
