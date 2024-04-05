@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #db.js
-/src/database/db.js
+/src/db.js
+

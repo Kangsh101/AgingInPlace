@@ -18,7 +18,8 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://localhost:5000',
+  origin: 'http://www.aginginplaces.net/',
+  methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200, 
 }));
@@ -26,7 +27,7 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-const connection = require('./src/database/db');
+const connection = require('./src/db');
 
 
 app.use((req, res, next) => {
