@@ -44,13 +44,6 @@ connection.connect((err) => {
   console.log('DB 연결 성공');
 });
 
-connection.query('USE aginginplace', (err) => {
-  if (err) {
-    console.error('aginginplace 데이터베이스 선택 실패: ' + err.stack);
-    return;
-  }
-  console.log('aginginplace 데이터베이스 선택 성공');
-});
 
 //회원가입
 app.post('/api/signup', (req, res) => {
