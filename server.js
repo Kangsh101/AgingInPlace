@@ -6,6 +6,9 @@ const cors = require('cors');
 
 const path = require('path');
 const app = express();
+
+const kangsh = 'USE aginginplace';
+
 app.use(cookieParser());
 
 app.use(express.json());
@@ -89,6 +92,36 @@ app.post('/api/login', (req, res) => {
     res.status(200).json(user);
   });
 });
+
+//안드로이드 로그인
+app.post('/api/android/login', (req, res) => {
+  const { username, password } = req.body;
+
+  const query = `SELECT * FROM members WHERE username = ? AND password = ?`;
+
+  connection.query(query, [username, password], (err, result) => {
+    if (err) {
+      console.error('로그인 실패: ' + err.stack);
+      res.status(500).send('로그인 실패');
+      return;
+    }
+    if (result.length === 0) {
+      res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
+      return;
+    }
+    const user = result[0];
+    if (user.is_active !== 1) {
+      res.status(401).send('비활성화된 계정입니다');
+      return;
+    }
+    req.session.userId = user.id; 
+
+    console.log('세션에 저장된 기본키:', req.session.userId);
+
+    res.status(200).json(user);
+  });
+});
+
 
 
 
