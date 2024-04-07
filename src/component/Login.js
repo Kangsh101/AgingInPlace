@@ -18,11 +18,18 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const response = await axios.post('/api/login', {
-        username,
-        password
+      // 폼 데이터 생성
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+
+      // POST 요청 보내기
+      const response = await axios.post('/api/login', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data' // 폼 데이터로 설정
+        }
       });
-    
+
       if (response.status === 200) {
         const user = response.data;
         if (user) {
@@ -51,14 +58,13 @@ const Login = ({ onLogin }) => {
       console.error('로그인 오류:', error);
       alert('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
-  }       
+  };
 
   return (
     <div className='login-container'>
       <div>
         <div className="login-layout">
           <h2 className='login-lg'>로그인</h2>
-          
           <div className="row">
             <div className="login-box col-lg-2">
               <form onSubmit={handleSubmit}>
@@ -69,24 +75,15 @@ const Login = ({ onLogin }) => {
                   <input type="password" id="password" title="비밀번호" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" placeholder="비밀번호" />
                 </div>
                 <div className="find-group">
-                  <Link to="/signup" className="text-primary">
-                    회원가입 | 
-                  </Link>
-                  <Link to="/Idppl" className="findPd">
-                     아이디 찾기 |
-                  </Link>
-                  <Link to="/Passwordppl" className="findPd">
-                    비밀번호 찾기
-                  </Link>
+                  <Link to="/signup" className="text-primary">회원가입 | </Link>
+                  <Link to="/Idppl" className="findPd">아이디 찾기 |</Link>
+                  <Link to="/Passwordppl" className="findPd">비밀번호 찾기</Link>
                 </div>
-                <button  type="submit" className="login-btt">
-                  로그인
-                </button>
+                <button type="submit" className="login-btt">로그인</button>
               </form>
               <div className="social-login">
                 <strong>간편 로그인</strong>
-                <div className="social-icon">
-                </div>
+                <div className="social-icon"></div>
               </div>
             </div>
           </div>
