@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://www.aginginplaces.net/',
+  origin: 'http://www.aginginplaces.net',
   methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200, 

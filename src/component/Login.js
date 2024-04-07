@@ -47,7 +47,7 @@ const Login = ({ onLogin }) => {
         if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
           alert('아이디 또는 비밀번호를 확인하세요.');
         } else if (errorMessage === '비활성화된 계정입니다') {
-          alert('비활성화된 계정이리리리리니다.');
+          alert('비활성화된 계정입니다.');
         } else {
           alert('서버 오류가 발생했습니다.');
         }
