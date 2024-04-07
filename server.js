@@ -86,7 +86,7 @@ app.post('/api/login', (req, res) => {
       res.status(401).send('비활성화된 계정입니다');
       return;
     }
-    req.session.userId = user.id; 
+    req.session.userId = user.id;
 
     console.log('세션에 저장된 기본키:', req.session.userId);
 
