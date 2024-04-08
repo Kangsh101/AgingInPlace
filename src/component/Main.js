@@ -14,7 +14,7 @@ const Main = () => {
     <div className='mainmain'>
       <img src="/images/asddddd.jpg" alt='img' style={{ width: '100%', height: '100%', marginTop:'3.8%'}}/>
       <div className="main-container">
-        <h1 className='testsiz'>소개22</h1>
+        <h1 className='testsiz'>소개sss</h1>
         <div className='mainbtt'>
           <div className="main-bttcontainer">
             <button
