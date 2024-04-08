@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://www.aginginplaces.net',
+  origin: 'http://www.aginginplaces.net/',
   methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200, 
@@ -94,7 +94,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-//안드로이드 로그인
+// 안드로이드 로그인
 app.post('/api/android/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -115,44 +115,54 @@ app.post('/api/android/login', (req, res) => {
       res.status(401).send('비활성화된 계정입니다');
       return;
     }
-    req.session.userId = user.id; 
 
-    console.log('세션에 저장된 기본키:', req.session.userId);
+    // 여기서 사용자를 인증하고 고유한 식별자를 생성하여 반환합니다.
+    const userId = user.id; // 사용자의 고유한 ID
 
-    res.status(200).json({ userId: user.id });
+    // 쿠키에 사용자 ID를 저장합니다.
+    res.cookie('userId', userId, { httpOnly: true }); // httpOnly: true로 설정하여 JavaScript에서 쿠키에 접근하지 못하도록 합니다.
+
+    console.log('사용자 인증 및 식별자 생성:', userId);
+    res.status(200).json({ userId });
   });
 });
 
-//안드로이드 사용자 정보 가져오기
+// 안드로이드 사용자 정보 가져오기
 app.get('/api/android/userinfo', (req, res) => {
-  const userId = req.session.userId;
-  const sessionId = req.headers.sessionId;
+  // 쿠키에서 사용자 ID를 추출합니다.
+  const userId = req.cookies.userId;
 
-
-    connection.query(
-      "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
-      [userId], 
-      (err, rows, fields) => {
-        if (err) {
-          console.error('회원 정보 조회 실패: ' + err.stack);
-          res.status(500).send('회원 정보 조회 실패');
-          return;
-        }
-
-        const user = rows[0];
-        const userInfo = {
-          gender: user.gender,
-          name: user.name,
-          role: user.role,
-          phoneNumber: user.phoneNumber,
-          birthdate: user.birthdate,
-          email: user.email
-        };
-        res.status(200).json(userInfo);
+  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
+  connection.query(
+    "SELECT gender, name, role, phoneNumber, birthdate, email FROM members WHERE id = ?;",
+    [userId], 
+    (err, rows, fields) => {
+      if (err) {
+        console.error('회원 정보 조회 실패: ' + err.stack);
+        res.status(500).json({ error: '회원 정보 조회 실패' }); // JSON 형식으로 오류 응답
+        return;
       }
-    );
-});
 
+      if (rows.length === 0) {
+        console.error('사용자 정보가 없습니다.');
+        res.status(404).json({ error: '사용자 정보가 없습니다.' }); // JSON 형식으로 오류 응답
+        return;
+      }
+
+      // 조회된 사용자 정보를 JSON 형식으로 응답
+      const user = rows[0];
+      const userInfo = {
+        gender: user.gender,
+        name: user.name,
+        role: user.role,
+        phoneNumber: user.phoneNumber,
+        birthdate: user.birthdate,
+        email: user.email
+      };
+      res.status(200).json(userInfo); // JSON 형식으로 사용자 정보 응답
+    }
+  );
+});
 
 // 사용자 정보 업데이트
 app.post('/api/updateuserinfo', (req, res) => {
@@ -352,7 +362,7 @@ app.post('/api/post', (req, res) => {
     const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, 'QnA', 'Y', ?, NOW())`;
 
     connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
-      if (insertErr) {
+      if (insertErr) {  
         console.error('글 저장 중 오류 발생:', insertErr);
         res.status(500).json({ error: '글 저장 중 오류 발생' });
         return;
