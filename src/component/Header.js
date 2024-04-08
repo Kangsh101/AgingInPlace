@@ -30,13 +30,13 @@ const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
         <h1 id="logo"><a href="/">Landed</a></h1>
         <nav id="nav">
           <ul>
-            <li><a href="/">프로그램 콘텐츠</a></li>
+            <li><a href="/contents">프로그램 콘텐츠22</a></li>
             <li>
-              <a href="#">커뮤니티</a>
+              <a href="qnapage">커뮤니티</a>
             </li>
             {!isLoggedIn && (
               <>
-                <li><a href="/elements" >회원가입</a></li>
+                <li><a href="/signup" >회원가입</a></li>
                 <li><a href="login" className="button primary">로그인</a></li>
               </>
             )}

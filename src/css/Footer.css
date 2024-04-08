@@ -1,7 +1,7 @@
 /* .footer-container {
   position: absolute;
   width: 98%;
-  background: #272833;
+  background-color: #f8f8f8;
   padding:  20px 0px;
   text-align: left;
   margin-top: 50px;
@@ -15,14 +15,13 @@
 .abcds {
   margin-left: 21%; 
   margin-right: 10%; 
-  color: white
 }
 
 .babago {
   margin-right: 25%;
   font-size: 20px;
   font-weight: bold;
-  color: white
+  color: rgb(244, 124, 124);
 }
 
 .upper-section {
@@ -56,23 +55,19 @@
   font-size: 12px;
   display: flex; 
   justify-content: space-around; 
-  color: rgba(255, 255, 255, 0.5);
 }
 
 .footit {
   font-size: 16px;
-  color: rgb(196, 195, 195);
+  color: #000000;
 }
 
 .fooati {
   font-size: 19px;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(98, 98, 98);
 }
-.fontwhwjd {
-  font-size: 13px;
-  color: #7c7c7c;
-}
+
 @media only screen and (max-width: 480px) {
   .footer-container {
     padding: 15px;
@@ -108,4 +103,22 @@
   }
 }
 
- */
+.fontwhwjd {
+  font-size: 13px;
+  color: #636161;
+} */
+.footer-label1{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.464);
+  margin-left: 4px;
+  margin-right:2px;
+}
+
+.footer-label2{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.464);
+  margin-left: 4px;
+}
+.label1{
+  font-size: 17px;
+}

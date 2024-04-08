@@ -50,7 +50,7 @@ function App() {
       <div className="App">
       
         <Routes>
-          <Route path="/" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
+          <Route path="/" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer/></>} />
           <Route path="/login" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
           <Route path="/signup" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
           <Route path="/Idppl" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
@@ -59,7 +59,7 @@ function App() {
           <Route path="/qnaup" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAUp /><Footer /></>} />
           <Route path="/notice" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Notice /><Footer /></>} />
           <Route path="/faqpage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><FaqPage /><Footer /></>} />
-          <Route path="/main" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
+          <Route path="/main" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer/></>} />
           <Route path="/MyPage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
           <Route path="/contents" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
           <Route path="/qnacontent/:id" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />

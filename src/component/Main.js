@@ -14,9 +14,9 @@ const Main = () => {
           <header>
             <h2> 치매 </h2>
             <p>안녕하세요<br />치매 페이지에 오신것을 환영합니다.</p>
-            {/* <img src="/images/pic01.jpg" alt="Your Logo" className='hadervar-logo'/> */}
+            {/* <img src="/images/clclao.jpg" alt="Your Logo" className='hadervar-logo'/> */}
           </header>
-          {/* <img src="/images/pic01.jpg" alt="Your Logo" className='hadervar-logo'/> */}
+          {/* <img src="/images/clclao.jpg" alt="Your Logo" className='hadervar-logo'/> */}
           {/* <span className="image"><img src={require('./images/pic01.jpg').default} alt="" /></span> */}
         </div>
         <a href="#one" className="goto-next scrolly">Next</a>
@@ -240,19 +240,7 @@ const Main = () => {
       </section> */}
 
       {/* Footer */}
-      <footer id="footer">
-        <ul className="icons">
-          <li><a href="#" className="icon brands alt fa-twitter"><span className="label">Twitter</span></a></li>
-          <li><a href="#" className="icon brands alt fa-facebook-f"><span className="label">Facebook</span></a></li>
-          <li><a href="#" className="icon brands alt fa-linkedin-in"><span className="label">LinkedIn</span></a></li>
-          <li><a href="#" className="icon brands alt fa-instagram"><span className="label">Instagram</span></a></li>
-          <li><a href="#" className="icon brands alt fa-github"><span className="label">GitHub</span></a></li>
-          <li><a href="#" className="icon solid alt fa-envelope"><span className="label">Email</span></a></li>
-        </ul>
-        <ul className="copyright">
-          <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-        </ul>
-      </footer>
+
     </div>
   );
 };
