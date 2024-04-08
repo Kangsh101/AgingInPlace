@@ -21,6 +21,7 @@ import QnAContent from './component/QnAContent';
 import FaqUp from './admin/FaqUp';
 import NoticeUp from './admin/NoticeUp';
 import NoticeUpdate from './admin/NoticeUpdate';
+import Navpanel from './component/Navpanel';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,19 +50,19 @@ function App() {
       <div className="App">
       
         <Routes>
-          <Route path="/" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
-          <Route path="/login" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
-          <Route path="/signup" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
-          <Route path="/Idppl" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
-          <Route path="/Passwordppl" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Passwordppl /><Footer /></>} />
-          <Route path="/qnapage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAPage /><Footer /></>} />
-          <Route path="/qnaup" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAUp /><Footer /></>} />
-          <Route path="/notice" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Notice /><Footer /></>} />
-          <Route path="/faqpage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><FaqPage /><Footer /></>} />
-          <Route path="/main" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
-          <Route path="/MyPage" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
-          <Route path="/contents" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
-          <Route path="/qnacontent/:id" element={<><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
+          <Route path="/" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
+          <Route path="/login" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
+          <Route path="/signup" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
+          <Route path="/Idppl" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
+          <Route path="/Passwordppl" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Passwordppl /><Footer /></>} />
+          <Route path="/qnapage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAPage /><Footer /></>} />
+          <Route path="/qnaup" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAUp /><Footer /></>} />
+          <Route path="/notice" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Notice /><Footer /></>} />
+          <Route path="/faqpage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><FaqPage /><Footer /></>} />
+          <Route path="/main" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /></>} />
+          <Route path="/MyPage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
+          <Route path="/contents" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
+          <Route path="/qnacontent/:id" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
 
 
           <Route path="/faqup" element={<FaqUp />} />

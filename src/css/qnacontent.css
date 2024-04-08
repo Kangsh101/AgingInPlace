@@ -1,4 +1,4 @@
-.qnacontent-container{
+/* .qnacontent-container{
     margin:3% 0 0 19%;
     width: 700px;
     height: 700px;
@@ -22,11 +22,6 @@
     white-space: pre-wrap;
     overflow: auto; 
 }
-/* .QnA-content {
-    height: auto;
-    margin-right: 10px;
-    white-space: pre-wrap; 
-} */
 
 .QnA-comments span{
     font-weight: bold;
@@ -127,4 +122,4 @@
     font-size: 12px;
     width: 95px;
     height: 35px;
-}
+} */

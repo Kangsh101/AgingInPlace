@@ -1,23 +1,17 @@
-/* html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-} */
-
-/* body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
+/* 
 .main-container {
   text-align: center;
   margin: 0;
   height: 100vh;
 }
-
-
+.maintext{
+  margin-top: 8%;
+  color: white;
+}
+.testsiz{
+  margin-top: 30px;
+  color: white;
+}
 .image-container {
   width: 100%;
   height: 100%;
@@ -32,11 +26,12 @@
   margin-top: 2%;
 }
 
+
 .mainbtt {
-  background-color: #ffffff;
+  background: rgba(255, 255, 255, 0.075);
   padding: 10px 5% 10px 5%;
-  border: 1px solid #848383;
-  border-radius: 5px;
+ 
+  border-radius: 15px;
   width: fit-content;
   margin: 0 auto;
 }
@@ -44,45 +39,71 @@
 .main-bttcontainer button {
   margin: 5px;
   padding: 10px 20px;
-  font-size: 16px;
-  border: 1px solid #ffffff;
   border-radius: 5px;
-  background-color: #ffffff;
+  background: rgba(255, 255, 255, 0.075);
   cursor: pointer;
-  color: black;
-  font-weight: bold;
-  font-size: 20px;
+  color: white;
+  font-size: 18px;
 }
 
 .main-bttcontainer button:hover {
-  color: #6b5e5e;
+  color: #e44c65;
 }
 
 .main-bttcontainer button.active {
-  color: #6b5e5e;
-  border: 1px solid #ffffff;
+  background: rgba(255, 255, 255, 0);
+  color: rgb(255, 255, 255);
+  border: 1px solid #cfcdcd;
 }
 
 .sul1 {
   width: 80%;
   padding: 1% 10% 1% 10%;
-  background-color: rgb(240, 239, 239);
+  background-color: transparent;
   color: rgb(0, 0, 0);
   margin: 0 auto;
 }
 
 .sul2 {
   width: 39%;
-  padding: 1% 10% 1% 10%;
-  background-color: rgb(240, 239, 239);
+  padding: 1% 10% 3% 10%;
+  background: rgba(116, 115, 115, 0.968);
   color: rgb(0, 0, 0);
   margin: 0 auto;
+  border-radius: 20px;
 }
 
 .sul11 {
   font-weight: bold;
 }
 
+
+.maintext-h3{
+  padding: 5% 0 0 0;
+  font-size: 2.5em;
+  line-height: 1.5em;
+  color: #ffffff;
+  font-weight: 300;
+  line-height: 1em;
+  margin: 0 0 1em 0;
+}
+
+.maintext-p{
+  font-size: 1.2em;
+  margin-top: -0.8em;
+  line-height: 1.75em;
+  color: #ffffff;
+  position: relative;
+  margin: 0 0 1.5em 0;
+}
+.maintext-span{
+  font-size: 0.9em;
+  margin-top: -0.8em;
+  line-height: 1.75em;
+  color: #ffffff;
+  position: relative;
+  margin: 0 0 1.5em 0;
+}
 @media only screen and (max-width: 768px) {
   .main-container {
     padding: 0 10px; 
@@ -123,4 +144,4 @@
   .sul111{
     font-size: 10px;
   }
-}
+} */

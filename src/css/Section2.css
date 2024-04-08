@@ -1,4 +1,4 @@
-.nav-pills-step {
+/* .nav-pills-step {
   display: flex;
   list-style: none;
   padding: 20px;
@@ -15,7 +15,7 @@
 }
 
 .nav-item.active {
-  background-color: #3a3a4a;
+  background-color:  #e44c65;
   color: white;
 }
 
@@ -26,6 +26,7 @@
 .section2-title{
   border-bottom: 2px solid rgb(122, 120, 120);
   padding-bottom: 15px;
+  color: white;
   font-size: 30px;
   font-weight: bold;
 }
@@ -46,7 +47,7 @@
 }
 
 .Section2-field {
-  margin-top: 3px;
+  margin-top: 5px;
   width: 450px;
   padding: 18px;
   height: 23px;
@@ -86,7 +87,6 @@
   margin-left: 5px; 
 }
 
-/**/
 .gender-container {
   display: flex;
   justify-content: center;
@@ -111,14 +111,19 @@
   background-color: #3a3a4a;
   color: white;
 }
+.section2-textInt input::placeholder{
+  color: white;
+}
+
 
 
 
 .Section2-field {
-  border-radius: 20px; 
+  border-radius: 4px; 
   padding: 10px; 
   border: 1px solid #ccc; 
   outline: none; 
+  background-color: transparent;
 }
 
 .input-email {
@@ -136,7 +141,7 @@
 
 
 .next-button {
-  background-color:#1877F2;
+  background-color:#e44c65;
   color: rgb(255, 255, 255); 
   border: none; 
   padding: 10px 20px; 
@@ -145,10 +150,14 @@
   display: inline-block; 
   font-size: 18px; 
   cursor: pointer; 
-  border-radius: 20px; 
+  border-radius: 6px; 
   margin-top: 20px;
   font-weight: bold;
 }
+.next-button:hover {
+  color:rgb(212, 211, 211);
+}
+
 .Section-btt{
   background-color:#1877F2;
   color: rgb(255, 255, 255); 
@@ -166,24 +175,6 @@
 
 
 
-/* .next-button:hover {
-  background-color: rgb(189, 92, 92); 
-
-/* 
-  .type-radio {
-   margin-bottom: 1%;
-   margin-left: 50%;
-   border: 1px solid #c1c0c0;
-   cursor: pointer;
-   width: 10px;
-   height: 10px;
-   border-radius: 8px;
-   padding: 20px;
-   font-size: 15px;
-   background-color:  #ffffff;
-   color: #9e9e9e;
-   font-weight: bold;
-  } */
   
 
 .type-radio3{
@@ -306,4 +297,4 @@
     margin-left: 1%;
     font-size: 22px;
   }
-}
+} */

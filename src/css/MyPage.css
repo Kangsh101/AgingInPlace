@@ -1,4 +1,4 @@
-
+/* 
 .mypage {
   margin-top: 250px;
 }
@@ -83,7 +83,6 @@
     opacity: 0.3;
   }
 
-/* 폰 사이즈일 때 스타일 */
 @media screen and (max-width: 768px) {
   .logo-container{
     margin-top: 5px;
@@ -165,4 +164,4 @@
   .content {
     order: 2; 
   }
-}
+} */
