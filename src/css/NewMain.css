@@ -3056,10 +3056,10 @@ input, select, textarea {
 		}
 
 		.spotlight:before {
-			/* background-image: url("images/overlay.png"); */
+			background-image: url("/public/images/cat2.jpg");
 			content: '';
 			display: block;
-			/* height: 100%; */
+			height: 100%;
 			left: 0;
 			top: 0;
 			width: 100%;
@@ -3450,18 +3450,18 @@ input, select, textarea {
 
 /* Banner */
 
-	#banner {
-		background-attachment: fixed;
-		background-color: #272833;
-		/* background-image: url("../../images/banner.jpg"); */
-		background-position: center center;
-		background-size: cover;
-		box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.25);
-		min-height: 0vh;
-		position: relative;
-		text-align: center;
-		z-index: 21;
-	}
+#banner {
+    background-attachment: fixed;
+    background-color: #272833;
+    background-image: url(/public/images/cat1.jpg);
+    background-position: center center;
+    background-size: cover;
+    box-shadow: 0 0.25em 0.5em 0 rgba(221, 197, 197, 0.25);
+    min-height: 100vh;
+    position: relative;
+    text-align: center;
+    z-index: 21;
+}
 
 		#banner:before {
 			content: '';
@@ -3472,10 +3472,7 @@ input, select, textarea {
 		}
 
 		#banner:after {
-			/* background-image: -moz-linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url("images/overlay.png");; */
-			/* background-image: -webkit-linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url("images/overlay.png");; */
-			/* background-image: -ms-linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url("images/overlay.png");; */
-			/* background-image: linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url("images/overlay.png");; */
+			background-image: -webkit-linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/cat1.jpg);
 			content: '';
 			display: block;
 			height: 100%;
@@ -3496,37 +3493,35 @@ input, select, textarea {
 			z-index: 1;
 		}
 
-			#banner .content header {
-				display: inline-block;
-				vertical-align: middle;
+		#banner .content header {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+			#banner .content header h2 {
+				font-size: 2.5em;
+				margin: 0;
 			}
 
-				#banner .content header h2 {
-					font-size: 2.5em;
-					margin: 0;
-					
-				}
+			#banner .content header p {
+				margin: 0.5em 0 0 0;
+				top: 0;
+			}
 
-				#banner .content header p {
-					margin: 0.5em 0 0 0;
-					top: 0;
-					/* text-align: right; */
-				}
+		#banner .content .image {
+			border-radius: 100%;
+			display: inline-block;
+			height: 18em;
+			margin-left: 3em;
+			vertical-align: middle;
+			width: 18em;
+		}
 
-			#banner .content .image {
+			#banner .content .image img {
 				border-radius: 100%;
-				display: inline-block;
-				height: 18em;
-				margin-left: 3em;
-				vertical-align: middle;
-				width: 18em;
+				display: block;
+				width: 100%;
 			}
-
-				#banner .content .image img {
-					border-radius: 100%;
-					display: block;
-					width: 100%;
-				}
 
 	body.is-touch #banner {
 		background-attachment: scroll;
@@ -3707,6 +3702,7 @@ input, select, textarea {
 					margin: 0;
 					max-height: 40vh;
 					overflow: hidden;
+					
 				}
 
 				.spotlight .content {

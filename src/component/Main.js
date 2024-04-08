@@ -9,12 +9,11 @@ const Main = () => {
   return (
     
     <div className="is-preload landing" id="page-wrapper">
-      <section id="banner">
+      <section id="banner" style={{ backgroundPosition: 'center -42.6px' }}>
         <div className="content">
           <header>
             <h2> 치매 </h2>
             <p>안녕하세요<br />치매 페이지에 오신것을 환영합니다.</p>
-            {/* <img src="/images/clclao.jpg" alt="Your Logo" className='hadervar-logo'/> */}
           </header>
           {/* <img src="/images/clclao.jpg" alt="Your Logo" className='hadervar-logo'/> */}
           {/* <span className="image"><img src={require('./images/pic01.jpg').default} alt="" /></span> */}
@@ -22,10 +21,9 @@ const Main = () => {
         <a href="#one" className="goto-next scrolly">Next</a>
       </section>
 
-      {/* One */}
-      {/* <section id="one" className="spotlight style1 bottom">
-        <img src="/images/pic02.jpg" alt="Your Logo" className='hadervar-logo'/>
-        <span className="image fit main"><img src={require('/images/pic02.jpg').default} alt="" /></span>
+    
+      <section id="one" className="spotlight style1 bottom">
+        <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
         <div className="content">
           <div className="container">
             <div className="row">
@@ -53,11 +51,10 @@ const Main = () => {
           </div>
         </div>
         <a href="#two" className="goto-next scrolly">Next</a>
-      </section> */}
+      </section>
 
-      {/* Two */}
-      {/* <section id="two" className="spotlight style2 right">
-        <span className="image fit main"><img src={require('./images/pic03.jpg').default} alt="" /></span>
+       <section id="two" className="spotlight style2 right">
+        <span className="image fit main"><img src="/images/cat03.jpg"/></span>
         <div className="content">
           <header>
             <h2>Interdum amet non magna accumsan</h2>
@@ -69,11 +66,11 @@ const Main = () => {
           </ul>
         </div>
         <a href="#three" className="goto-next scrolly">Next</a>
-      </section> */}
+      </section>
 
       {/* Three */}
-      {/* <section id="three" className="spotlight style3 left">
-        <span className="image fit main bottom"><img src={require('./images/pic04.jpg').default} alt="" /></span>
+      <section id="three" className="spotlight style3 left">
+        <span className="image fit main bottom"></span>
         <div className="content">
           <header>
             <h2>Interdum felis blandit praesent sed augue</h2>
@@ -85,7 +82,7 @@ const Main = () => {
           </ul>
         </div>
         <a href="#four" className="goto-next scrolly">Next</a>
-      </section> */}
+      </section>
 
       {/* Four */}
       <section id="four" className="wrapper style1 special fade-up">
@@ -224,7 +221,7 @@ const Main = () => {
       </section>
 
       {/* Five */}
-      {/* <section id="five" className="wrapper style2 special fade">
+      <section id="five" className="wrapper style2 special fade">
         <div className="container">
           <header>
             <h2>Magna faucibus lorem diam</h2>
@@ -237,7 +234,7 @@ const Main = () => {
             </div>
           </form>
         </div>
-      </section> */}
+      </section>
 
       {/* Footer */}
 
