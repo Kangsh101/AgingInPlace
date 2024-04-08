@@ -135,7 +135,7 @@ app.get('/api/android/userinfo', (req, res) => {
   // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
   connection.query(
     "SELECT gender, name, role, phoneNumber, birthdate, email FROM members WHERE id = ?;",
-    [userId], 
+    [userId], // userId 값을 플레이스홀더에 전달
     (err, rows, fields) => {
       if (err) {
         console.error('회원 정보 조회 실패: ' + err.stack);
