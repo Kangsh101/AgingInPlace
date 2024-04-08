@@ -2,18 +2,16 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import '../css/Header.css';
 
-const Header = ({ isLoggedIn, setIsLoggedIn }) => {
+const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate(); 
 
   const handleLogout = async () => {
     try {
-
       const response = await fetch('/api/logout', {
         method: 'POST',
       });
   
       if (response.ok) {
-      
         setIsLoggedIn(false); 
         localStorage.removeItem('isLoggedIn'); 
         navigate('/main'); 
@@ -27,34 +25,32 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   };
 
   return (
-    <header className="header-container">
-      <div>
-        <Link to="/main">
-          <img src="/images/loginlogo.png" alt="Your Logo" className='hadervar-logo'/>
-        </Link>
-      </div>
-      <nav className="nav-container">
-        <ul>
-          <li className='Header-nav'><Link to="/contents">프로그램 콘텐츠</Link></li>
-          <li className='Header-nav'><Link to="/qnapage">커뮤니티</Link></li>
-        </ul>
-      </nav>
-      <div className="auth-buttons">
-        {isLoggedIn ? (
-          <>
-            <button className='Header-nav' onClick={handleLogout}>로그아웃</button>
-            <button className='Header-nav'><Link to="/mypage">내정보</Link></button>
-          </>
-        ) : (
-          <>
-            <button className='Header-loginbtt'><Link to="/login">로그인</Link></button>
-            <button className='Header-signupbtt'><Link to="/signup">회원가입</Link></button>
-          </>
-        )}
-        <button className='Header-nav'><Link to="/customer-service">고객센터</Link></button>
-      </div>
-    </header>
+    <div className="is-preload landing" id="page-wrapper">
+      <header id="header">
+        <h1 id="logo"><a href="/">Landed</a></h1>
+        <nav id="nav">
+          <ul>
+            <li><a href="/">프로그램 콘텐츠</a></li>
+            <li>
+              <a href="#">커뮤니티</a>
+            </li>
+            {!isLoggedIn && (
+              <>
+                <li><a href="/elements" >회원가입</a></li>
+                <li><a href="login" className="button primary">로그인</a></li>
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+                <li><a href="/elements">내정보</a></li>
+                <li><button onClick={handleLogout} className="button primary">로그아웃</button></li>
+              </>
+            )}
+          </ul>
+        </nav>
+      </header>
+    </div>
   );
 };
 
-export default Header;
+export default Header2;

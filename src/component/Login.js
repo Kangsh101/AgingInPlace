@@ -5,68 +5,72 @@ import '../css/Login.css';
 import axios from 'axios';
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!username || !password) {
-      alert('아이디와 비밀번호를 입력하세요.');
-      return;
-    }
-
-    try {
-      // 폼 데이터 생성
-      const formData = new FormData();
-      formData.append('username', username);
-      formData.append('password', password);
-
-      // POST 요청 보내기
-      const response = await axios.post('/api/login', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data' // 폼 데이터로 설정
-        }
-      });
-
-      if (response.status === 200) {
-        const user = response.data;
-        if (user) {
-          if (user.is_active === 1) {
-            onLogin(true);
-            navigate('/main');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      if (!username || !password) {
+        alert('아이디와 비밀번호를 입력하세요.');
+        return;
+      }
+  
+      try {
+        const response = await axios.post('/api/login', {
+          username,
+          password
+        });
+      
+        if (response.status === 200) {
+          const user = response.data;
+          if (user) {
+            if (user.is_active === 1) {
+              onLogin(true);
+              navigate('/main');
+            } else {
+              alert('비활성화된 계정입니다.');
+            }
           } else {
-            alert('비활성화된 계정입니다.');
+            alert('아이디 또는 비밀번호를 확인하세요.');
           }
-        } else {
-          alert('아이디 또는 비밀번호를 확인하세요.');
-        }
-      } else if (response.status === 401) {
-        const errorMessage = response.data;
-        if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
-          alert('아이디 또는 비밀번호를 확인하세요.');
-        } else if (errorMessage === '비활성화된 계정입니다') {
-          alert('비활성화된 계정입니다.');
+        } else if (response.status === 401) {
+          const errorMessage = response.data;
+          if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
+            alert('아이디 또는 비밀번호를 확인하세요.');
+          } else if (errorMessage === '비활성화된 계정입니다') {
+            alert('비활성화된 계정입니다.');
+          } else {
+            alert('서버 오류가 발생했습니다.');
+          }
         } else {
           alert('서버 오류가 발생했습니다.');
         }
-      } else {
-        alert('서버 오류가 발생했습니다.');
+      } catch (error) {
+        console.error('로그인 오류:', error);
+        alert('아이디 또는 비밀번호가 올바르지 않습니다.');
       }
-    } catch (error) {
-      console.error('로그인 오류:', error);
-      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
-    }
-  };
-
+    }       
   return (
-    <div className='login-container'>
+    <div id="page-wrapper" >
+
+      {/* Main */}
+      <div id="main" className="wrapper style1">
+        <div className="container">
+          <header className="major">
+            <h2>로그인</h2>
+          </header>
+
+          {/* Content */}
+          <section id="content">
+          <div className='login-container'>
       <div>
-        <div className="login-layout">
-          <h2 className='login-lg'>로그인</h2>
+        <div className="">
+
+          
           <div className="row">
-            <div className="login-box col-lg-2">
+            <div className="LoginBox">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <input type="text" id="username" title="아이디" name="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control" placeholder="아이디" />
@@ -75,20 +79,49 @@ const Login = ({ onLogin }) => {
                   <input type="password" id="password" title="비밀번호" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" placeholder="비밀번호" />
                 </div>
                 <div className="find-group">
-                  <Link to="/signup" className="text-primary">회원가입 | </Link>
-                  <Link to="/Idppl" className="findPd">아이디 찾기 |</Link>
-                  <Link to="/Passwordppl" className="findPd">비밀번호 찾기</Link>
+                  <Link to="/signup" className="findPd">
+                    회원가입 | 
+                  </Link>
+                  <Link to="/Idppl" className="findPd">
+                     아이디 찾기 |
+                  </Link>
+                  <Link to="/Passwordppl" className="findPd">
+                    비밀번호 찾기
+                  </Link>
                 </div>
-                <button type="submit" className="login-btt">로그인</button>
+                <button  type="submit" className="login-btt">
+                  로그인
+                </button>
               </form>
               <div className="social-login">
-                <strong>간편 로그인</strong>
-                <div className="social-icon"></div>
+                {/* <strong>간편 로그인</strong> */}
+                <div className="social-icon">
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+          </section>
+
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer id="footer">
+        <ul className="icons">
+          <li><a href="#" className="icon brands alt fa-twitter"><span className="label">Twitter</span></a></li>
+          <li><a href="#" className="icon brands alt fa-facebook-f"><span className="label">Facebook</span></a></li>
+          <li><a href="#" className="icon brands alt fa-linkedin-in"><span className="label">LinkedIn</span></a></li>
+          <li><a href="#" className="icon brands alt fa-instagram"><span className="label">Instagram</span></a></li>
+          <li><a href="#" className="icon brands alt fa-github"><span className="label">GitHub</span></a></li>
+          <li><a href="#" className="icon solid alt fa-envelope"><span className="label">Email</span></a></li>
+        </ul>
+        <ul className="copyright">
+          <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        </ul>
+      </footer>
     </div>
   );
 };

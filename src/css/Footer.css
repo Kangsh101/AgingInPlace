@@ -1,7 +1,7 @@
-.footer-container {
+/* .footer-container {
   position: absolute;
   width: 98%;
-  background-color: #f8f8f8;
+  background: #272833;
   padding:  20px 0px;
   text-align: left;
   margin-top: 50px;
@@ -15,13 +15,14 @@
 .abcds {
   margin-left: 21%; 
   margin-right: 10%; 
+  color: white
 }
 
 .babago {
   margin-right: 25%;
   font-size: 20px;
   font-weight: bold;
-  color: rgb(244, 124, 124);
+  color: white
 }
 
 .upper-section {
@@ -55,19 +56,23 @@
   font-size: 12px;
   display: flex; 
   justify-content: space-around; 
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .footit {
   font-size: 16px;
-  color: #000000;
+  color: rgb(196, 195, 195);
 }
 
 .fooati {
   font-size: 19px;
   font-weight: bold;
-  color: rgb(98, 98, 98);
+  color: rgba(255, 255, 255, 0.5);
 }
-
+.fontwhwjd {
+  font-size: 13px;
+  color: #7c7c7c;
+}
 @media only screen and (max-width: 480px) {
   .footer-container {
     padding: 15px;
@@ -103,7 +108,4 @@
   }
 }
 
-.fontwhwjd {
-  font-size: 13px;
-  color: #636161;
-}
+ */

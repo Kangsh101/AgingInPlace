@@ -1,4 +1,4 @@
-.cms-confile{
+/* .cms-confile{
     display: flex ;
     
 }
@@ -41,7 +41,6 @@
     margin-top: 20px;
 }
 
-/* 작은 화면 크기(모바일)에 대한 스타일 */
 @media (max-width: 768px) {
     .cms-container {
       padding: 10px;
@@ -71,7 +70,6 @@
       }
   }
   
-  /* 큰 화면 크기(데스크톱)에 대한 스타일 */
   @media (min-width: 769px) {
     .sidebar {
       width: 200px;
@@ -80,4 +78,4 @@
       margin-left: 250px;
     }
   }
-  
+   */
