@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import '../css/Header.css';
 
 const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate(); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleDropdownToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   const handleLogout = async () => {
     try {
       const response = await fetch('/api/logout', {
@@ -23,16 +27,55 @@ const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
       alert('로그아웃에 실패했습니다.');
     }
   };
+  useEffect(() => {
+    const handleMouseEnter = () => {
+      setIsMenuOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsMenuOpen(false);
+    };
+
+    const navLiElements = document.querySelectorAll('#nav > ul ');
+    navLiElements.forEach(li => {
+      li.addEventListener('mouseenter', handleMouseEnter);
+      li.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    return () => {
+      navLiElements.forEach(li => {
+        li.removeEventListener('mouseenter', handleMouseEnter);
+        li.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    };
+  }, []);
 
   return (
     <div className="is-preload landing" id="page-wrapper">
       <header id="header">
         <h1 id="logo"><a href="/">Landed</a></h1>
-        <nav id="nav">
+
+        <nav id="nav" className={isMenuOpen ? 'navPanel-visible' : ''}>
+
           <ul>
             <li><a href="/contents">프로그램 콘텐츠</a></li>
             <li>
-              <a href="qnapage">커뮤니티</a>
+              <Link to="#" onMouseEnter={handleDropdownToggle} onMouseLeave={handleDropdownToggle}>
+                커뮤니티
+                {isMenuOpen && (
+                  <ul className="submenu">
+                    <li className='comusub'>
+                      <Link to="/qnapage">QnA 페이지</Link>
+                    </li>
+                    <li className='comusub'>
+                      <Link to="/faqpage">FAQ 페이지</Link>
+                    </li>
+                    <li className='comusub'>
+                      <Link to="/notice">공지사항 페이지</Link>
+                    </li>
+                  </ul>
+                )}
+              </Link>
             </li>
             {!isLoggedIn && (
               <>

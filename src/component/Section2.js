@@ -8,7 +8,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [showCustomDomain, setShowCustomDomain] = useState(false);
   const [customDomain, setCustomDomain] = useState('');
   const [gender, setGender] = useState('male');
-  const [role, setRole] = useState('patient');
+  const [role, setRole] = useState('');
 
   const isFormComplete = () => {
     return (
@@ -78,6 +78,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   
 
   const handleRoleChange = (e) => {
+    
     const selectedRole = e.target.value;
     const roleInKorean = selectedRole === 'patient' ? '환자' : '보호자';
     setRole(selectedRole);
@@ -94,7 +95,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
         <li className="nav-item"><span className="num">03</span> 가입완료</li>
       </ol>
       <div className='signup-info'>
-        <p className='section2-title'>가입정보입력</p>
+        <h3 className='section2-title'>가입정보입력</h3>
       </div>
       <div className='signup-id'>
         <div className='Section2-container'>
@@ -110,14 +111,14 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           </div>
           <div className='email-container'>
             <input type='text' id='emailId' name='emailId' value={emailId} onChange={handleEmailIdChange} placeholder='이메일' className='Section2-field input-email' />
-            <span>@</span>
+            <span> @ </span>
             {showCustomDomain ? (
               <>
                 <input type='text' id='customDomain' value={customDomain} onChange={handleCustomDomainChange} placeholder='' className='input-field' />
                 <button onClick={() => setShowCustomDomain(false)}>확인</button>
               </>
             ) : (
-              <select id='emailDomain' value={emailDomain} onChange={handleEmailDomainChange} className='select-field1'>
+              <select id='emailDomain' value={emailDomain} onChange={handleEmailDomainChange} className='select-field11'>
                 <option value=''>옵션 선택</option>
                 <option value='naver.com'>naver.com</option>
                 <option value='gmail.com'>gmail.com</option>
@@ -126,43 +127,26 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             )}
           </div>
           <div className='genderradio-container'>
-            <div className='gender-radio1'>
-              <label>
-                <input type="radio" name="gender" value="남성" checked={gender === '남성'} onChange={handleGenderChange} />
-                남성
-              </label>
-            </div>
-            <div className='gender-radio'>
-              <label>
-                <input type="radio" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange} />
-                여성
-              </label>
-            </div>
+            <div class="row gtr-uniform gtr-50">
+							<div class="col-4 col-12-medium">
+									<input type="radio" id="priority-low" name="gender" value="남성"  checked={gender ==="남성"}onChange={handleGenderChange} />
+									<label for="priority-low">남성</label>
+                  <input type="radio" id="priority-normal" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange}/>
+								<label for="priority-normal">여성</label>
+							</div>
+						</div>
           </div>
-          <div className='typeradio-container'>
-            <div className='type-radio1'>
-              <label>
-                <input type="radio" name="role" value="환자" checked={role === '환자'} onChange={handleRoleChange} />
-                환자
-              </label>
-            </div>
-            <div className='type-radio'>
-              <label>
-                <input type="radio" name="role" value="보호자" checked={role === '보호자'} onChange={handleRoleChange} />
-                보호자
-              </label>
-            </div>
-            <div className='type-radio2'>
-              <label>
-                <input type="radio" name="role" value="일반인" checked={role === '일반인'} onChange={handleRoleChange} />
-                일반인
-              </label>
-            </div>
-          </div>
+          <select id='role' value={role} onChange={handleRoleChange} className='select-field1'>
+            <option value='' disabled selected hidden>타입 선택</option>
+            <option value='환자'>환자</option>
+            <option value='보호자'>보호자</option>
+            <option value='일반인'>일반인</option>
+          </select>
         </div>
         <div>
           <input type='text' id='name' name='name' value={userData.name} onChange={handleInputChange} placeholder='이름' className='Section2-field'></input>
         </div>
+
         <div>
           <input type='text' id='birthdate' name='birthdate' value={userData.birthdate} onChange={handleInputChange} placeholder='생년월일 8자' className='Section2-field'></input>
         </div>
@@ -170,7 +154,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           <input type='text' id='phoneNumber' name='phoneNumber' value={userData.phoneNumber} onChange={handleInputChange} placeholder='휴대전화번호' className='Section2-field'></input>
         </div>
       </div>
-      <button onClick={handleNextClick} className="next-button">
+      <button onClick={handleNextClick} className="button primary" id='Section2Btt'>
         다음
       </button>
     </div>

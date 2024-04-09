@@ -84,60 +84,71 @@ const QnAPage = () => {
   };
 
   return (
-    <div>
-      <div className="qna-page">
-        <nav className="qna-navigation">
-          <span className="qna-nav-ALL">전체</span>
-          <Link to="/qnapage" className="qna-nav-item-Q">QnA게시판</Link>
-          <Link to="/notice" className="qna-nav-item">공지사항</Link>
-          <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
-        </nav>
-      </div>
+    <div className="row gtr-150">
+      {/* <div className="col-8 col-12-medium imp-medium">
+        Content
+        <section id="content">
+          <h3>QnA 게시판</h3>
+          <p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at magna consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam.</p>
+          <p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique.</p>
+          <h3>Sed Magna Ornare</h3>
+          <p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus.</p>
+          <ul>
+            <li>Faucibus orci lobortis ac adipiscing integer.</li>
+            <li>Col accumsan arcu mi aliquet placerat.</li>
+            <li>Lobortis vestibulum ut magna tempor massa nascetur.</li>
+            <li>Blandit massa non blandit tempor interdum.</li>
+            <li>Lacinia mattis arcu nascetur lobortis.</li>
+          </ul>
+        </section>
+      </div> */}
 
-      <div className="qna-header">
-        <div className="qna-options">
-          <h2 className='aaaaaa'>QnA 게시판</h2>
-          <select className="qna-select" value={searchType} onChange={handleSearchTypeChange}>
-            <option value="title">제목</option>
-            <option value="author">작성자</option>
-          </select>
-          <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
-          <button className="qna-button" onClick={handleSearch}>검색</button>
+      <div className="col-4 col-12-medium">
+      <h2 className='aaaaaa'>QnA 게시판</h2>
+        <div className="qna-header">
+          <div className="qna-options">  
+            <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
+              <option value="title">제목</option>
+              <option value="author">작성자</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
+            <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
+            <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
+            {isLoggedIn ? '글쓰기' : '로그인'}
+          </button>
+          </div>
+
         </div>
-        <button className="qna-write-button" onClick={handleLoginButtonClick}>
-          {isLoggedIn ? '글쓰기' : '로그인'}
-        </button>
-      </div>
 
-      <div className="qna-content">
-        <table>
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>등록일</th>
-            </tr>
-          </thead>
-          <tbody>
-          {currentPosts.map((post, index) => (
-            <tr key={post.board_id} onClick={() => handlePostClick(post.board_id)}>
-              <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
-              <td><Link to={`/qnacontent/${post.board_id}`}>{post.title}</Link></td>
-              <td>{post.name}</td>
-              <td>{post.create_at}</td>
-            </tr>
-          ))}
+        <div className="qna-content">
+          <table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+              </tr>
+            </thead>
+            <tbody>
+            {currentPosts.map((post, index) => (
+              <tr key={post.board_id} onClick={() => handlePostClick(post.board_id)}>
+                <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
+                <td><Link to={`/qnacontent/${post.board_id}`}>{post.title}</Link></td>
+                <td>{post.name}</td>
+                <td>{post.create_at}</td>
+              </tr>
+            ))}
 
-          </tbody>
-        </table>
+            </tbody>
+          </table>
 
-        <Pagination
-          postsPerPage={postsPerPage}
-          totalPosts={posts.length}
-          paginate={paginate}
-
-        />
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={posts.length}
+            paginate={paginate}
+          />
+        </div>
       </div>
     </div>
   );

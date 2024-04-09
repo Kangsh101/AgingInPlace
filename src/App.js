@@ -23,6 +23,7 @@ import NoticeUp from './admin/NoticeUp';
 import NoticeUpdate from './admin/NoticeUpdate';
 import Navpanel from './component/Navpanel';
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -63,7 +64,6 @@ function App() {
           <Route path="/MyPage" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
           <Route path="/contents" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
           <Route path="/qnacontent/:id" element={<><Navpanel/><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
-
 
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />
