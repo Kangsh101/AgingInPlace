@@ -6,7 +6,7 @@
   height: 100vh;
   text-align: center; 
   
-}
+} */
 .nav-pills-step {
   display: flex;
   list-style: none;
@@ -15,14 +15,15 @@
   align-items: center; 
 }
 .nav-item {
-  background-color: #f0f0f0;
+  background-color: rgb(185, 182, 182);
+  color: black;
   padding: 10px;
   margin-right: 10px;
   border-radius: 5px;
   cursor: pointer;
 }
 .nav-item.active {
-  background-color: #3a3a4a;
+  background-color: #e44c65;
   color: white;
 }
 .num {
@@ -33,22 +34,22 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 100vh;
+  height: 70vh;
   margin-top: 8%;
 } 
 .pscheck-box1{
   padding-bottom: 15px;
   font-size: 15px;
+  font-weight: bold;
   margin-top: 1%;
-  color: white;
 }
 
 
 .pschecks{
-  color: #e44c65;
+  color: red;
   font-weight: bold;
 }
-.Section-btt{
+/* .Section-btt{
   padding: 10px;
   font-weight: bold;
   font-size: 18px;
@@ -59,7 +60,7 @@
   color: #fff;
   margin-top: 10px;
   background-color: dodgerblue;
-}
+} */
 
 .nextBtt{
   padding: 10px;
@@ -69,27 +70,20 @@
   border: 0 none;
   padding: 10px 20px;
   color: #fff;
-  margin-top: 20px;
   background-color: #e44c65;
-  border-radius: 6px;
+  margin-top: 20px;
+  border-radius: 4px;
 }
 .nextBtt:hover{
-  color: rgb(212, 211, 211);
+  background-color:  #e76278;
 }
 
-.Allcheckdss{
+/* .Allcheckdss{
   padding-top: 7px;
   font-size: 18px;
   font-weight: bold;
-}
-.signup-textarea textarea{
-  background: rgba(39, 40, 51, 0.965);
+} */
 
-}
-.signup-textarea textarea::placeholder {
-  color: white;
-  padding: 10px;
-}
 
 @media only screen and (max-width: 768px) {
   .section-container{
@@ -101,4 +95,4 @@
   .section-container{
     margin-top: 12%;
   }
-} */
+}

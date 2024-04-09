@@ -36,16 +36,16 @@ const Section1 = ({ handleNext }) => {
       <div>
         <div className="terms-scroll">
           <div className='pscheck-box1'>
-            <label>
-              <input type="checkbox" checked={agreement1} onChange={handleCheckAll} />
+          <label>
+              <input  type="checkbox" checked={agreement1} onChange={handleCheckAll} />
               <span className='pschecks'>(필수)</span> 개인정보 수집 및 이용 동의 </label>
           </div>
-          <div>
-            <textarea rows="15" cols="65" placeholder="약관 내용asdadsadadadadasdadsadadadadasdadsadadadad
-            asdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadad
-            asdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadad
-            asdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadad
-            asdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadadasdadsadadadad" readOnly></textarea>
+
+          
+          
+          <div className='Section1Text'>
+            <textarea rows="15" cols="65" placeholder="약관 내용asㄴㅁㅇㅇㄴㅁㅇㄴㅁdadsadadadadasdadsadadadadasdadsadadadad
+            asdadsadadadadasdadsaddadasdadsadadadad" readOnly></textarea>
           </div>
         </div>
 

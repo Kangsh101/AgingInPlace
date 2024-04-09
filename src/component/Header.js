@@ -30,7 +30,7 @@ const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
         <h1 id="logo"><a href="/">Landed</a></h1>
         <nav id="nav">
           <ul>
-            <li><a href="/contents">프로그램 콘텐츠22</a></li>
+            <li><a href="/contents">프로그램 콘텐츠</a></li>
             <li>
               <a href="qnapage">커뮤니티</a>
             </li>
