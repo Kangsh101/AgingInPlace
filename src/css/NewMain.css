@@ -69,10 +69,32 @@ table {
 	color: rgb(214, 210, 210);
 }
 
-
-
+.pagebtt {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }
   
-
+  .pagebtt button {
+	margin: 10px 5px;
+	margin-bottom: 10%;
+	padding: 5px 15px;
+	background-color: #a3a2a2;
+	border-radius: 1px solid #a3a2a2;;
+	border-radius: 6px;
+	cursor: pointer;
+	color: rgb(0, 0, 0);
+	
+  }
+  .pagebtt button:hover {
+	background-color: #e44c65e2;
+  }
+  .skskskssksk a{
+	color: white;
+	text-decoration: none;
+	border-bottom: none;
+  }
 .nav-item {
 	position: relative;
   }

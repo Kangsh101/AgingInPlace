@@ -114,7 +114,7 @@ const QnAPage = () => {
             <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
             <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
             <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
-            {isLoggedIn ? '글쓰기' : '로그인'}
+            {isLoggedIn ? '글쓰기' : '글쓰기'}
           </button>
           </div>
 
@@ -134,7 +134,7 @@ const QnAPage = () => {
             {currentPosts.map((post, index) => (
               <tr key={post.board_id} onClick={() => handlePostClick(post.board_id)}>
                 <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
-                <td><Link to={`/qnacontent/${post.board_id}`}>{post.title}</Link></td>
+                <td className='skskskssksk'><Link to={`/qnacontent/${post.board_id}`}>{post.title}</Link></td>
                 <td>{post.name}</td>
                 <td>{post.create_at}</td>
               </tr>
