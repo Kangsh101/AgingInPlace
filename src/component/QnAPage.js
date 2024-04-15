@@ -85,41 +85,25 @@ const QnAPage = () => {
 
   return (
     <div className="row gtr-150">
-      {/* <div className="col-8 col-12-medium imp-medium">
-        Content
-        <section id="content">
-          <h3>QnA 게시판</h3>
-          <p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at magna consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam.</p>
-          <p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique.</p>
-          <h3>Sed Magna Ornare</h3>
-          <p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus.</p>
-          <ul>
-            <li>Faucibus orci lobortis ac adipiscing integer.</li>
-            <li>Col accumsan arcu mi aliquet placerat.</li>
-            <li>Lobortis vestibulum ut magna tempor massa nascetur.</li>
-            <li>Blandit massa non blandit tempor interdum.</li>
-            <li>Lacinia mattis arcu nascetur lobortis.</li>
-          </ul>
-        </section>
-      </div> */}
-
       <div className="col-4 col-12-medium">
       <header className='major'> 
           <h2 className='aaaaaa'>QnA</h2>
         </header>
         <div className="qna-header">
           <div className="qna-options">  
-            <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
-              <option value="title">제목</option>
-              <option value="author">작성자</option>
-            </select>
-            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
-            <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
-            <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
-            {isLoggedIn ? '글쓰기' : '글쓰기'}
-          </button>
-          </div>
-
+              <select className="qna-select"  id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
+                <option value="title">제목</option>
+                <option value="author">작성자</option>
+              </select>
+              <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
+              <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
+              <div className="search-write-container">
+                  
+                  <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
+                  {isLoggedIn ? '글쓰기' : '글쓰기'}
+                </button>
+              </div>
+            </div>
         </div>
 
         <div className="qna-content">

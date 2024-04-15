@@ -54,17 +54,20 @@ const Notice = () => {
         </header>
           <div className="qna-header">
            <div className="qna-options"> 
-           <select className="qna-select" id='asdadad'>
-              <option value="title">제목</option>
-              <option value="author">작성자</option>
-            </select>
-            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
-              <button className="button primary" id='QnA-searchBtt'>검색</button>
-              <button className="button primary" id='QnA-Upbtt'>
-             
-            </button>
-          </div>
-        </div>
+              <select className="qna-select"  id='asdadad' >
+                <option value="title">제목</option>
+                <option value="author">작성자</option>
+              </select>
+              <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
+                  <button className="button primary" id='QnA-searchBtt'>검색</button>
+                <div className="search-write-container"> 
+                  <button className="button primary" id='QnA-Upbtt' >
+                    글쓰기
+                  {/* {isLoggedIn ? '글쓰기' : '글쓰기'} */}
+                  </button>
+              </div>
+            </div>
+         </div>
       
       <div className="notice-table">
         <table>

@@ -731,6 +731,7 @@ input, select, textarea {
 
 
 #QnA-searchBtt{
+	
 	margin-left: 3%;
 	margin-bottom: 1%;
 }
@@ -2255,6 +2256,10 @@ input, select, textarea {
 		margin: 4em 0 0 0;
 	}
 
+	/* Page2.css에 추가 */
+
+
+  
 /* Form */
 
 	form {
@@ -2359,8 +2364,8 @@ input, select, textarea {
 		width: 16em;
 	}
 #QnA-Upbtt{
-	margin-top: 10%;
-	margin-left: 15px;
+	margin-top: 70%;
+	margin-left: 20%;
 	background-color: rgb(120, 120, 120);
 	font-weight: bold;
 	
@@ -4284,4 +4289,55 @@ input, select, textarea {
 						padding: 0;
 					}
 
+					@media (max-width: 580px) {
+						.qna-options {
+						  flex-direction: column; 
+						  align-items: center;
+						}
+					  
+						.qna-options > .button {
+						  width: 25%; 
+						  margin-top: 10px; 
+						  margin-bottom: 5px; 
+						}
+					  
+						.search-write-container {
+						  display: flex;
+						  flex-direction: row;
+						  justify-content: space-between;
+						  width: 35%;
+						  margin-top: 5px; 
+						  margin-right: 4px;
+						}
+					  
+						.search-write-container > .button {
+						  flex-grow: 1;
+						  margin: 0 10px; 
+						}
+					  
+						.qna-search {
+						  width: 100%;
+						  margin-top: 10px; 
+						}
+					  
+						.qna-select {
+						  width: 100%;
+						  margin-top: 10px;
+						}
+						#QnA-Upbtt{
+							margin-top: 0%;
+							margin-bottom: 15%;
+							background-color: rgb(120, 120, 120);
+							font-weight: bold;
+
+							
+						}
+						#asdadad{
+							width: 30%;
+							margin-right: 20px;
+							
+						
+						}
+					  }
+					  
 	}
