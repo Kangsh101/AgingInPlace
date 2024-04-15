@@ -30,22 +30,22 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-const connection = require('./src/db');
+  const connection = require('./src/db');
 
 
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  next();
-});
+  app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+  });
 
 
-connection.connect((err) => {
-  if (err) {
-    console.error('DB 연결 실패: ' + err.stack);
-    return;
-  }
-  console.log('DB 연결 성공');
-});
+  connection.connect((err) => {
+    if (err) {
+      console.error('DB 연결 실패: ' + err.stack);
+      return;
+    }
+    console.log('DB 연결 성공');
+  });
 
 
 //회원가입

@@ -37,17 +37,28 @@ function MyPage() {
         }
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                document.querySelector('.mypage').classList.add('sticky');
+            } else {
+                document.querySelector('.mypage').classList.remove('sticky');
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+
     return (
         <div className="mypage">
             <div className="sidebar">
-                <div className="logo-container">
-                    <img src="/images/logo-small.png" alt="로고" />
-                    <span>Aging In Place</span>
-                </div>
-
-                <div className='sidebar-title'>
+                    <div className='sidebar-title'>
                     <h2>마이페이지</h2>
-                </div>
+                    </div>
                 <ul className='sidebar-menu'>
                     <li onClick={() => setSelectedSection('myinfo')}>
                         <span>내 정보</span>
@@ -68,6 +79,6 @@ function MyPage() {
             
         </div>
     );
-}
+} 
 
 export default MyPage;
