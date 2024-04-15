@@ -1,0 +1,32 @@
+
+.faq-content {
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    margin-bottom: 100px;
+}
+
+.faq-item {
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px; 
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.faq-question {
+    font-weight: bold;
+    color: #facaca;
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+
+}
+
+.faq-answer {
+    color: #f7e5e5; 
+    cursor: pointer;
+    padding: 5px;
+
+}

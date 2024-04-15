@@ -104,7 +104,9 @@ const QnAPage = () => {
       </div> */}
 
       <div className="col-4 col-12-medium">
-      <h2 className='aaaaaa'>QnA 게시판</h2>
+      <header className='major'> 
+          <h2 className='aaaaaa'>QnA</h2>
+        </header>
         <div className="qna-header">
           <div className="qna-options">  
             <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
