@@ -1,167 +1,41 @@
-/* 
-.mypage {
-  margin-top: 250px;
-}
 .sidebar {
-    position: absolute;
-    float: left;
-    background-color: #1877F2;
-    height: 60vh !important;
-    width: 250px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-    opacity: 0.9;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(256, 256, 256, 0.3);
+  min-height: 100px; /* 최소 높이 설정 */
+  display: flex;
+  flex-direction: column; /* sidebar-title과 sidebar-menu를 세로로 배치 */
+  align-items: center;
+  justify-content: center; /* 세로 가운데 정렬 */
+  margin-top: 3%;
+  position: relative;
+}
 
-  }
-  
-  .sidebar-title h2 {
-    color: white;
-    font-size: xx-large;
-    text-align: left; 
-    margin-top: 50px;
-    user-select: none;
-    margin-bottom: 30px;
-    margin-left: 40px;
-  }
-  .sidebar-menu li span{
-    margin-left: 20px;
-  }
-  
-  .content {
-    
-    position: relative;
-    margin-left: 15%;
-    float: center;
-    margin-top: -50px;
-    padding: 10px 100px;
-    height: 800px;
-  }
-  
-  .sidebar ul {
-    color: white;
-    list-style-type: none;
-    padding: 0;
-  }
+.sidebar-title {
+  user-select: none;
+  margin-top: -5%;
+  font-size: 20px;
+  margin-bottom: 10px; 
+  width: 200px;
+  height: 180px;
+  border-bottom: 4px solid #e44c65;
+}
 
-  .sidebar ul li {
-    color: rgb(253, 253, 253);
-    margin-top: 40px;
-    cursor: pointer;
-  }
+.sidebar-menu {
+  margin-top: 1%;
+  display: flex; /* sidebar-menu를 가로로 배치 */
+  justify-content: center; /* 가로 가운데 정렬 */
+}
 
-  .sidebar ul li:hover {
-    color: lightgray;
-  }
-  
-  li.active {
-    font-weight: bold;
-  }
+.sidebar-menu li {
+  margin-right: 20px; /* 메뉴 간의 우측 여백 */
+  cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
+  transition: color 0.3s;
+}
 
-  .logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: -40px;
-    margin-top: 30px;
-  }
+.sidebar-menu li:hover {
+  color: rgb(61, 61, 61); /* 마우스를 올렸을 때 텍스트 색상을 blue로 변경 */
+}
 
-  .logo-container span {
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  .logo-container img {
-    cursor: pointer;
-    margin-right: 10px;
-    width: 30px;
-    height: 30px;  
-  }
-
-  .logo-bottombar p {
-    margin-top: 30px;
-    border-bottom: 1px solid whitesmoke;
-    opacity: 0.3;
-  }
-
-@media screen and (max-width: 768px) {
-  .logo-container{
-    margin-top: 5px;
-  }
-  .sidebar-title{
-    margin-top: 10px;
-  }
-
-  .sidebar {
-    
-    position: absolute;
-    float: left;
-    background-color: #1877F2;
-    height: 37vh !important;
-    width: 100%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-    opacity: 0.9;
-
-  }
-
-  .sidebar-menu li span {
-    margin-left: 0;
-    display: block; 
-    padding: 10px; 
-  }
-
-  .sidebar ul li {
-    margin-top: 10px; 
-  }
-
-  .sidebar ul li:hover {
-    color: white;
-  }
-
-  .content {
-    margin-left: -40px;
-    float: none;
-    margin-top: 0;
-    padding: 10px; 
-    width: 100%;
-  }
-
-  .sidebar-title h2 {
-    height: 0px;
-    margin-top: 0; 
-    margin-bottom: 10px;
-    font-size: small; 
-  }
-
-  .logo-container {
-    margin-left: 0;
-    margin-top: 10px; 
-    margin-bottom: 10px; 
-  }
-
-  .logo-container img {
-    width: 20px; 
-    height: 20px;
-  }
-
-  .logo-container span {
-    font-size: small; 
-  }
-
-  .logo-bottombar p {
-    margin-top: 10px; 
-  }
-
-  .mypage {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-  }
-
-  .sidebar {
-    order: 1;
-  }
-
-  .content {
-    order: 2; 
-  }
-} */
+.content {
+  padding: 20px;
+}

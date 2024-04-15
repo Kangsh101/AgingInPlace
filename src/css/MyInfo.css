@@ -1,88 +1,49 @@
-/* .myinfo-container {
-     background-color: white;
-     width: 50%;
-     height: auto;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-     margin-left: 5%;
-     margin-top: -100px;
- }
- .myinfo-context{
-    border: 2px solid rgb(170, 169, 169);
-    border-radius: 8px;
-
-}
-.myinfo-context-container strong{
-    margin-left: 10px;
-    font-size: 20px;
-    font-weight: bold;
-}
- @media only screen and (max-width: 1100px) {
-    .myinfo-container {
-        width: 130%;
-        margin-top: 10px;
-    }
-
-    .myinfo-context-container input {
-        width: 100%;
-        margin-right: 0;
-
-    } 
-}
-
- .myinfo-title {  
-     margin-bottom: 10px;
-     margin-top: 10%;
- }
- 
-
- .myinfo-title strong {
-     text-align: left;
-     font-size: 28px;
-     margin-left: 40px;
-     font-weight: bolder;
- }
-
- .myinfo-context-container div {
-     text-align: left;
-     margin-top: 60px;
-     margin-bottom: 30px;
-     margin-left: 50px;
-     display: flex;
- }
-
- .myinfo-context-container button {
-     width: 70px;
-     text-align: center;
-     font-size: small;
-     height: 40px;
-     margin-left: 20px;
-     cursor: pointer;
- }
-
- .myinfo-context-container button:active {
-     background-color: skyblue;
- }
-
- .myinfo-context-container input {
-     width: 300px;
-     height: 30px;
-     margin-left: 20px;
-     border-radius: 7px;
-     border-color: transparent;
-     background-color: rgba(170, 170, 170, 0.1);
-     color: black;
- }
-
- input:focus {
-     outline: none
- }
-
- .myinfo-context-container input::placeholder {
-     color: gray;
- }
-
- 내 정보 페이지 끝 */
+.myinfo-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 100px;
+  }
+  
+  .myinfo-title {
+    margin-bottom: 20px;
+    border-bottom: 1px solid whitesmoke;
+    width: 500px;
+    text-align: center;
+    padding: 50px;
+    font-size: 35px;
+    font-weight: 1000;
+  }
+  
+  .myinfo-context-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 좌측 정렬 */
+  }
+  
+  .myinfo-context {
+    margin-top: 20px;
+    display: flex;
+    align-items: center; /* 가로 가운데 정렬 */
+    margin-bottom: 35px;
+  }
+  
+  .myinfo-context p {
+    margin: 0; /* p 요소의 기본 마진 제거 */
+  }
+  
+  .myinfo-context strong {
+    margin-right: 10px; /* 각 strong 요소 사이의 우측 여백 */
+  }
+  .myinfo-context span {
+    padding: 5px;
+    text-align: center;
+    border-radius: 15px;
+    display: inline-block; /* 높이와 너비를 설정하기 위해 inline-block으로 변경 */
+    min-width: 300px; /* 너비 설정 */
+    height: 40px; /* 높이 설정 */
+    border: 1px solid rgba(256, 256, 256, 0.3); /* border 스타일 설정 */
+    margin-left: 150px; /* 각 span 요소 사이의 좌측 여백 설정 */
+    white-space: nowrap;
+  }

@@ -62,18 +62,18 @@ function ChangePassword() {
             <div className='changepw-context-container'>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <strong className='passwordChange1'>현재 비밀번호 : </strong>
+                        <strong className='passwordChange1'>현재 비밀번호</strong>
                         <input type="password" id="currentPassword" placeholder='현재 비밀번호'  name="currentPassword" value={currentPassword} onChange={handleChange} required />
                     </div>
                     <div>
-                        <strong className='passwordChange2'>새 비밀번호 :</strong>
+                        <strong className='passwordChange2'>새 비밀번호 </strong>
                         <input type="password" id="newPassword" name="newPassword" placeholder='새 비밀번호' value={newPassword} onChange={handleChange} required />
                     </div>
                     <div>
-                        <strong className='passwordChange3'>비밀번호 확인 : </strong>
+                        <strong className='passwordChange3'>비밀번호 확인</strong>
                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder='새 비밀번호 확인' value={confirmPassword} onChange={handleChange} required />
                     </div>
-                    <button type="submit" className='ChangeBtt'>변경</button>
+                    <button type="submit" className='ChangeBtt'>변 경</button>
                 </form>
                 {message && <p className="message" style={{ color: messageColor }}>{message}</p>}
             </div>

@@ -1,105 +1,68 @@
-/* .editprofile-container {
-    background-color: white;
-    width: 50%;
-    height: 60vh;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.editprofile-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 세로 가운데 정렬 */
+    margin-bottom: 100px;
+  }
+  
+  .editprofile-title {
+    margin-bottom: 20px;
+    border-bottom: 1px solid whitesmoke;
+    width: 500px;
     text-align: center;
+    padding: 50px;
+    font-size: 35px;
+    font-weight: 1000;
+    user-select: none;
+  }
+  
+  .editprofile-context-container {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
     flex-direction: column;
-    margin-left: 5%;
-    border-radius: 30px;
-}
-.Profile-strong{
-    margin:0 10px 0 10px;
-}
-.editprofile-title strong {
-    font-size: 30px;
-    font-weight: bolder;
-    display: block;
-    text-align: center; 
-    padding: 0 30px;
-    
-}
-
-.editprofile-context-container {
+    align-items: flex-start; /* 좌측 정렬 */
+  }
+  
+  .editprofile-row, .Profile-type {
+    margin-top: 20px;
     display: flex;
-    text-align: left;
-    flex-direction: column;
-    margin-top: 70px;
-    padding: 0 30px;
-}
-
-.editprofile-context-container div {
-    display: flex;
-    flex-direction: row;
     align-items: center;
     margin-bottom: 30px;
-    width: 150%;
-}
-
-.editprofile-context-container div label {
-    width: 200px;
-    margin-right: 20px;
-}
-
-
-
-
-
-.editprofile-context-container div select,
-.editprofile-context-container div input {
-    flex: 1;
-    height: 30px;
-    border-radius: 7px;
-    border-color: transparent;
-    background-color: rgba(170, 170, 170, 0.2);
-    color: black;
-}
-
-.editprofile-context-container button {
-    width: 30%;
+  }
+  
+  .Profile-strong {
+    margin-right: 10px; /* 각 strong 요소 사이의 우측 여백 */
+  }
+  .editprofile-row #email,
+  .editprofile-row #name,
+  .editprofile-row #phoneNumber,
+  .Profile-type {
+    padding: 5px;
     text-align: center;
-    font-size: small;
-    height: 100%;
+    border-radius: 15px;
+    display: inline-block; /* 높이와 너비를 설정하기 위해 inline-block으로 변경 */
+    min-width: 300px; /* 너비 설정 */
+    height: 40px; /* 높이 설정 */
+    border: 1px solid rgba(256, 256, 256, 0.3); /* border 스타일 설정 */
+    margin-left: 120px; /* 각 span 요소 사이의 좌측 여백 설정 */
+    white-space: nowrap;
+  }
+
+  .editprofile-btn {
+    margin-top: 100px;
+    background-color: #e44c65;
+    color: white;
+    width: 400px;
+    height: 80px;
+    border-radius: 35px;
+    border: none;
+    margin-left: 15%;
     cursor: pointer;
-    margin-top: 20px;
-    margin-left: 60%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-}
+    transition: background-color 0.2s;
+    font-size: 20px;
+  }
 
-.editprofile-context-container button:active {
-    background-color: skyblue;
-}
-
-.editprofile-context-container button:hover {
-    transition: opacity 0.5s ease;
-    opacity: 0.7;
-}
-.Profile-type{
-    
-}
-@media only screen and (max-width: 1100px) {
-    .editprofile-container {
-        width: 100%;
-    }
-
-    .editprofile-context-container div label {
-        width: 40%;
-        margin-right: 5%;
-    }
-
-    .editprofile-context-container div select, 
-    .editprofile-context-container div input {
-        width: 55%;
-    }
-    .editprofile-title strong{
-        font-size: 26px;
-        width: 100%;
-        margin-left: 10%;
-    }
-    .editprofile-nameinput{
-        width: 20px;
-    }
-} */
+  .editprofile-btn:hover {
+    background-color: #953142;
+  }
+  
