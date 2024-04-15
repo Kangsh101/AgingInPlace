@@ -38,27 +38,33 @@ const Notice = () => {
   };
 
   return (
-    <div>
-      <div className="qna-page">
+    <div className="row gtr-150">
+      {/* <div className="qna-page">
         <nav className="qna-navigation">
           <span className="qna-nav-ALL">전체</span>
           <Link to="/qnapage" className="qna-nav-item">QnA게시판</Link>
           <Link to="/notice" className="qna-nav-item-Q">공지사항</Link>
           <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
         </nav>
-      </div>
+      </div> */}
 
-      <div className="qna-header">
-        <div className="qna-options">
+        <div className="col-4 col-12-medium">
+        <header className='major'>
           <h2 className='aaaaaa'>공지사항</h2>
-          <select className="qna-select">
-            <option value="title">제목</option>
-            <option value="author">작성자</option>
-          </select>
-          <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
-          <button className="qna-button">검색</button>
+        </header>
+          <div className="qna-header">
+           <div className="qna-options"> 
+           <select className="qna-select" id='asdadad'>
+              <option value="title">제목</option>
+              <option value="author">작성자</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
+              <button className="button primary" id='QnA-searchBtt'>검색</button>
+              <button className="button primary" id='QnA-Upbtt'>
+             
+            </button>
+          </div>
         </div>
-      </div>
       
       <div className="notice-table">
         <table>
@@ -102,6 +108,7 @@ const Notice = () => {
           paginate={paginate}
         />
       </div>
+    </div>
     </div>
   );
 };
