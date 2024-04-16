@@ -12,7 +12,7 @@ const Section3 = () => {
       </ol>
       <h3>회원가입이 완료되었습니다.</h3>
       <Link to="/login">
-        <button className='Section-btt'>로그인</button>
+        <button className='button primary'>로그인</button>
       </Link>
     </div>
   );

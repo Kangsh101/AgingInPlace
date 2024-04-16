@@ -80,7 +80,7 @@ const Cms = () => {
 
   return (
     <>
-      <div className="sidebar">
+      <div className="">
         {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
         <header className='major'> 
           <h2 className='aaaaaa'>관리자 페이지</h2>

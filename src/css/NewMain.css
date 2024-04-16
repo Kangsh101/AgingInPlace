@@ -3742,7 +3742,7 @@ input, select, textarea {
 
 			body, input, select, textarea {
 				font-size: 13pt;
-				margin-left: 12px;
+				/* margin-left: 12px; */
 			}
 
 	}
@@ -4339,5 +4339,11 @@ input, select, textarea {
 						
 						}
 					  }
-					  
+					  @media (max-width: 1200px) {
+						textarea {
+							width: 90%;
+							height: 300px;
+						}
+					  }
+
 	}

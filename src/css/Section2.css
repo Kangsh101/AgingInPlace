@@ -298,3 +298,8 @@
     font-size: 22px;
   }
 } */
+@media only screen and (max-width: 500px) {
+  #Section2Btt{
+    width: 19%;
+  }
+  }
