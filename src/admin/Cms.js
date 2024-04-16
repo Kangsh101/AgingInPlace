@@ -79,20 +79,21 @@ const Cms = () => {
   // }
 
   return (
-    <>
-      <div className="">
+    <div className="cms-container">
+      <div className="cms-sidebar">
         {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
-        <header className='major'> 
-          <h2 className='aaaaaa'>관리자 페이지</h2>
-        </header>
+        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
+        <h2>관리자</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
           <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
           <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
-      <div className="cms-container">
-
+      <div className="cms-main-content">
+      <header className='major' id='major-rest'> 
+          <h2 className='aaaaaa'>공지사항</h2>
+        </header>
         <div className="Cmss-header">
           <div className='Cmss-chch'>
             <Link to="/Cms"><button className='button' id='cms-nodicego'>공지사항 게시판</button></Link>
@@ -158,7 +159,7 @@ const Cms = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -173,7 +174,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
+          <button  className='button' id='cms-pagebtt' key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}

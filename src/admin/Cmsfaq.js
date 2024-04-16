@@ -54,22 +54,25 @@ const Cmsfaq = () => {
 
   const location = useLocation(); 
   return (
-    <>
-      <div className="sidebar">
-        <img src="/images/logo192.png" alt="Your Logo" />
-        <h2>관리자 페이지</h2>
+    <div className="cms-container">
+      <div className="cms-sidebar">
+        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
+        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
+        <h2>관리자</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
           <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
           <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
-      <div className="cms-container">
-
+      <div className="cms-main-content">
+      <header className='major' id='major-rest'> 
+          <h2 className='aaaaaa'>FAQ </h2>
+        </header>
       <div className="Cmss-header">
         <div className='Cmss-chch'>
-          <Link to="/Cms"><button className='chchbtt'>공지사항 게시판</button></Link>
-          <Link to="/Cmsfaq"><button className='chchbtt1'>FAQ 게시판</button></Link>
+          <Link to="/Cms"><button className='button' id='cmscs-notice' >공지사항 게시판</button></Link>
+          <Link to="/Cmsfaq"><button className='button' id='cms-nodicego'>FAQ 게시판</button></Link>
         </div>
 
         <div className="Cmss-options">
@@ -79,10 +82,10 @@ const Cmsfaq = () => {
             <option value="author">작성자</option>
           </select>
           <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
-          <button className="Cmss-button">검색</button>
+          <button className="button primary">검색</button>
         </div>
         <Link to="/faqup">
-             <button className="cms-FAQ">FAQ 등록</button>
+             <button className="button1" id='saddasdasd'>FAQ 등록</button>
         </Link>
 
 
@@ -112,8 +115,8 @@ const Cmsfaq = () => {
                           <p className='sang-title'>{post.title}</p>
                           <p className='sang-description'>{post.content}</p>
                           <div className='sang-bttcon'>
-                            <button className='sang-btt'>게시글 수정</button>
-                            <button className='sang-btt' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
+                            <button className='button primary' >게시글 수정</button>
+                            <button className='button' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
                           </div>
                         </div>
                       </td>
@@ -132,7 +135,7 @@ const Cmsfaq = () => {
         /> 
       </div>
     </div>
-    </>
+    </div>
     
   );
 };
@@ -148,7 +151,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
+          <button  key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}

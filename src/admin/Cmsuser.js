@@ -83,26 +83,29 @@ const Cmsuser = () => {
     .catch(error => console.error('사용자 활성화 오류:', error));
   };
   return (
-    <>
-      <div className="sidebar">
+    <div className="cms-container">
+      <div className="cms-sidebar">
         {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
-        <h2>관리자 페이지</h2>
+        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
+        <h2>관리자 </h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
           <li className="cms-item"><Link to="/Cms">게시판 관리</Link></li>
           <li className={`cms-item ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
-      <div className="cms-container">
+      <div className="cms-main-content">
         <div className="Cmss-header">
-          <h2>사용자 관리</h2>
+          <header className='major' id='major-rest'> 
+            <h2 className='aaaaaa'>사용자 관리</h2>
+          </header>
           <div className="Cmss-options">
             <select className="Cmss-select">
               <option value="환자">성함</option>
               <option value="보호자">타입</option>
             </select>
             <input type="text" placeholder="사용자 정보를 입력해주세요." className="Cmss-search" />
-            <button className="Cmss-button">검색</button>
+            <button className="button primary">검색</button>
           </div>
         </div>
         <div className="Cmss-content">
@@ -157,7 +160,7 @@ const Cmsuser = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -172,7 +175,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
+          <button className='button' id='cms-pagebtt' key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}

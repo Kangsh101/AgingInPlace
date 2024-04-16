@@ -23,6 +23,7 @@
 
 
 
+
 .sidebar ul li a{
   color: white;
   margin-left: 15%;
@@ -257,12 +258,73 @@ th:last-child {
   margin: 2% 0 0 0%;
 }
  */
+
+ .Cms-Aginginplace{
+  border-bottom: 2px solid #e44c65;
+  padding-bottom: 10%;
+}
+/* 전체 페이지 레이아웃 */
+.cms-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 사이드바 스타일링 */
+.cms-sidebar {
+  width: 300px; /* 사이드바 너비 */
+  background-color: rgba(255, 255, 255, 0.075); /* 사이드바 배경색 */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 콘텐츠 영역 스타일링 */
+.cms-main-content {
+  flex-grow: 1; /* 나머지 공간 모두 차지 */
+  padding: 20px;
+}
+
+/* 사이드바 내부 리스트 스타일링 */
+.cms-item a{
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+}
+#dwkwjdj a:hover{
+  color: aqua;
+}
+.cms-item {
+  
+  padding: 4%;
+  list-style: none;
+  margin-bottom: 10px;
+  /* border: 1px solid rgb(255, 255, 255, 0.3); */
+  /* border-right: 1px solid rgb(255,255,255,0.3); */
+  /* border-top: 1px solid rgb(255, 255, 255, 0.3);; */
+  border-bottom: 1px solid rgb(255, 255, 255, 0.3);
+  /* border-left: 1px solid rgb(255, 255, 255, 0.3); */
+
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.cms-item:hover{
+  background-color: rgb(97, 97, 97);
+  /* color: black; */
+}
+.cms-item li a:hover{
+  color: black;
+}
  .Cmss-content {
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  width: 55%;
+  width: 70%;
   display: block; 
+}
+.Cmss-header{
+  margin-right: 10%;
 }
 .Cmss-chch{
   margin-left: 40%;
@@ -271,19 +333,38 @@ th:last-child {
 }
 #cms-nodicego{
   margin-right: 10px;
-  /* background-color: ; */
+  background-color: rgb(91, 100, 114);
+  font-weight: bold;
+}
+.sang-title{
+  border-bottom: 1px solid rgb(255, 255, 255, 0.3);
+}
+#cmscs-notice{
+  margin-right: 10px;
+}
+#cms-pagebtt{
+  padding: 0%;
+  width: 3%;
+  margin-left: 48%;
+  margin-bottom: 100px;
 }
 .Cmss-options{
+  margin-left: auto;
+  margin-right: auto;
   width: 70%;
 }
 .Cmss-select{
   width: 15%;
+  margin-right: 10px;
 }
 .Cmss-options{
 margin-left: 27%;
 }
+#major-rest{
+  margin-right: 4%;
+}
 #saddasdasd{
-  margin-left: 73%;
+  margin-left: 82.5%;
   background-color: rgb(91, 100, 114);
   font-weight: bold;
 }
@@ -319,4 +400,35 @@ margin-left: 27%;
 }
 .Cmss-search{
   margin-right: 10px;
+}
+/* .ddddasda{
+  background-color: ;
+} */
+
+/* .Cmss-pagebtt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.Cmss-pagebtt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  margin-right: 115%;
+}
+
+.Cmss-pagebtt button {
+  margin: 10px 5px;
+  padding: 7px 20px;
+  background-color: #71bdf3;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  cursor: pointer;
+  
+}
+
+.Cmss-pagebtt button:hover {
+  background-color: #686666;
 }
