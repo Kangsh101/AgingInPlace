@@ -1,6 +1,6 @@
 
 .faq-content {
-    border: solid 1px rgba(255, 255, 255, 0.3);
+   
     padding: 20px;
     margin-top: 10px;
     border-radius: 8px;
@@ -28,5 +28,7 @@
     color: #f7e5e5; 
     cursor: pointer;
     padding: 5px;
-
+    word-wrap: break-word; 
+    overflow-wrap: break-word;  
 }
+

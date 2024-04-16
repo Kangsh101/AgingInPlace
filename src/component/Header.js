@@ -65,14 +65,15 @@ const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
                 {isMenuOpen && (
                   <ul className="submenu">
                     <li className='comusub'>
-                      <Link to="/qnapage">QnA 페이지</Link>
+                      <Link to="/notice">공지사항</Link>
                     </li>
                     <li className='comusub'>
-                      <Link to="/faqpage">FAQ 페이지</Link>
+                      <Link to="/qnapage">QnA</Link>
                     </li>
                     <li className='comusub'>
-                      <Link to="/notice">공지사항 페이지</Link>
+                      <Link to="/faqpage">FAQ</Link>
                     </li>
+
                   </ul>
                 )}
               </Link>

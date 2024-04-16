@@ -36,8 +36,8 @@ h2 {
 }
 
 .form-group {
-  margin-bottom: 15px;
-  
+  display: flex;
+  flex-direction: column; 
 }
 
 .form-control {
@@ -46,6 +46,11 @@ h2 {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+#password,
+#username{
+  height: 2.8em;
+  width: 16em;
 }
 
 .custom-label {
@@ -70,7 +75,7 @@ border-radius: 6px;
 padding: 10px 20px;
 color: #fff;
 background-color: #e44c65;
-margin-left: 89px;
+margin-left: 34%;
 }
 
 #username:hover {
