@@ -71,11 +71,11 @@
   .editprofile-row #name,
   .editprofile-row #phoneNumber,
   .Profile-type {
-      min-width: 15em; 
+      max-width: 100px; 
       margin-left: 3em; 
     }
     .editprofile-btn {
-      min-width: 100px;
-      margin-left: 3px;
+      max-width: 80%;
+      margin-left: 15%;
     }
   }
