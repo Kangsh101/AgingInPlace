@@ -66,3 +66,16 @@
     background-color: #953142;
   }
   
+  @media screen and (max-width: 768px) {
+    .editprofile-row #email,
+  .editprofile-row #name,
+  .editprofile-row #phoneNumber,
+  .Profile-type {
+      min-width: 15em; 
+      margin-left: 3em; 
+    }
+    .editprofile-btn {
+      min-width: 100px;
+      margin-left: 3px;
+    }
+  }
