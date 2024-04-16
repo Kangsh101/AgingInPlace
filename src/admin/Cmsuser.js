@@ -10,21 +10,21 @@ const Cmsuser = () => {
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false); 
 
-  useEffect(() => {
-    fetch('/api/checkRole', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.role !== 'admin') {
-        setIsAdmin(false);
-      } else {
-        setIsAdmin(true); 
-      }
-    })
-    .catch(error => console.error('권한 확인 실패:', error));
-  }, []);
+  // useEffect(() => {
+  //   fetch('/api/checkRole', {
+  //     method: 'GET',
+  //     credentials: 'include'
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (data.role !== 'admin') {
+  //       setIsAdmin(false);
+  //     } else {
+  //       setIsAdmin(true); 
+  //     }
+  //   })
+  //   .catch(error => console.error('권한 확인 실패:', error));
+  // }, []);
 
   useEffect(() => {
     fetch('/api/cmsusers')
@@ -46,13 +46,13 @@ const Cmsuser = () => {
     setSelectedUserIndex(selectedUserIndex === index ? null : index); 
   };
 
-  if (!isAdmin) {
-    return (
-      <div>
-        <h1>권한이 없습니다.</h1>
-      </div>
-    );
-  }
+  // if (!isAdmin) {
+  //   return (
+  //     <div>
+  //       <h1>권한이 없습니다.</h1>
+  //     </div>
+  //   );
+  // }
   const handleDeactivateUser = (userId) => {
     fetch(`/api/deactivateUser/${userId}`, {
       method: 'PUT',
@@ -85,7 +85,7 @@ const Cmsuser = () => {
   return (
     <>
       <div className="sidebar">
-        <img src="/images/logo192.png" alt="Your Logo" />
+        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
         <h2>관리자 페이지</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>

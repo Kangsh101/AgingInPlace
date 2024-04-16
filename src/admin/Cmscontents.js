@@ -24,7 +24,7 @@ const Cmscontents = () => {
   return (
     <>
       <div className="sidebar">
-        <img src="/images/logo192.png" alt="Your Logo" />
+        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
         <h2>관리자 페이지</h2>
         <ul>
           <li className={`cms-item ${location.pathname === "/Cmscontents" ? "cms-active" : ""}`}>

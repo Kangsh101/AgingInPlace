@@ -80,10 +80,10 @@ const Login = ({ onLogin }) => {
                 </div>
                 <div className="find-group">
                   <Link to="/signup" className="findPd">
-                    회원가입 | 
+                    회원가입 
                   </Link>
                   <Link to="/Idppl" className="findPd">
-                     아이디 찾기 |
+                     아이디 찾기
                   </Link>
                   <Link to="/Passwordppl" className="findPd">
                     비밀번호 찾기

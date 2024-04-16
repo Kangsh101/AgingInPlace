@@ -50,7 +50,7 @@ h2 {
 #password,
 #username{
   height: 2.8em;
-  width: 16em;
+  width: 18em;
 }
 
 .custom-label {
@@ -127,16 +127,27 @@ margin-left: 34%;
   background-color: #eee;
   border-radius: 4px;
   font-size: 14px;
+  
 }
-.findPd{
-  padding-left: 10px;
+.findPd {
+  padding: 5px 10px;
   color: white;
+  border-right: 1px solid #ccc; 
+  display: inline-block;
+  line-height: 6px; 
 }
 .find-group a{
   text-decoration: none;
   border-bottom: none;
   }
-
+  .findPd:last-child {
+    border-right: none;
+  }
+ @media only screen and (max-width: 440px) {
+  .find-group {
+    font-size: 12px;
+  }
+}
 /* @media only screen and (max-width: 768px) {
   .login-box {
     width: 80%;
