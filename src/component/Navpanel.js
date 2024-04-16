@@ -1,12 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/NewMain.css';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 
-const Navpanel = () => {
+const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false); 
   const navPanelRef = useRef(null);
+  const navigate = useNavigate(); 
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+      });
+  
+      if (response.ok) {
+        setIsLoggedIn(false); 
+        localStorage.removeItem('isLoggedIn'); 
+        navigate('/main'); 
+      } else {
+        throw new Error('로그아웃 실패');
+      }
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+      alert('로그아웃에 실패했습니다.');
+    }
+  };
   useEffect(() => {
     const handleScroll = () => {
       // 스크롤 이벤트에 따른 동작 수행
@@ -45,15 +64,25 @@ const Navpanel = () => {
         <nav>
           <ul>
             <li><a href="login" className='link'>Home</a></li>
-            <li><a href="login" className='link3'>로그인</a></li>
-            <li><a href="signup" className='link3'>회원가입</a></li>
-            <li><a href="left-sidebar.html" className='link3'>프로그램 콘텐츠</a></li>
+            {!isLoggedIn && (
+              <>
+                <li><a href="/login" className='link3'>로그인</a></li>
+                <li><a href="/signup" className='link3'>회원가입</a></li>
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+                <li><a onClick={handleLogout} className="link3">로그아웃</a></li>
+                <li><a href="/mypage" className='link3'>내정보</a></li>
+              </>
+            )}
+            <li><a href="contents" className='link3'>프로그램 콘텐츠</a></li>
             <li>
-                <a href="left-sidebar.html" className='link3'>커뮤니티</a>
+                <a href="notice" className='link3'>커뮤니티</a>
                 <ul>
-                    <li><a href="left-sidebar.html" className='link2'>공지사항</a></li>
-                    <li><a href="left-sidebar.html" className='link2'>QnA 게시판</a></li>
-                    <li><a href="left-sidebar.html" className='link2'>FAQ 게시판</a></li>
+                    <li><a href="notice" className='link2'>공지사항</a></li>
+                    <li><a href="qnapage" className='link2'>QnA 게시판</a></li>
+                    <li><a href="faqpage" className='link2'>FAQ 게시판</a></li>
                 </ul>
             </li>
           </ul>

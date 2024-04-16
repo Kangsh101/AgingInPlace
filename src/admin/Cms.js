@@ -42,47 +42,49 @@ const Cms = () => {
 
 
 
-  useEffect(() => {
-    fetch('/api/checkRole', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.role !== 'admin') {
-        setIsAdmin(false);
-        Navigate.push('/main'); 
-      } else {
-        setIsAdmin(true);
-        fetch('/api/notices')
-          .then(response => response.json())
-          .then(data => {
-            const postsWithNumbers = data.reverse().map((post, index) => ({
-              ...post,
-              number: index + 1,
-              create_at: formatDate(post.create_at)
-            }));
-            setPosts(postsWithNumbers);
-          })
-          .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
-      }
-    })
-    .catch(error => console.error('권한 확인 실패:', error));
-  }, [Navigate]);
+  // useEffect(() => {
+  //   fetch('/api/checkRole', {
+  //     method: 'GET',
+  //     credentials: 'include'
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (data.role !== 'admin') {
+  //       setIsAdmin(false);
+  //       Navigate.push('/main'); 
+  //     } else {
+  //       setIsAdmin(true);
+  //       fetch('/api/notices')
+  //         .then(response => response.json())
+  //         .then(data => {
+  //           const postsWithNumbers = data.reverse().map((post, index) => ({
+  //             ...post,
+  //             number: index + 1,
+  //             create_at: formatDate(post.create_at)
+  //           }));
+  //           setPosts(postsWithNumbers);
+  //         })
+  //         .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
+  //     }
+  //   })
+  //   .catch(error => console.error('권한 확인 실패:', error));
+  // }, [Navigate]);
 
-  if (!isAdmin) {
-    return (
-      <div>
-        <h1>권한이 없습니다.</h1>
-      </div>
-    );
-  }
+  // if (!isAdmin) {
+  //   return (
+  //     <div>
+  //       <h1>권한이 없습니다.</h1>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
       <div className="sidebar">
-        <img src="/images/logo192.png" alt="Your Logo" />
-        <h2>관리자 페이지</h2>
+        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
+        <header className='major'> 
+          <h2 className='aaaaaa'>관리자 페이지</h2>
+        </header>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
           <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
@@ -93,8 +95,8 @@ const Cms = () => {
 
         <div className="Cmss-header">
           <div className='Cmss-chch'>
-            <Link to="/Cms"><button className='chchbtt1'>공지사항 게시판</button></Link>
-            <Link to="/Cmsfaq"><button className='chchbtt'>FAQ 게시판</button></Link>
+            <Link to="/Cms"><button className='button' id='cms-nodicego'>공지사항 게시판</button></Link>
+            <Link to="/Cmsfaq"><button className='button'>FAQ 게시판</button></Link>
           </div>
 
           <div className="Cmss-options">
@@ -103,10 +105,10 @@ const Cms = () => {
               <option value="author">작성자</option>
             </select>
             <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
-            <button className="Cmss-button">검색</button>
+            <button className="button primary">검색</button>
           </div>
           <Link to="/noticeup">
-            <button className="cms-FAQ">공지사항 등록</button>
+            <button className="button1" id='saddasdasd'>공지사항 등록</button>
           </Link>
         </div>
 

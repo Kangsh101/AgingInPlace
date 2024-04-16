@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import '../css/Header.css';
 
-const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate(); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -97,4 +97,4 @@ const Header2 = ({ isLoggedIn, setIsLoggedIn }) => {
   );
 };
 
-export default Header2;
+export default Header;
