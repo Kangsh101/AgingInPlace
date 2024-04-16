@@ -59,7 +59,7 @@
 }
 
 .editprofile-btn {
-  margin-top:70px;
+  margin-top: 50px;
   background-color: #e44c65;
   color: white;
   width: 400px;
@@ -88,7 +88,7 @@
 
   .editprofile-btn {
     max-width: 60%;
-    margin-left: 15%;
+    margin-left: 20%;
   }
 }
 @media screen and (max-width: 385px) {
@@ -112,7 +112,8 @@
   }
 
   .editprofile-btn {
-    max-width: 60%;
-    margin-left: 15%;
+    max-width: 50%;
+    margin-left: 25%;
+    height: 50px;
   }
 }
