@@ -99,10 +99,10 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       </div>
       <div className='signup-id'>
         <div className='Section2-container'>
-          <div>
+          <div id='section2-id'>
             <input type='text' id='userid' name='username' value={userData.username} onChange={handleInputChange} placeholder='아이디' className='Section2-field' />
           </div>
-          <div>
+          <div id='section2-id'>
             <input type='password' id='userpassword' name='password' value={userData.password} onChange={handleInputChange} placeholder='비밀번호' className='Section2-field' />
           </div>
           <div>

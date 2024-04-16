@@ -2313,7 +2313,7 @@ input, select, textarea {
 		outline: 0;
 		padding: 0 1em;
 		text-decoration: none;
-		width: 25%;
+		width: 35%;
 		height: 300px;
 		margin-bottom: 10px;
 	}
@@ -2390,8 +2390,8 @@ input, select, textarea {
 		input[type="password"],
 		input[type="email"],
 		select {
-			height: 2.3em;
-			width: 19em;
+			height: 2.5em;
+			width: 25.6em;
 
 		}
 	}

@@ -44,7 +44,9 @@
   margin-top: 1%;
 }
 
-
+#section2-id{
+  margin-bottom: -18px;
+}
 .pschecks{
   color: red;
   font-weight: bold;
