@@ -48,10 +48,12 @@
     white-space: nowrap;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 385px) {
     .myinfo-context span {
       min-width: 15em; 
       margin-left: 3em; 
     }
   }
+
+  
   
