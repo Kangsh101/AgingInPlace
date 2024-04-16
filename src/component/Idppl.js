@@ -90,8 +90,11 @@ const Idppl = () => {
   };
   
   return (
-    <div>
-      <h2 className='idididid'>아이디 찾기</h2>
+    <div className="row gtr-150">
+      <div className="">
+        <header className='major'> 
+          <h2 className='aaaaaa'>아이디 찾기</h2>
+        </header>
       <div className='ddd'>
         <div className="idbox col-lg-2">
           {showRadioButtons && (
@@ -110,33 +113,35 @@ const Idppl = () => {
           <div>
             {showInputFields && (
              <div>
-                <label htmlFor="name">이름 : </label>
+              <div className='idemail'>
+                <label htmlFor="name" className='idpass-nowrap'>이름 : </label>
                 <input type='text' id='name' name='name' value={name} onChange={handleNameChange} placeholder='이름' className='idfieldname' />
+                </div>
                 {findMethod === 'email' && (
                 <div className='idemail'>
-                    <label htmlFor="email" className='Idpplemail'>이메일 :</label>
+                    <label htmlFor="email" className='idpass-nowrap'>이메일 :</label>
                     <input type='text' id='email' name='email' value={email} onChange={handleEmailChange} placeholder='예) kangsh4969@naver.com' className='idfield2' />
-                    <button onClick={handleSendVerificationCode} className='fieldbtt'>인증번호 받기</button>
+                    <button onClick={handleSendVerificationCode} className='button' id='email-btt'>인증번호 받기</button>
                 </div>
                 )}
                 {findMethod === 'phoneNumber' && (
-                <div className='idemail'>
-                    <label htmlFor="phoneNumber" className='Idpplemail'>전화번호 : </label>
+                <div className='idemail2'>
+                    <label htmlFor="phoneNumber" className='idpass-nowrap'>전화번호 : </label>
                     <input type='text' id='phoneNumber' name='phoneNumber' value={phoneNumber} onChange={handlePhoneChange} placeholder='예) 01033604963' className='idfield2' />
-                    <button onClick={handleSendVerificationCode} className='fieldbtt'>인증번호 받기</button>
+                    <button onClick={handleSendVerificationCode} className='button' id='email-btt'>인증번호 받기</button>
                 </div>
                 )}
                 {verificationCodeSent && (
-                <div>
+                <div className='inzzngbubun'>
                     <input type='text' id='verificationCode' name='verificationCode' value={verificationCode} onChange={handleVerificationCodeChange} placeholder='인증번호입력' className='inzzm' />
-                    <button onClick={handleVerify} className='fieldbtt1'>확인</button>
+                    <button onClick={handleVerify} className='button' id='inzzngbubun-btt'>확인</button>
                 </div>
                 )}
              </div>
             )}
             <div className="button-group">
             {!searched && (
-                <button onClick={findMethod === 'email' ? handleFindUsername : handleFindUserPhone} className='idbttckck'>아이디 찾기</button>
+                <button onClick={findMethod === 'email' ? handleFindUsername : handleFindUserPhone} className='button primary' id='idckwrl-btt'>아이디 찾기</button>
             )}
             </div>
           </div>
@@ -152,6 +157,7 @@ const Idppl = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

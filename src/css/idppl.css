@@ -159,3 +159,48 @@
     font-weight: bold;
     font-size: 16px;
 } */
+.ddd{
+    border-radius: 20px;
+    padding: 18% 10% 18% 10%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.075);
+    margin-bottom: 10%;
+}
+
+.idemail {
+    display: flex;
+    margin-bottom: 10px; 
+}
+.idemail2{
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.idfieldname, .idfield2 {
+    flex-grow: 1;  
+    margin-right: 10px; 
+}
+
+#email-btt {
+    width: auto;       
+    padding: 0 2% 0 2%; 
+    font-size: 0.8em;  
+    white-space: nowrap;
+ 
+}
+.idpass-nowrap {
+    white-space: nowrap; 
+    
+}
+.inzzngbubun{
+    display: flex;
+    margin-left: 14%;
+}
+
+#inzzngbubun-btt{
+    margin-left: 3%;
+}
+#idckwrl-btt{
+    font-size: 14px;
+   margin: 10px 0 0 33%;
+}
