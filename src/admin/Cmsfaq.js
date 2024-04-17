@@ -7,10 +7,17 @@ const Cmsfaq = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5); 
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
-
   const handleClick = (index) => {
-    setSelectedPostIndex(index);
+    if (selectedPostIndex === index) {
+      setSelectedPostIndex(null);
+    } else {
+      setSelectedPostIndex(index);
+    }
   };
+  
+  // const handleClick = (index) => {
+  //   setSelectedPostIndex(index);
+  // };
   useEffect(() => {
     fetch('/api/faq')
       .then(response => response.json())
@@ -61,7 +68,7 @@ const Cmsfaq = () => {
         <h2>관리자</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
-          <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
+          <li className={`cms-item2 ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
           <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
@@ -100,31 +107,32 @@ const Cmsfaq = () => {
               <th>A</th>
             </tr>
           </thead>
-          <tbody >
-          {posts.map((post, index) => (
-                <React.Fragment key={post.id}>
-                  <tr onClick={() => handleClick(index)}>
-                    <td>{post.number}</td>
-                    <td>{post.title}</td>
-                    <td>{post.content}</td>
-                  </tr>
-                  {selectedPostIndex === index && (
-                    <tr className='sang-trtag'>
-                      <td colSpan="5">
-                        <div className="selected-post">
-                          <p className='sang-title'>{post.title}</p>
-                          <p className='sang-description'>{post.content}</p>
-                          <div className='sang-bttcon'>
-                            <button className='button primary' >게시글 수정</button>
-                            <button className='button' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
-                          </div>
+          <tbody>
+            {currentPosts.map((post, index) => (
+              <React.Fragment key={post.id}>
+                <tr onClick={() => handleClick(indexOfFirstPost + index)}>
+                  <td>{indexOfFirstPost + index + 1}</td>
+                  <td className="ellipsis">{post.title}</td>
+                  <td className="ellipsis">{post.content}</td>
+                </tr>
+                {selectedPostIndex === indexOfFirstPost + index && (
+                  <tr className='sang-trtag'>
+                    <td colSpan="5">
+                      <div className="selected-post">
+                        <p className='sang-title wrap-text'><span className='cms-QA'>Q </span> : {post.title}</p>
+                        <p className='sang-description wrap-text'><span className='cms-QA'>A </span> : {post.content}</p>
+                        <div className='sang-bttcon'>
+                          <button className='button primary' id='cms-correction'>게시글 수정</button>
+                          <button className='button' onClick={() => handleDelete(post.id, indexOfFirstPost + index)}>게시글 삭제</button>
                         </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
           </tbody>
+
         </table>
         
         <Pagination

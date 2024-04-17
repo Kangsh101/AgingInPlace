@@ -22,12 +22,13 @@ const Cmscontents = () => {
   const location = useLocation(); 
 
   return (
-    <>
-      <div className="sidebar">
+    <div className="cms-container">
+      <div className="cms-sidebar">
         {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
-        <h2>관리자 페이지</h2>
+        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
+        <h2>관리자 </h2>
         <ul>
-          <li className={`cms-item ${location.pathname === "/Cmscontents" ? "cms-active" : ""}`}>
+          <li className={`cms-item2 ${location.pathname === "/Cmscontents" ? "cms-active" : ""}`}>
             <Link to="/Cmscontents">프로그램 컨텐츠</Link>
           </li>
           <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}>
@@ -38,7 +39,7 @@ const Cmscontents = () => {
           </li>
         </ul>
       </div>
-      <div className="cms-container">
+      <div className="cms-main-content">
         <div className="Cmss-header">
           <h2>프로그램 콘텐츠 관리</h2>
           <div className="Cmss-options">
@@ -47,7 +48,7 @@ const Cmscontents = () => {
               <option value="author">작성자</option>
             </select>
             <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
-            <button className="Cmss-button">검색</button>
+            <button className="button primary">검색</button>
           </div>
         </div>
         <div className="Cmss-content">
@@ -101,7 +102,7 @@ const Cmscontents = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -91,7 +91,7 @@ const Cmsuser = () => {
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
           <li className="cms-item"><Link to="/Cms">게시판 관리</Link></li>
-          <li className={`cms-item ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}><Link to="/Cmsuser">사용자 관리</Link></li>
+          <li className={`cms-item2 ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
       <div className="cms-main-content">
@@ -124,7 +124,7 @@ const Cmsuser = () => {
               {currentPosts.map((user, index) => (
                 <React.Fragment key={index}>
                   <tr onClick={() => handleUserClick(index)}>
-                    <td>{index + 1}</td>
+                    <td>{indexOfFirstPost + index + 1}</td>
                     <td>{user.username}</td>
                     <td>{user.role}</td>
                     <td>{user.name}</td>
@@ -175,7 +175,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button className='button' id='cms-pagebtt' key={number} onClick={() => paginate(number)}>
+          <button  key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}

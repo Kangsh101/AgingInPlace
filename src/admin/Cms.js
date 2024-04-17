@@ -42,41 +42,41 @@ const Cms = () => {
 
 
 
-  // useEffect(() => {
-  //   fetch('/api/checkRole', {
-  //     method: 'GET',
-  //     credentials: 'include'
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     if (data.role !== 'admin') {
-  //       setIsAdmin(false);
-  //       Navigate.push('/main'); 
-  //     } else {
-  //       setIsAdmin(true);
-  //       fetch('/api/notices')
-  //         .then(response => response.json())
-  //         .then(data => {
-  //           const postsWithNumbers = data.reverse().map((post, index) => ({
-  //             ...post,
-  //             number: index + 1,
-  //             create_at: formatDate(post.create_at)
-  //           }));
-  //           setPosts(postsWithNumbers);
-  //         })
-  //         .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
-  //     }
-  //   })
-  //   .catch(error => console.error('권한 확인 실패:', error));
-  // }, [Navigate]);
+  useEffect(() => {
+    fetch('/api/checkRole', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.role !== 'admin') {
+        setIsAdmin(false);
+        Navigate.push('/main'); 
+      } else {
+        setIsAdmin(true);
+        fetch('/api/notices')
+          .then(response => response.json())
+          .then(data => {
+            const postsWithNumbers = data.reverse().map((post, index) => ({
+              ...post,
+              number: index + 1,
+              create_at: formatDate(post.create_at)
+            }));
+            setPosts(postsWithNumbers);
+          })
+          .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
+      }
+    })
+    .catch(error => console.error('권한 확인 실패:', error));
+  }, [Navigate]);
 
-  // if (!isAdmin) {
-  //   return (
-  //     <div>
-  //       <h1>권한이 없습니다.</h1>
-  //     </div>
-  //   );
-  // }
+  if (!isAdmin) {
+    return (
+      <div>
+        <h1>권한이 없습니다.</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="cms-container">
@@ -86,7 +86,7 @@ const Cms = () => {
         <h2>관리자</h2>
         <ul>
           <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
-          <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
+          <li className={`cms-item2 ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
           <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
       </div>
@@ -138,11 +138,11 @@ const Cms = () => {
                     <tr className='sang-trtag'>
                       <td colSpan="5">
                         <div className="selected-post">
-                          <p className='sang-title'>{post.title}</p>
-                          <p className='sang-description'>{post.content}</p>
+                          <p className='sang-title wrap-text'><span className='cms-QA'>제목 </span> : {post.title}</p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>내용 </span> : {post.content}</p>
                           <div className='sang-bttcon'>
-                            <button className='sang-btt'>게시글 수정</button>
-                            <button className='sang-btt' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
+                            <button className='button primary' id='cms-correction'>게시글 수정</button>
+                            <button className='button' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
                           </div>
                         </div>
                       </td>
@@ -174,7 +174,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button  className='button' id='cms-pagebtt' key={number} onClick={() => paginate(number)}>
+          <button key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}
