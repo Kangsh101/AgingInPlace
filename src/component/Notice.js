@@ -61,10 +61,7 @@ const Notice = () => {
               <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
                   <button className="button primary" id='QnA-searchBtt'>검색</button>
                 <div className="search-write-container"> 
-                  <button className="button primary" id='QnA-Upbtt' >
-                    글쓰기
-                  {/* {isLoggedIn ? '글쓰기' : '글쓰기'} */}
-                  </button>
+ 
               </div>
             </div>
          </div>

@@ -23,7 +23,6 @@ import NoticeUp from './admin/NoticeUp';
 import NoticeUpdate from './admin/NoticeUpdate';
 import Navpanel from './component/Navpanel';
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 

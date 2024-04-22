@@ -2286,6 +2286,7 @@ input, select, textarea {
 	  .qna-options {
 		display: flex;
 		align-items: center;
+		margin-bottom: 40px;
 	  }
 	  
 	  .qna-options h2 {
