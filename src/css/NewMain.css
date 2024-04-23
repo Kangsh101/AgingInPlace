@@ -3168,7 +3168,7 @@ input, select, textarea {
 		}
 
 		.spotlight:before {
-			background-image: url("/public/images/clclao.jpg");
+			background-image: url("/public/images/cat2.jpg");
 			content: '';
 			display: block;
 			height: 100%;
@@ -3195,6 +3195,7 @@ input, select, textarea {
 			-ms-transition: -ms-transform 1s ease, opacity 1s ease;
 			transition: transform 1s ease, opacity 1s ease;
 			background: rgba(23, 24, 32, 0.95);
+			/* background: rgba(91, 92, 102, 0.95); */
 			border-style: solid;
 			opacity: 1;
 			position: absolute;
@@ -3216,6 +3217,7 @@ input, select, textarea {
 			opacity: 1;
 		}
 
+		
 		.spotlight.top .content, .spotlight.bottom .content {
 			left: 0;
 			padding: 5.1em 0 3.1em 0;
@@ -3250,7 +3252,8 @@ input, select, textarea {
 		}
 
 		.spotlight.style1 .content {
-			border-color: #e44c65;
+			/* border-color: #e44c65; */
+			border-color: #39c088;
 		}
 
 		.spotlight.style2 .content {
@@ -3565,11 +3568,11 @@ input, select, textarea {
 #banner {
     background-attachment: fixed;
     background-color: #272833;
-    background-image: url(/public/images/cat1.jpg);
+    background-image: url(/public/images/cat4.jpg);
     background-position: center center;
     background-size: cover;
     box-shadow: 0 0.25em 0.5em 0 rgba(221, 197, 197, 0.25);
-    min-height: 100vh;
+    min-height: 150vh;
     position: relative;
     text-align: center;
     z-index: 21;
@@ -3584,16 +3587,27 @@ input, select, textarea {
 		}
 
 		#banner:after {
-			background-image: -webkit-linear-gradient(top, rgba(23, 24, 32, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/clclao.jpg);
+			background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/asddddd.jpg);
 			content: '';
 			display: block;
-			height: 100%;
-			left: 0;
+			height: 50%;
+			left: 0;	
 			position: absolute;
 			top: 0;
 			width: 100%;
 		}
-
+		@media screen and (max-width: 736px) {
+			#banner:after {
+				background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/asddddd.jpg);
+				content: '';
+				display: block;
+				height: 70%;
+				left: 0;	
+				position: absolute;
+				top: 0;
+				width: 100%;
+			}
+		}
 		#banner .content {
 			display: inline-block;
 			margin-right: 1%;
@@ -3725,7 +3739,8 @@ input, select, textarea {
 					border-radius: 20px;
 					padding: 50px;
 					margin-left: 2.5em;
-					background: rgba(255, 255, 255, 0.075)
+					background: rgba(255, 255, 255, 0.075);
+					/* background: rgba(255, 255, 255, 0.075); */
 				  }
 				  .email-container input{
 					width: 14.6em;
@@ -3773,6 +3788,7 @@ input, select, textarea {
 				width: 25em;
 			}
 
+		
 		/* Wrapper */
 
 			.wrapper {

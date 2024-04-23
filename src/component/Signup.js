@@ -32,9 +32,17 @@ const Signup = () => {
   };
 
   const handleNext = async () => {
-  if (section === 2) { 
+    if (section === 1) { 
+      if (agreed) {
+        alert('약관에 동의해주세요.');
+        return;
+      }
+      setSection(section + 1); 
+      return;
+    }
+    
+    if (section === 2) { 
       if (!checkAllInputs()) {
-       
         return;
       }
       if (userData.password !== userData.confirmPassword) {
@@ -44,11 +52,11 @@ const Signup = () => {
       try {
         const response = await axios.post('/api/signup', userData); 
         console.log('User signed up successfully:', response.data);
+        setSection(section + 1); 
       } catch (error) {
         console.error('Error signing up:', error.response.data.error);
       }
     }
-    setSection(section + 1);
   };
 
   const checkAllInputs = () => {

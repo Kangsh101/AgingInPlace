@@ -23,10 +23,11 @@ const Section1 = ({ handleNext }) => {
     if (agreement1) {
       handleNext();
     } else {
-      alert('동의가 필요합니다.');
+      alert('약관에 동의해주세요.');
     }
   };
-   return (
+  
+  return (
     <div className='section-container'>
       <ol className="nav nav-pills nav-pills-step">
         <li className="nav-item active"><span className="num">01</span> 약관동의</li>
@@ -36,9 +37,9 @@ const Section1 = ({ handleNext }) => {
       <div>
         <div className="terms-scroll">
           <div className='col-6 col-12-medium'>
-              <div class="col-4 col-12-medium">
+              <div className="col-4 col-12-medium">
 									<input type="checkbox" id="priority-low" checked={agreement1} onChange={handleCheckAll} />
-									<label for="priority-low"><span className='pschecks'>(필수)</span> 개인정보 수집 및 이용 동의</label>
+									<label htmlFor="priority-low"><span className='pschecks'>(필수)</span> 개인정보 수집 및 이용 동의</label>
 							</div>
             </div>
           <div className='Section1Text'>

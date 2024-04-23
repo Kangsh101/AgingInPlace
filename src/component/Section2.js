@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import '../css/Section2.css';
 
 const Section2 = ({ userData, handleInputChange, handleNext }) => {
@@ -9,7 +9,8 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [customDomain, setCustomDomain] = useState('');
   const [gender, setGender] = useState('male');
   const [role, setRole] = useState('');
-
+  const [nextSession, setNextSession] = useState(false);
+  
   const isFormComplete = () => {
     return (
       userData.username !== '' &&
@@ -30,28 +31,32 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       }
       const email = showCustomDomain ? `${emailId}@${customDomain}` : `${emailId}@${emailDomain}`;
       handleInputChange({ target: { name: 'email', value: email } });
-      handleInputChange({ target: { name: 'role', value: role } }); 
-      handleNext(); 
+      handleInputChange({ target: { name: 'role', value: role } });
+      setNextSession(true);
     } else {
-      if (userData.username === '') {
-        alert('아이디를 입력하세요.');
-      } else if (userData.password === '') {
-        alert('비밀번호를 입력하세요.');
-      } else if (userData.confirmPassword === '') {
-        alert('비밀번호 확인을 입력하세요.');
-      } else if(userData.password !== userData.confirmPassword){
-        alert('비밀번호와 비밀번호확인이 틀립니다.')
-      } else if (userData.name === '') {
-        alert('이름을 입력하세요.');
-      } else if (userData.birthdate === '') {
-        alert('생년월일을 입력하세요.');
-      } else if (userData.phoneNumber === '') {
-        alert('휴대전화번호를 입력하세요.');
-      } 
-      
-    }
-  };
+    if (userData.username === '') {
+      alert('아이디를 입력하세요.');
+    } else if (userData.password === '') {
+      alert('비밀번호를 입력하세요.');
+    } else if (userData.confirmPassword === '') {
+      alert('비밀번호 확인을 입력하세요.');
+    } else if(userData.password !== userData.confirmPassword){
+      alert('비밀번호와 비밀번호확인이 틀립니다.')
+    } else if (userData.name === '') {
+      alert('이름을 입력하세요.');
+    } else if (userData.birthdate === '') {
+      alert('생년월일을 입력하세요.');
+    } else if (userData.phoneNumber === '') {
+      alert('휴대전화번호를 입력하세요.');
+    } 
+  }
+};
   
+useEffect(() => {
+    if (nextSession) {
+      handleNext();
+    }
+  }, [nextSession]);
 
   const handleEmailIdChange = (e) => {
     const { value } = e.target;
@@ -127,17 +132,17 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             )}
           </div>
           <div className='genderradio-container'>
-            <div class="row gtr-uniform gtr-50">
-							<div class="col-4 col-12-medium">
+            <div className="row gtr-uniform gtr-50">
+							<div className="col-4 col-12-medium">
 									<input type="radio" id="priority-low" name="gender" value="남성"  checked={gender ==="남성"}onChange={handleGenderChange} />
-									<label for="priority-low">남성</label>
+									<label htmlFor="priority-low">남성</label>
                   <input type="radio" id="priority-normal" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange}/>
-								<label for="priority-normal">여성</label>
+								<label htmlFor="priority-normal">여성</label>
 							</div>
 						</div>
           </div>
           <select id='role' value={role} onChange={handleRoleChange} className='select-field1'>
-            <option value='' disabled selected hidden>타입 선택</option>
+            <option value='' disabled hidden>타입 선택</option>
             <option value='환자'>환자</option>
             <option value='보호자'>보호자</option>
             <option value='일반인'>일반인</option>
@@ -154,9 +159,10 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           <input type='text' id='phoneNumber' name='phoneNumber' value={userData.phoneNumber} onChange={handleInputChange} placeholder='휴대전화번호' className='Section2-field'></input>
         </div>
       </div>
-      <button onClick={handleNextClick} className="button primary" id='Section2Btt'>
+      <button onClick={() => handleNextClick()} className="button primary" id='Section2Btt'>
         다음
       </button>
+
     </div>
   );
 };
