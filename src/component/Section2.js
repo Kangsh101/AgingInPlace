@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/Section2.css';
 
 const Section2 = ({ userData, handleInputChange, handleNext }) => {
@@ -10,7 +10,9 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [gender, setGender] = useState('male');
   const [role, setRole] = useState('');
   const [nextSession, setNextSession] = useState(false);
-  
+  const [isGuardian, setIsGuardian] = useState(false);
+  const [guardianName, setGuardianName] = useState('');
+
   const isFormComplete = () => {
     return (
       userData.username !== '' &&
@@ -34,25 +36,25 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       handleInputChange({ target: { name: 'role', value: role } });
       setNextSession(true);
     } else {
-    if (userData.username === '') {
-      alert('아이디를 입력하세요.');
-    } else if (userData.password === '') {
-      alert('비밀번호를 입력하세요.');
-    } else if (userData.confirmPassword === '') {
-      alert('비밀번호 확인을 입력하세요.');
-    } else if(userData.password !== userData.confirmPassword){
-      alert('비밀번호와 비밀번호확인이 틀립니다.')
-    } else if (userData.name === '') {
-      alert('이름을 입력하세요.');
-    } else if (userData.birthdate === '') {
-      alert('생년월일을 입력하세요.');
-    } else if (userData.phoneNumber === '') {
-      alert('휴대전화번호를 입력하세요.');
-    } 
-  }
-};
-  
-useEffect(() => {
+      if (userData.username === '') {
+        alert('아이디를 입력하세요.');
+      } else if (userData.password === '') {
+        alert('비밀번호를 입력하세요.');
+      } else if (userData.confirmPassword === '') {
+        alert('비밀번호 확인을 입력하세요.');
+      } else if (userData.password !== userData.confirmPassword) {
+        alert('비밀번호와 비밀번호확인이 틀립니다.');
+      } else if (userData.name === '') {
+        alert('이름을 입력하세요.');
+      } else if (userData.birthdate === '') {
+        alert('생년월일을 입력하세요.');
+      } else if (userData.phoneNumber === '') {
+        alert('휴대전화번호를 입력하세요.');
+      }
+    }
+  };
+
+  useEffect(() => {
     if (nextSession) {
       handleNext();
     }
@@ -79,18 +81,22 @@ useEffect(() => {
     setGender(selectedGender);
     handleInputChange({ target: { name: 'gender', value: selectedGender } });
   };
-  
-  
 
   const handleRoleChange = (e) => {
-    
     const selectedRole = e.target.value;
-    const roleInKorean = selectedRole === 'patient' ? '환자' : '보호자';
     setRole(selectedRole);
-    handleInputChange({ target: { name: 'role', value: roleInKorean } });
+    setIsGuardian(selectedRole === '보호자');
+    handleInputChange({ target: { name: 'role', value: selectedRole } });
   };
-  
-  
+
+  const handleGuardianNameChange = (e) => {
+    const { value } = e.target;
+    setGuardianName(value);
+  };
+
+  const handleGuardianNameConfirm = () => {
+    handleInputChange({ target: { name: 'guardianName', value: guardianName } });
+  };
 
   return (
     <div className='section-container'>
@@ -133,13 +139,13 @@ useEffect(() => {
           </div>
           <div className='genderradio-container'>
             <div className="row gtr-uniform gtr-50">
-							<div className="col-4 col-12-medium">
-									<input type="radio" id="priority-low" name="gender" value="남성"  checked={gender ==="남성"}onChange={handleGenderChange} />
-									<label htmlFor="priority-low">남성</label>
-                  <input type="radio" id="priority-normal" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange}/>
-								<label htmlFor="priority-normal">여성</label>
-							</div>
-						</div>
+              <div className="col-4 col-12-medium">
+                <input type="radio" id="priority-low" name="gender" value="남성" checked={gender === "남성"} onChange={handleGenderChange} />
+                <label htmlFor="priority-low">남성</label>
+                <input type="radio" id="priority-normal" name="gender" value="여성" checked={gender === '여성'} onChange={handleGenderChange} />
+                <label htmlFor="priority-normal">여성</label>
+              </div>
+            </div>
           </div>
           <select id='role' value={role} onChange={handleRoleChange} className='select-field1'>
             <option value='' disabled hidden>타입 선택</option>
@@ -147,6 +153,12 @@ useEffect(() => {
             <option value='보호자'>보호자</option>
             <option value='일반인'>일반인</option>
           </select>
+          {isGuardian && (
+            <div>
+              <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 성함' className='Section2-field section2-inputgu' />
+              <button className='button11' onClick={handleGuardianNameConfirm}>확인</button>
+            </div>
+          )}
         </div>
         <div>
           <input type='text' id='name' name='name' value={userData.name} onChange={handleInputChange} placeholder='이름' className='Section2-field'></input>
