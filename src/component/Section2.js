@@ -7,12 +7,13 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [emailDomain, setEmailDomain] = useState('');
   const [showCustomDomain, setShowCustomDomain] = useState(false);
   const [customDomain, setCustomDomain] = useState('');
-  const [gender, setGender] = useState('male');
+  const [gender, setGender] = useState('');
   const [role, setRole] = useState('');
   const [nextSession, setNextSession] = useState(false);
   const [isGuardian, setIsGuardian] = useState(false);
   const [guardianName, setGuardianName] = useState('');
-
+  const [isPatientExist, setIsPatientExist] = useState(null);
+  const [showMarginBottom ,setShowMarginBottom] = useState(false);
   const isFormComplete = () => {
     return (
       userData.username !== '' &&
@@ -31,9 +32,26 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
         alert('이메일을 입력하거나 옵션을 선택하세요.');
         return;
       }
+      if (isGuardian && isPatientExist === false) {
+        alert('환자 성함을 확인해주세요.');
+        return;
+      }
+      if (isGuardian && !guardianName) {
+        alert('환자 성함을 입력하고 확인해주세요.');
+        return;
+      }
+      if (!gender) {
+        alert('성별을 선택해주세요.');
+        return;
+      }
+      if (!role) {
+        alert('타입을 선택해주세요.');
+        return;
+      }
       const email = showCustomDomain ? `${emailId}@${customDomain}` : `${emailId}@${emailDomain}`;
       handleInputChange({ target: { name: 'email', value: email } });
       handleInputChange({ target: { name: 'role', value: role } });
+      handleInputChange({ target: { name: 'patientName', value: guardianName } });
       setNextSession(true);
     } else {
       if (userData.username === '') {
@@ -49,10 +67,12 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       } else if (userData.birthdate === '') {
         alert('생년월일을 입력하세요.');
       } else if (userData.phoneNumber === '') {
-        alert('휴대전화번호를 입력하세요.');
+        alert('전화번호를 입력하세요.');
       }
     }
   };
+  
+  
 
   useEffect(() => {
     if (nextSession) {
@@ -96,6 +116,21 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
 
   const handleGuardianNameConfirm = () => {
     handleInputChange({ target: { name: 'guardianName', value: guardianName } });
+    fetch('/api/check-patient', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ patientName: guardianName }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        setIsPatientExist(data.message === '있음');
+        setShowMarginBottom(true);
+      })
+      .catch(error => {
+        console.error('오류:', error);
+      });
   };
 
   return (
@@ -154,9 +189,11 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             <option value='일반인'>일반인</option>
           </select>
           {isGuardian && (
-            <div>
+            <div className={`se2button-container ${showMarginBottom ? 'with-margin-bottom' : ''}`}>
               <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 성함' className='Section2-field section2-inputgu' />
-              <button className='button11' onClick={handleGuardianNameConfirm}>확인</button>
+              <button className='button11' onClick={handleGuardianNameConfirm} >확인</button>
+              {isPatientExist === true && <p id='section2ro' className='section2-rolet'>확인 되었습니다.</p>}
+              {isPatientExist === false && <p id='section2ro' className='section2-rolef'>일치하는 환자가 없습니다.</p>}
             </div>
           )}
         </div>
@@ -168,7 +205,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
           <input type='text' id='birthdate' name='birthdate' value={userData.birthdate} onChange={handleInputChange} placeholder='생년월일 8자' className='Section2-field'></input>
         </div>
         <div>
-          <input type='text' id='phoneNumber' name='phoneNumber' value={userData.phoneNumber} onChange={handleInputChange} placeholder='휴대전화번호' className='Section2-field'></input>
+          <input type='text' id='phoneNumber' name='phoneNumber' value={userData.phoneNumber} onChange={handleInputChange} placeholder='전화번호' className='Section2-field'></input>
         </div>
       </div>
       <button onClick={() => handleNextClick()} className="button primary" id='Section2Btt'>

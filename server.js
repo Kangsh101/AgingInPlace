@@ -50,11 +50,11 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 //회원가입
 app.post('/api/signup', (req, res) => {
-  const { username, password, email, name, birthdate, gender, phoneNumber,role} = req.body;
+  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientName } = req.body;
 
-  const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`;
+  const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
 
-  connection.query(query, [username, password, email, name, birthdate, gender,  phoneNumber,role], (err, result) => {
+  connection.query(query, [username, password, email, name, birthdate, gender, phoneNumber, role, patientName], (err, result) => {
     if (err) {
       console.error('회원가입 실패: ' + err.stack);
       res.status(500).send('회원가입 실패');
@@ -662,8 +662,24 @@ app.put('/api/activateUser/:userId', (req, res) => {
   });
 });
 
-
-
+// 회원가입 환자 체크
+app.post('/api/check-patient', (req, res) => {
+  const { patientName } = req.body;
+  const query = `SELECT COUNT(*) AS count FROM members WHERE role = "환자" AND name = ?`;
+  connection.query(query, [patientName], (err, results) => {
+    if (err) {
+      console.error('쿼리 오류:', err);
+      res.status(500).json({ message: '서버 오류' });
+      return;
+    }
+    const count = results[0].count;
+    if (count > 0) {
+      res.json({ message: '있음' });
+    } else {
+      res.json({ message: '없음' });
+    }
+  });
+});
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {

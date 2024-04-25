@@ -344,3 +344,24 @@
     height: 2.4em;
     margin-right: 10px;
   }
+
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .section2-rolet {
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .section2-rolef {
+    font-size: 17px;
+    font-weight: bold;
+    color: red;
+  }
+  #section2ro{
+    margin: 0 0 0.5em;
+  }
