@@ -1,0 +1,36 @@
+
+#QnA-Plus{
+    width: 45%;
+    /* margin-left: 27em; */
+    margin-left: 28%;
+}
+#QnA-titlecss{
+    width: 100%;
+    border: 1px solid white;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+#QnA-Plus h2{
+    margin-left: 30%;
+}
+#QnAup-content .ql-container {
+    /* 내용 입력 칸의 높이 조절 */
+    min-height: 350px; /* 또는 원하는 높이 값 */
+    margin-bottom: 20px;
+  }
+  #QnAup-content .ql-container .ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.5); /* 원하는 색상과 투명도 설정 */
+    font-size: 25px;
+  }
+  #QnAup-content .ql-editor img {
+    max-width: 90%;
+    height: auto;
+    cursor: pointer;
+  }
+  .button-group{
+    margin-bottom: 50px;
+    
+  }
+  #QnAbtt{
+    margin-right: 10px;
+  }

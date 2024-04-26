@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import '../css/Page3.css'; 
-import { Link, useNavigate } from 'react-router-dom';
+import '../css/Qnaup.css'; 
+import { useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const QnAUp = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('');
   const navigate = useNavigate();
+  const quillRef = useRef(null); 
+  const [image, setImage] = useState(null);
+
 
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('userId');
@@ -15,69 +21,126 @@ const QnAUp = () => {
     }
   }, []);
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+  
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file);
+  
+        try {
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await response.json();
+  
+          if (response.ok) {
+            // 에디터에 이미지 삽입
+            const range = quillRef.current.getEditor().getSelection(true);
+            quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
+          } else {
+            throw new Error('서버에서 이미지를 처리할 수 없습니다.');
+          }
+        } catch (error) {
+          console.error('이미지 업로드 중 오류 발생:', error);
+        }
+      }
+    };
+  }, []);
+  
+  
+
+  const modules = React.useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        'image': imageHandler
+      }
+    },
+  }), [imageHandler]);
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
   };
 
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
+  const handleContentChange = (content) => {
+    setContent(content);
   };
 
-  const handleSave = () => {
-    if (!title.trim()) {
-      alert('제목을 작성해주세요.');
+  const handleSave = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert('제목과 내용을 모두 작성해주세요.');
       return;
     }
-
-    if (!content.trim()) {
-      alert('내용을 작성해주세요.');
-      return;
+  
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('userId', userId);
+    if (image) {
+      formData.append('image', image); 
     }
-
-    fetch('/api/post', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, content, userId }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('글이 성공적으로 저장되었습니다.');
-      alert('글이 성공적으로 저장되었습니다.'); 
-      navigate('/qnapage'); 
-      window.location.reload(); 
-    })
-    .catch(error => {
+  
+    try {
+      const response = await fetch('/api/post', {
+        method: 'POST',
+        body: formData, // headers를 설정하지 않습니다. FormData는 자동으로 Content-Type을 설정합니다.
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('글이 성공적으로 저장되었습니다.');
+        alert('글이 성공적으로 저장되었습니다.');
+        navigate('/qnapage');
+      } else {
+        throw new Error('글을 저장하지 못했습니다.');
+      }
+    } catch (error) {
       console.error('글 저장 중 오류 발생:', error);
-    });
+    }
   };
-
   const handleCancel = () => {
     navigate(-1);
   };
 
   return (
     <div className="qna-page">
-      <nav className="qna-navigation">
-        <span className="qna-nav-ALL">전체</span>
-        <Link to="/qnapage" className="qna-nav-item-Q">QnA게시판</Link>
-        <Link to="/notice" className="qna-nav-item">공지사항</Link>
-        <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
-      </nav>
-      <div className="qnaplus">
-        <h2 className='aaaaaa'>QnA 게시글 작성</h2>
+      <div id='QnA-Plus'className="qnaplus">
+        <h2>QnA 게시글 작성</h2>
         <div className="form-group">
-          <label>제목:</label>
-          <input type="text" value={title} onChange={handleTitleChange} />
-        </div>
-        <div className="form-group1">
-          <label>내용:</label>
-          <textarea value={content} onChange={handleContentChange} />
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="제목"
+            className="title-input"
+            id='QnA-titlecss'
+          />
+          <ReactQuill
+           id='QnAup-content'
+            ref={quillRef}
+            value={content}
+            onChange={handleContentChange}
+            placeholder="내용을 입력하세요."
+            modules={modules}
+            
+          />
         </div>
         <div className="button-group">
-          <button className="cancel-button" onClick={handleCancel}>취소</button>
-          <button className="save-button" onClick={handleSave}>글 작성</button>
+          <button id='QnAbtt' className='button' onClick={handleCancel}>취소</button>
+          <button className='button primary' onClick={handleSave}>글 작성</button>
         </div>
       </div>
     </div>

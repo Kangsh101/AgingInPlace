@@ -3,9 +3,28 @@ const mysql = require('mysql');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const multer = require('multer');
+
 
 const path = require('path');
 const app = express();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+});
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, 
+    fieldSize: 10 * 1024 * 1024, 
+  }
+});
+
 
 const kangsh = 'USE aginginplace';
 
@@ -13,6 +32,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(session({  
   secret: 'mySecretKey', 
@@ -339,39 +359,38 @@ app.get('/api/checklogin', (req, res) => {
 
 
 // QnA 게시판 등록 api
-app.post('/api/post', (req, res) => {
+app.post('/api/post', upload.single('image'), (req, res) => {
   const { title, content } = req.body;
-  const userId = req.session.userId;
-  const query = `SELECT name FROM members WHERE id = ?`;
+  let imageUrl = '';
+  if (req.file) {
+    imageUrl = req.file.path; // 이미지 파일 경로 저장
+  }
 
-  connection.query(query, [userId], (err, result) => {
+  // 세션에서 userId를 가져오거나, req.body에서 가져옵니다.
+  const userId = req.session.userId || req.body.userId;
+  
+  const query = 'INSERT INTO boards (title, content, image_url, board_type, is_answer, name, create_at) VALUES (?, ?, ?, "QnA", "N", (SELECT name FROM members WHERE id = ?), NOW())';
+
+  connection.query(query, [title, content, imageUrl, userId], (err, result) => {
     if (err) {
-      console.error('사용자 이름 조회 중 오류 발생:', err);
-      res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
+      console.error('글 저장 중 오류 발생:', err);
+      res.status(500).json({ error: '글 저장 중 오류 발생' });
       return;
     }
-
-    if (result.length === 0) {
-      console.error('사용자를 찾을 수 없습니다.');
-      res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
-      return;
-    }
-
-    const name = result[0].name;
-
-    const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, 'QnA', 'Y', ?, NOW())`;
-
-    connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
-      if (insertErr) {  
-        console.error('글 저장 중 오류 발생:', insertErr);
-        res.status(500).json({ error: '글 저장 중 오류 발생' });
-        return;
-      }
-      console.log('글이 성공적으로 저장되었습니다.');
-      res.status(200).json({ message: '글이 성공적으로 저장되었습니다.' });
-    });
+    console.log('글이 성공적으로 저장되었습니다.');
+    res.status(200).json({ message: '글이 성공적으로 저장되었습니다.', postId: result.insertId });
   });
 });
+// 예시: 이미지 업로드 API
+app.post('/api/upload', upload.single('image'), (req, res) => {
+  if (req.file) {
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json({ imageUrl: imageUrl }); // 클라이언트에게 imageUrl 반환
+  } else {
+    res.status(400).send('이미지 업로드 실패');
+  }
+});
+
 
 // QnA 게시판만 검색 API
 app.get('/api/qnaposts', (req, res) => {

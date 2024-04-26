@@ -23,7 +23,7 @@ import NoticeUp from './admin/NoticeUp';
 import NoticeUpdate from './admin/NoticeUpdate';
 import Navpanel from './component/Navpanel';
 import useIntersectionObserver from './component/useIntersectionObserver';
-
+import Rkdtjrgus12 from './component/rkdtjrgus12';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -67,7 +67,16 @@ function App() {
           <Route path="/MyPage" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><MyPage /><Footer /></>} />
           <Route path="/contents" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
           <Route path="/qnacontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
-
+        
+        
+        
+  
+          
+          <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
+         
+         
+         
+         
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />
           <Route path="/cms" element={<Cms />} />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom'; 
 import '../css/Page2.css';
 import '../css/qnacontent.css';
+import '../css/rkdtjrgus12.css';
 
 const QnAContent = () => {
   const { id } = useParams(); 
@@ -14,7 +15,10 @@ const QnAContent = () => {
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState(null); 
-
+  const createMarkup = (htmlContent) => {
+    return { __html: htmlContent };
+  };
+  
   const getUserName = () => {
     fetch(`/api/getUserName/${localStorage.getItem('userId')}`)
       .then(res => res.json())
@@ -97,49 +101,46 @@ const QnAContent = () => {
   };
 
   return (
-    <div>
-      <div className="qna-page">
+    <div className="qnaup-page">
+      {/* <div className="qna-page">
         <nav className="qna-navigation">
           <span className="qna-nav-ALL">전체</span>
           <Link to="/qnapage" className="qna-nav-item-Q">QnA게시판</Link>
           <Link to="/notice" className="qna-nav-item">공지사항</Link>
           <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
         </nav>
-      </div>
+      </div> */}
 
-      <div className="qna-header">
-        <div className="qna-options">
-          <h2 className='QnA-main'>QnA 상세 내용</h2>
-
+      <div className="qnaup-header">
+          {/* <h2 className='QnA-main'>QnA 상세 내용</h2> */}
           <div className='qnacontent-container'>
             {post && ( 
               <>
-                <div className='QnA-title'>
-                  <p>제목: {post.title}</p>
+                <div className='QnAup-title'>
+                  <span>제목 : </span>{post.title}
                 </div>
-                <hr className="qna-title-line" />
-                <div className='QnA-author'>
-                  <span className='QnA-authortext'>작성자: {post.name}</span>
+                {/* <hr className="qna-title-line" /> */}
+                <div className='QnAup-author'>
+                  <span>작성자 : </span> {post.name}
+                  <span>등록일 : </span> {post.create_at}
                 </div>
-                <div className='QnA-date'>
-                  <p className='QnA-commentDate'>등록일: {post.create_at}</p>
+                {/* <hr className="qna-title-line" /> */}
+                <div className='QnAup-content'>
+                  {/* <span>내용:</span> */}
+                  <div className='qnaup-maincon' dangerouslySetInnerHTML={createMarkup(post.content)} />
                 </div>
-                <hr className="qna-title-line" />
-                <div className='QnA-content'>
-                  <p>내용: {post.content}</p>
-                </div>
-                <hr className="qna-title-line" />
-                <div className='QnA-comments'>
+                {/* <hr className="qna-title-line" /> */}
+                {/* <div className='QnA-comments'>
                   <span>댓글</span>
-                </div>
-                <hr className="qna-title-line" />
-                  <div className='QnA-comments2'>
+                </div> */}
+                {/* <hr className="qna-title-line" /> */}
+                  {/* <div className='QnA-comments2'>
                     <p>댓글 단 유저 </p>
                     <span>댓글 내용 </span>
                     <span>data</span>
-                  </div>
-                <hr className="qna-title-line" />
-                <div className='QnA-commentInput'>
+                  </div> */}
+                {/* <hr className="qna-title-line" /> */}
+                {/* <div className='QnA-commentInput'>
                   <input
                     className='QnA-Input'
                     type="text"
@@ -152,22 +153,22 @@ const QnAContent = () => {
                   <button className='QnA-Btt3' onClick={handleCommentSubmit}>
                     댓글 등록
                   </button>
-                </div>
+                </div> */}
               </>
             )}
           </div>
-            <div className='QnA-contentBtt'>
+            <div className='QnAup-contentBtt'>
+            <button className='button' onClick={handleGoBackToList}>목록</button>
                     {isLoggedIn && post && loggedInUserName === post.name && (
                     <>
-                      <button className='QnA-Btt'>글 수정</button>
-                      <button className='QnA-Btt' onClick={handleDeletePost}>글 삭제</button>
+                      <button className='button primary'>글 수정</button>
+                      <button className='button primary' onClick={handleDeletePost}>글 삭제</button>
                     </>
                   )}            
-              <button className='QnA-Btt1' onClick={handleGoBackToList}>목록</button>
+
             </div>
         </div>
       </div>
-    </div>
   );
 };
 
