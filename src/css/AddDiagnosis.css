@@ -17,7 +17,12 @@
     font-weight: 1000;
     user-select: none; 
 }
-
+.patient-div{
+    margin-bottom: 25px;
+}
+.patient-name{
+    font-size: 25px;
+}
 .medication-container {
     display: flex;
     flex-direction: column;

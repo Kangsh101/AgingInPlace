@@ -6,6 +6,7 @@ import MyInfo from './MyInfo';
 import EditProfile from './EditProfile';
 import AddDiagnosis from './AddDiagnosis';
 import Footer from './Footer';
+
 function MyPage() {
     const [selectedSection, setSelectedSection] = useState('myinfo');
     const [userInfo, setUserInfo] = useState('');
@@ -19,7 +20,7 @@ function MyPage() {
                     const userData = response.data;
                    
                     setUserInfo(userData);
-                    
+                    console.log("Fetched user info:", userData);
                 } else {
                     console.error('Failed to fetch user info');
                 }
@@ -53,7 +54,7 @@ function MyPage() {
         };
     }, []);
 
-
+    const isGuardian = userInfo.role === "보호자";
     return (
         <div className="mypage">
             <div className="sidebar">
@@ -79,7 +80,7 @@ function MyPage() {
                 {selectedSection === 'myinfo' && <MyInfo userInfo={userInfo} />}
                 {selectedSection === 'changepassword' && <ChangePassword />}
                 {selectedSection === 'editprofile' && <EditProfile />}
-                {selectedSection === 'adddiagnosis' && <AddDiagnosis />}
+                {selectedSection === 'adddiagnosis' && <AddDiagnosis isGuardian={isGuardian} />}
             </div>
             
         </div>

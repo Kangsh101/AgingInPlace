@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import '../css/AddDiagnosis.css';
+import axios from 'axios';
 
-function HealthInfoForm({ isGuardian = false }) {
+function AddDiagnosis({ isGuardian = true }) {
+    console.log("Is guardian:", isGuardian);
+    const [patientName, setPatientName] = useState('');
     const [diseases, setDiseases] = useState(['']);
     const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '' }]);
-    const [dependentId, setDependentId] = useState('');
+
+    useEffect(() => {
+        if (isGuardian) {
+          axios.get('/api/getPatientName')
+            .then(response => {
+              setPatientName(response.data.patientName);
+            })
+            .catch(error => {
+              console.error('환자 정보를 가져오는 데 실패했습니다.', error);
+            });
+        }
+      }, [isGuardian]);
 
     const handleAddDisease = () => {
         setDiseases([...diseases, '']);
@@ -35,12 +49,11 @@ function HealthInfoForm({ isGuardian = false }) {
             <div className='diagnosis-title'>
                 <strong>진단명 추가</strong>
             </div>
-                {isGuardian && (
-                    <div>
-                        <label>대상자 ID: </label>
-                        <input type="text" value={dependentId} onChange={(e) => setDependentId(e.target.value)} />
+            {isGuardian && (
+                    <div className='patient-div'>
+                        <span className='patient-name'>환자 성함: {patientName}</span>
                     </div>
-                )}
+                 )}
                 <div>
                     <label>진단받은 질환</label>
                     {diseases.map((disease, index) => (
@@ -71,4 +84,4 @@ function HealthInfoForm({ isGuardian = false }) {
     );
 }
 
-export default HealthInfoForm;
+export default AddDiagnosis;

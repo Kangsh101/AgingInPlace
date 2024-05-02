@@ -15,7 +15,7 @@ const EditProfile = () => {
       try {
         const response = await axios.get('/api/userinfo', { withCredentials: true });
         if (response.status === 200) {
-          const userInfo = response.data[0]; 
+          const userInfo = response.data; 
           setName(userInfo.name);
           setGender(userInfo.gender);
           setPhoneNumber(userInfo.phoneNumber);

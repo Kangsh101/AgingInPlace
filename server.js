@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const multer = require('multer');
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 
 const path = require('path');
@@ -30,7 +31,7 @@ const upload = multer({
 const kangsh = 'USE aginginplace';
 
 app.use(cookieParser());
-
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -241,12 +242,29 @@ app.post('/api/updateuserinfo', (req, res) => {
 
 
 // 내정보 유저정보 가져오기
-app.get('/api/userinfo', (req, res) => {
-  const userId = req.session.userId; 
+// app.get('/api/userinfo', (req, res) => {
+//   const userId = req.session.userId; 
 
- console.log('현재 로그인된 사용자의 세션 ID:', userId);
+//  console.log('현재 로그인된 사용자의 세션 ID:', userId);
+//   connection.query(
+//     "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
+//     [userId], 
+//     (err, rows, fields) => {
+//       if (err) {
+//         console.error('회원 정보 조회 실패: ' + err.stack);
+//         res.status(500).send('회원 정보 조회 실패');
+//         return;
+//       }
+//       res.send(rows);
+//     }
+//   );
+// });
+app.get('/api/userinfo', (req, res) => {
+  const userId = req.session.userId;
+
+  console.log('현재 로그인된 사용자의 세션 ID:', userId);
   connection.query(
-    "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
+    "SELECT gender, name, role, phoneNumber, birthdate, email FROM members WHERE id = ?;",
     [userId], 
     (err, rows, fields) => {
       if (err) {
@@ -254,7 +272,11 @@ app.get('/api/userinfo', (req, res) => {
         res.status(500).send('회원 정보 조회 실패');
         return;
       }
-      res.send(rows);
+      if (rows.length > 0) {
+        res.send(rows[0]); // 첫 번째 행만 반환
+      } else {
+        res.status(404).send('User not found');
+      }
     }
   );
 });
@@ -747,8 +769,27 @@ app.post('/api/logout', (req, res) => {
 });
 
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+
+// guardianId로 환자 이름 가져오기
+app.get('/api/getPatientName', (req, res) => {
+  const guardianId = req.session.userId;  // 또는 다른 방법으로 guardianId를 가져옵니다.
+
+  const query = `SELECT name FROM members WHERE id = (SELECT patientId FROM members WHERE id = ?)`;
+  connection.query(query, [guardianId], (err, result) => {
+    if (err) {
+      console.error('환자 이름 조회 실패:', err);
+      res.status(500).send('서버 오류');
+    } else if (result.length === 0) {
+      res.status(404).send('환자 정보를 찾을 수 없습니다.');
+    } else {
+      res.json({ patientName: result[0].name });
+    }
+  });
+});
+
+
+
+//톰캣에서 다운로드 가져오는 로직
 app.post('/downloadFile', async (req, res) => {
   try {
     const response = await axios({
