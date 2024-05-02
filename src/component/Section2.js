@@ -14,6 +14,9 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [guardianName, setGuardianName] = useState('');
   const [isPatientExist, setIsPatientExist] = useState(null);
   const [showMarginBottom ,setShowMarginBottom] = useState(false);
+  const [patientPhoneNumber, setPatientPhoneNumber] = useState('');
+
+
   const isFormComplete = () => {
     return (
       userData.username !== '' &&
@@ -115,24 +118,26 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   };
 
   const handleGuardianNameConfirm = () => {
-    handleInputChange({ target: { name: 'guardianName', value: guardianName } });
     fetch('/api/check-patient', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ patientName: guardianName }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ patientName: guardianName, phoneNumber: patientPhoneNumber })
     })
-      .then(response => response.json())
-      .then(data => {
-        setIsPatientExist(data.message === '있음');
-        setShowMarginBottom(true);
-      })
-      .catch(error => {
-        console.error('오류:', error);
-      });
+    .then(response => response.json())
+    .then(data => {
+      setIsPatientExist(data.message === '있음');
+      if (data.message === '있음') {
+        handleInputChange({ target: { name: 'patientId', value: data.patientId } }); // 환자 ID를 상태에 저장
+      }
+      setShowMarginBottom(true);
+    })
+    .catch(error => {
+      console.error('오류:', error);
+    });
   };
-
+  const handlePatientPhoneNumberChange = (e) => {
+    setPatientPhoneNumber(e.target.value);
+  };
   return (
     <div className='section-container'>
       <ol className="nav nav-pills nav-pills-step">
@@ -189,12 +194,14 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             <option value='일반인'>일반인</option>
           </select>
           {isGuardian && (
-            <div className={`se2button-container ${showMarginBottom ? 'with-margin-bottom' : ''}`}>
-              <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 성함' className='Section2-field section2-inputgu' />
-              <button className='button11' onClick={handleGuardianNameConfirm} >확인</button>
-              {isPatientExist === true && <p id='section2ro' className='section2-rolet'>확인 되었습니다.</p>}
-              {isPatientExist === false && <p id='section2ro' className='section2-rolef'>일치하는 환자가 없습니다.</p>}
-            </div>
+            <>
+              <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 이름' className='Section2-field' />
+              <input type='text' id='patientPhoneNumber' name='patientPhoneNumber' value={patientPhoneNumber} onChange={handlePatientPhoneNumberChange} placeholder='환자 전화번호' className='Section2-field' />
+              <button className='button11' onClick={handleGuardianNameConfirm}>확인</button>
+              {isPatientExist !== null && (
+                <p className={`section2-role${isPatientExist ? 't' : 'f'}`}>{isPatientExist ? '확인 되었습니다.' : '일치하는 환자가 없습니다.'}</p>
+              )}
+            </>
           )}
         </div>
         <div>

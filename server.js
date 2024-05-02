@@ -69,21 +69,54 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 //회원가입
+// app.post('/api/signup', (req, res) => {
+//   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId  } = req.body;
+
+//   const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
+
+//   connection.query(query, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId ], (err, result) => {
+//     if (err) {
+//       console.error('회원가입 실패: ' + err.stack);
+//       res.status(500).send('회원가입 실패');
+//       return;
+//     }
+//     console.log('회원가입 성공');
+//     res.status(200).send('회원가입 성공');
+//   });
+// });
+
 app.post('/api/signup', (req, res) => {
-  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientName } = req.body;
+  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
-  const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
+  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`;
 
-  connection.query(query, [username, password, email, name, birthdate, gender, phoneNumber, role, patientName], (err, result) => {
+  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role], (err, result) => {
     if (err) {
       console.error('회원가입 실패: ' + err.stack);
       res.status(500).send('회원가입 실패');
       return;
     }
-    console.log('회원가입 성공');
-    res.status(200).send('회원가입 성공');
+    const guardianId = result.insertId;
+
+    // 환자 레코드에 보호자 ID 추가
+    const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+    connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error('보호자 ID 업데이트 실패:', updateErr);
+        res.status (500).send('보호자 정보 업데이트 실패');
+        return;
+      }
+      console.log('보호자 정보 업데이트 성공');
+      res.status(200).send('회원가입 성공');
+    });
   });
 });
+
+
+
+
+
+
 
 //로그인
 app.post('/api/login', (req, res) => {
@@ -683,17 +716,17 @@ app.put('/api/activateUser/:userId', (req, res) => {
 
 // 회원가입 환자 체크
 app.post('/api/check-patient', (req, res) => {
-  const { patientName } = req.body;
-  const query = `SELECT COUNT(*) AS count FROM members WHERE role = "환자" AND name = ?`;
-  connection.query(query, [patientName], (err, results) => {
+  const { patientName, phoneNumber } = req.body;
+  const query = `SELECT id FROM members WHERE role = "환자" AND name = ? AND phoneNumber = ?`;
+
+  connection.query(query, [patientName, phoneNumber], (err, results) => {
     if (err) {
       console.error('쿼리 오류:', err);
       res.status(500).json({ message: '서버 오류' });
       return;
     }
-    const count = results[0].count;
-    if (count > 0) {
-      res.json({ message: '있음' });
+    if (results.length > 0) {
+      res.json({ message: '있음', patientId: results[0].id });
     } else {
       res.json({ message: '없음' });
     }
