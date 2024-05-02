@@ -4,6 +4,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const multer = require('multer');
+const axios = require('axios');
 
 
 const path = require('path');
@@ -88,9 +89,9 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.post('/api/signup', (req, res) => {
   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
-  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`;
+  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
 
-  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role], (err, result) => {
+  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
     if (err) {
       console.error('회원가입 실패: ' + err.stack);
       res.status(500).send('회원가입 실패');
@@ -744,6 +745,34 @@ app.post('/api/logout', (req, res) => {
     res.status(200).send('로그아웃 성공');
   });
 });
+
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.post('/downloadFile', async (req, res) => {
+  try {
+    const response = await axios({
+      url: 'http://13.124.80.232:8080/downloadCsv/activityAll',
+      method: 'POST', // 적절한 HTTP 메서드로 설정
+      responseType: 'arraybuffer' // blob 대신 arraybuffer로 설정
+    });
+
+    // 헤더 설정
+    res.writeHead(200, {
+      'Content-Type': 'application/octet-stream', // MIME 타입 설정
+      'Content-Disposition': 'attachment; filename="download.csv"'
+    });
+
+    // 데이터를 바이너리 형태로 클라이언트에 전송
+    res.end(Buffer.from(response.data)); // Buffer.from을 사용하여 ArrayBuffer를 처리
+  } catch (error) {
+    console.error('Error downloading file from Tomcat:', error);
+    res.status(500).send('Failed to download file');
+  }
+});
+
+
+
 
 
 app.get('/', (req, res) => {

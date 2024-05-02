@@ -39,6 +39,10 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
         alert('환자 성함을 확인해주세요.');
         return;
       }
+      if (!isPatientExist) {
+        alert('환자 성함과 전화번호가 일치하지 않습니다.');
+        return;
+      }
       if (isGuardian && !guardianName) {
         alert('환자 성함을 입력하고 확인해주세요.');
         return;
@@ -127,14 +131,20 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
     .then(data => {
       setIsPatientExist(data.message === '있음');
       if (data.message === '있음') {
-        handleInputChange({ target: { name: 'patientId', value: data.patientId } }); // 환자 ID를 상태에 저장
+        handleInputChange({ target: { name: 'patientId', value: data.patientId } });
+        setShowMarginBottom(true);
+        alert('확인 되었습니다.'); 
+      } else {
+        alert('환자 성함과 전화번호가 일치하지 않습니다.'); 
+        setShowMarginBottom(false);
       }
-      setShowMarginBottom(true);
     })
     .catch(error => {
       console.error('오류:', error);
+      alert('확인 과정에서 오류가 발생했습니다.');
     });
   };
+  
   const handlePatientPhoneNumberChange = (e) => {
     setPatientPhoneNumber(e.target.value);
   };
@@ -193,16 +203,18 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             <option value='보호자'>보호자</option>
             <option value='일반인'>일반인</option>
           </select>
-          {isGuardian && (
-            <>
-              <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 이름' className='Section2-field' />
-              <input type='text' id='patientPhoneNumber' name='patientPhoneNumber' value={patientPhoneNumber} onChange={handlePatientPhoneNumberChange} placeholder='환자 전화번호' className='Section2-field' />
-              <button className='button11' onClick={handleGuardianNameConfirm}>확인</button>
-              {isPatientExist !== null && (
-                <p className={`section2-role${isPatientExist ? 't' : 'f'}`}>{isPatientExist ? '확인 되었습니다.' : '일치하는 환자가 없습니다.'}</p>
-              )}
-            </>
-          )}
+          <div>
+            {isGuardian && (
+              <>
+                <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 이름' className='Section2-field' />
+                <input type='text' id='patientPhoneNumber' name='patientPhoneNumber' value={patientPhoneNumber} onChange={handlePatientPhoneNumberChange} placeholder='환자 전화번호'/>
+                <button className='button11' onClick={handleGuardianNameConfirm}>확인</button>
+                {isPatientExist !== null && (
+                  <p className={`section2-role${isPatientExist ? 't' : 'f'}`}>{isPatientExist ? '확인 되었습니다.' : '일치하는 환자가 없습니다.'}</p>
+                )}
+              </>
+            )}
+          </div>
         </div>
         <div>
           <input type='text' id='name' name='name' value={userData.name} onChange={handleInputChange} placeholder='이름' className='Section2-field'></input>

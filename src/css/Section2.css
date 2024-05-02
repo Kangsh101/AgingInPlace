@@ -340,12 +340,15 @@
     font-weight: bold;
   }
   #guardianName{
-    width: 8em;
+    width: 7em;
     height: 2.4em;
     margin-right: 10px;
   }
 
-  
+  #patientPhoneNumber{
+    width: 12.5em;
+    margin-right: 10px;
+  }
   .button-container {
     display: flex;
     align-items: center;
