@@ -41,7 +41,6 @@ const QnAUp = () => {
           const data = await response.json();
   
           if (response.ok) {
-            // 에디터에 이미지 삽입
             const range = quillRef.current.getEditor().getSelection(true);
             quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
           } else {

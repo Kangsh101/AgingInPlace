@@ -1,0 +1,81 @@
+.diagnosis-container{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-bottom: 100px;
+    
+}
+
+.diagnosis-title{
+    margin-bottom: 20px;
+    border-bottom: 1px solid whitesmoke;
+    width: 500px;
+    text-align: center;
+    padding: 50px;
+    font-size: 35px;
+    font-weight: 1000;
+    user-select: none; 
+}
+
+.medication-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.medication-name {
+    width: 100%; 
+    margin-bottom: 5px; 
+}
+
+#Drug-width{
+    width: 30%;
+}
+.Drug-name{
+    margin-top: 20px;
+    margin-left: 2%;
+}
+.dosage{
+    margin-right: 10px;
+}
+
+.Diagnosis-Addbtt{
+    margin-top: 30px;
+    
+}
+#Diagnosis-btt{
+    width: 90%;
+    /* margin-left: 20%; */
+}
+
+@media (max-width: 450px) {
+    .medication-name, .dosage, .frequency, .button {
+        width: 100%; /* 너비 100%로 설정 */
+        min-width: 40%; /* 최소 너비 100%로 확장 */
+    }
+
+    .medication-container, .daskdkasdk > div {
+        flex-direction: column; /* 수직 배치 */
+    }
+    .medication-name, .dosage, .frequency {
+        flex: 1;  /* 모든 필드가 화면 너비에 맞게 조정 */
+    }
+    .diagnosis-title {
+        padding: 10px; /* 타이틀 패딩 축소 */
+    }
+    #disease-input{
+        width: 90%;
+        margin-right: 100px;
+    }
+    #disease-btt{
+        width: 90%;
+    }
+    .Drug-name{
+        width: 90%;
+  
+    }
+    #Drug-width2{
+        width: 90%;
+    }
+}

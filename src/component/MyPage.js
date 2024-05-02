@@ -4,6 +4,7 @@ import '../css/MyPage.css';
 import ChangePassword from './ChangePassword';
 import MyInfo from './MyInfo';
 import EditProfile from './EditProfile';
+import AddDiagnosis from './AddDiagnosis';
 import Footer from './Footer';
 function MyPage() {
     const [selectedSection, setSelectedSection] = useState('myinfo');
@@ -69,12 +70,16 @@ function MyPage() {
                     <li onClick={() => setSelectedSection('editprofile')}>
                         <span>개인정보 수정</span>
                     </li>
+                    <li onClick={() => setSelectedSection('adddiagnosis')}>
+                    <span>진단명 추가</span>
+                    </li>
                 </ul>
             </div>
             <div className="content">
                 {selectedSection === 'myinfo' && <MyInfo userInfo={userInfo} />}
                 {selectedSection === 'changepassword' && <ChangePassword />}
                 {selectedSection === 'editprofile' && <EditProfile />}
+                {selectedSection === 'adddiagnosis' && <AddDiagnosis />}
             </div>
             
         </div>
