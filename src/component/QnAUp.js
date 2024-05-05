@@ -95,7 +95,7 @@ const QnAUp = () => {
     try {
       const response = await fetch('/api/post', {
         method: 'POST',
-        body: formData, // headers를 설정하지 않습니다. FormData는 자동으로 Content-Type을 설정합니다.
+        body: formData,
       });
   
       if (response.ok) {

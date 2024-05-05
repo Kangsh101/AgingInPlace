@@ -123,3 +123,71 @@
     width: 95px;
     height: 35px;
 } */
+.QnAup-author{
+    border-bottom: 1px solid rgb(66, 65, 65);
+    margin-bottom: 10px;
+}
+.qnaup-page{
+    width: 45%;
+    margin: 0 auto;
+    font-size: 15px;
+    margin-bottom: 8%;
+}
+.qnaup-header{
+    margin-top: 20%;
+}
+.qnacontent-container{
+    border: 1px solid rgb(126, 125, 125);
+    padding: 2%  0 0;
+    border-radius: 8px;
+    color: rgb(205, 200, 200);
+    background-color:#272833;
+}
+.QnAup-title{
+    border-bottom: 1px solid rgb(66, 65, 65);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+
+}
+.qnaup-page span{
+    margin-left: 20px;
+    font-size: 18px;
+    color: rgb(241, 241, 241);
+}
+.qnaup-maincon{
+    padding-top: 20px;
+    margin: 0 15px 0 15px;
+    border-top: 1px solid rgb(126, 125, 125);
+    /* border-bottom: 1px solid rgb(126, 125, 125); */
+    margin-bottom: 10%;
+}
+.QnAup-contentBtt{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.qnaup-maincon img {
+    max-width: 100%;
+    height: auto; 
+    display: block; 
+    
+  }
+  #edit-title-input{
+    width: 85%;
+  }
+  #qnaupdate-title{
+    margin-right: 10px;
+  }
+ #QnAupone-content p{
+    margin-left: 20px;
+    margin-right: 20px;
+ }
+ .qnacontent-container img {
+    max-width: 100%;
+    height: auto;  
+    display: block;  
+}
+.qnacontent-container {
+    overflow: hidden; 
+}

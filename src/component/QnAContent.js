@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom'; 
+import React, { useState, useEffect ,useCallback,useRef} from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; 
 import '../css/Page2.css';
 import '../css/qnacontent.css';
-import '../css/rkdtjrgus12.css';
+
 
 const QnAContent = () => {
   const { id } = useParams(); 
-
+  const quillRef = useRef(null); 
   const [post, setPost] = useState(null);
   const [newComment, setNewComment] = useState({
     user_name: "", 
@@ -15,10 +17,62 @@ const QnAContent = () => {
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState(null); 
+
+  const [isEditing, setIsEditing] = useState(false);
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
   const createMarkup = (htmlContent) => {
     return { __html: htmlContent };
   };
+
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
   
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file);
+  
+        try {
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await response.json();
+  
+          if (response.ok) {
+            const range = quillRef.current.getEditor().getSelection(true);
+            quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
+          } else {
+            throw new Error('서버에서 이미지를 처리할 수 없습니다.');
+          }
+        } catch (error) {
+          console.error('이미지 업로드 중 오류 발생:', error);
+        }
+      }
+    };
+  }, []);
+  
+
+  const modules = React.useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        'image': imageHandler
+      }
+    },
+  }), [imageHandler]);
   const getUserName = () => {
     fetch(`/api/getUserName/${localStorage.getItem('userId')}`)
       .then(res => res.json())
@@ -30,6 +84,7 @@ const QnAContent = () => {
       })
       .catch(err => console.error('사용자 이름 가져오기 실패:', err));
   };
+
 
   useEffect(() => {
     fetch(`/api/qnaposts/${id}`)
@@ -80,6 +135,51 @@ const QnAContent = () => {
     });
   };
 
+  const getTextFromHtml = (htmlString) => {
+    const div = document.createElement("div");
+    div.innerHTML = htmlString;
+    return div.textContent || div.innerText || "";
+  };
+
+  const handleSaveEdit = () => {
+    if (!post.title.trim()) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+  const plainContent = getTextFromHtml(post.content);
+  if (!plainContent.trim()) {
+    alert('내용을 입력해주세요.');
+    return;
+  }
+    fetch(`/api/qnaposts/${post.board_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title: post.title, content: post.content })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        response.text().then(text => {
+          console.error('게시글 업데이트 오류:', text);
+        });
+        throw new Error('Network response was not ok.');
+      }
+    })
+    .then(data => {
+      console.log(data); 
+      alert('수정이 완료되었습니다.');
+      setIsEditing(false);
+      window.location.reload(); 
+    })
+    .catch(error => {
+      console.error('게시글 업데이트 오류:', error);
+    });
+  }
+  
+
   const handleGoBackToList = () => {
     window.location.href = '/qnapage';
   };
@@ -102,32 +202,39 @@ const QnAContent = () => {
 
   return (
     <div className="qnaup-page">
-      {/* <div className="qna-page">
-        <nav className="qna-navigation">
-          <span className="qna-nav-ALL">전체</span>
-          <Link to="/qnapage" className="qna-nav-item-Q">QnA게시판</Link>
-          <Link to="/notice" className="qna-nav-item">공지사항</Link>
-          <Link to="/faqpage" className="qna-nav-item">자주묻는질문</Link>
-        </nav>
-      </div> */}
-
       <div className="qnaup-header">
-          {/* <h2 className='QnA-main'>QnA 상세 내용</h2> */}
           <div className='qnacontent-container'>
             {post && ( 
               <>
-                <div className='QnAup-title'>
-                  <span>제목 : </span>{post.title}
+                <div className='QnAup-title'>  
+                  {isEditing ? (
+                    <div>
+                      <span id='qnaupdate-title'> 제목 : </span>
+                    <input type="text"  value={post.title} onChange={e => setPost({...post, title: e.target.value})} id="edit-title-input" />
+                    </div>
+                ) : (
+                  <div>
+                    <span>제목 : </span>{post.title}
+                  </div>
+                )}
                 </div>
-                {/* <hr className="qna-title-line" /> */}
                 <div className='QnAup-author'>
                   <span>작성자 : </span> {post.name}
                   <span>등록일 : </span> {post.create_at}
                 </div>
-                {/* <hr className="qna-title-line" /> */}
                 <div className='QnAup-content'>
-                  {/* <span>내용:</span> */}
-                  <div className='qnaup-maincon' dangerouslySetInnerHTML={createMarkup(post.content)} />
+                  {isEditing ? (
+                  <ReactQuill
+                    ref={quillRef}
+                    modules={modules}
+                    theme="snow"
+                    value={post.content}
+                    onChange={content => setPost({...post, content})}
+                  />
+                ) : (
+                  <div  dangerouslySetInnerHTML={{ __html: post.content }} />
+                )}
+{/* id='QnAupone-content' */}
                 </div>
                 {/* <hr className="qna-title-line" /> */}
                 {/* <div className='QnA-comments'>
@@ -161,7 +268,11 @@ const QnAContent = () => {
             <button className='button' onClick={handleGoBackToList}>목록</button>
                     {isLoggedIn && post && loggedInUserName === post.name && (
                     <>
-                      <button className='button primary'>글 수정</button>
+                      {isEditing ? (
+                        <button className='button primary' onClick={handleSaveEdit}>저장</button>
+                      ) : (
+                        <button className='button primary' onClick={handleEdit}>글 수정</button>
+                      )}
                       <button className='button primary' onClick={handleDeletePost}>글 삭제</button>
                     </>
                   )}            

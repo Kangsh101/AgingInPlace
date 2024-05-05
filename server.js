@@ -436,6 +436,7 @@ app.post('/api/post', upload.single('image'), (req, res) => {
     console.log('글이 성공적으로 저장되었습니다.');
     res.status(200).json({ message: '글이 성공적으로 저장되었습니다.', postId: result.insertId });
   });
+  
 });
 // 예시: 이미지 업로드 API
 app.post('/api/upload', upload.single('image'), (req, res) => {
@@ -549,6 +550,23 @@ app.delete('/api/qnaposts/:id', (req, res) => {
   });
 });
 
+// QnA 게시판 업데이트
+app.put('/api/qnaposts/:postId', (req, res) => {
+  const { title, content } = req.body; 
+  const { postId } = req.params; 
+
+  const query = 'UPDATE boards SET title = ?, content = ? WHERE board_id = ?'; 
+
+  connection.query(query, [title, content, postId], (error, results) => { 
+    if (error) {
+      console.error('게시글 업데이트 실패:', error);
+      res.status(500).send('게시글 업데이트 실패');
+    } else {
+      console.log('게시글 업데이트 성공');
+      res.status(200).send('게시글 업데이트 성공');
+    }
+  });
+});
 
 
 
@@ -772,7 +790,7 @@ app.post('/api/logout', (req, res) => {
 
 // guardianId로 환자 이름 가져오기
 app.get('/api/getPatientName', (req, res) => {
-  const guardianId = req.session.userId;  // 또는 다른 방법으로 guardianId를 가져옵니다.
+  const guardianId = req.session.userId; 
 
   const query = `SELECT name FROM members WHERE id = (SELECT patientId FROM members WHERE id = ?)`;
   connection.query(query, [guardianId], (err, result) => {
