@@ -93,7 +93,7 @@ const QnAUp = () => {
     }
   
     try {
-      const response = await fetch('/api/post', {
+      const response = await fetch('/api/qna/posts', {
         method: 'POST',
         body: formData,
       });

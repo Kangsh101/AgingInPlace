@@ -415,38 +415,63 @@ app.get('/api/checklogin', (req, res) => {
 
 
 // QnA 게시판 등록 api
-app.post('/api/post', upload.single('image'), (req, res) => {
+app.post('/api/qna/posts', upload.single('image'), async (req, res) => {  
   const { title, content } = req.body;
-  let imageUrl = '';
-  if (req.file) {
-    imageUrl = req.file.path; // 이미지 파일 경로 저장
+  const userId = req.session.userId; 
+  const board_master_id = 1; 
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인 상태가 필요합니다.' });
   }
-
-  // 세션에서 userId를 가져오거나, req.body에서 가져옵니다.
-  const userId = req.session.userId || req.body.userId;
   
-  const query = 'INSERT INTO boards (title, content, image_url, board_type, is_answer, name, create_at) VALUES (?, ?, ?, "QnA", "N", (SELECT name FROM members WHERE id = ?), NOW())';
-
-  connection.query(query, [title, content, imageUrl, userId], (err, result) => {
-    if (err) {
-      console.error('글 저장 중 오류 발생:', err);
-      res.status(500).json({ error: '글 저장 중 오류 발생' });
-      return;
+  try {
+    const userQuery = 'SELECT role FROM members WHERE id = ?';
+    const userResult = await queryAsync(userQuery, [userId]); 
+    if (userResult.length === 0) {
+      return res.status(404).json({ error: '사용자 정보를 찾을 수 없습니다.' });
     }
-    console.log('글이 성공적으로 저장되었습니다.');
-    res.status(200).json({ message: '글이 성공적으로 저장되었습니다.', postId: result.insertId });
-  });
-  
-});
-// 예시: 이미지 업로드 API
-app.post('/api/upload', upload.single('image'), (req, res) => {
-  if (req.file) {
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    res.json({ imageUrl: imageUrl }); // 클라이언트에게 imageUrl 반환
-  } else {
-    res.status(400).send('이미지 업로드 실패');
+    const userRole = userResult[0].role;
+
+    const boardQuery = 'SELECT write_type FROM board_master WHERE id = ?';
+    const boardResult = await queryAsync(boardQuery, [board_master_id]); 
+    if (boardResult.length === 0) {
+      return res.status(404).json({ error: '게시판 정보를 찾을 수 없습니다.' });
+    }
+    const boardWriteType = boardResult[0].write_type;
+
+    const allowedRoles = boardWriteType.split(',').map(role => role.trim()); 
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).json({ error: '이 게시판에 글을 쓸 권한이 없습니다.' });
+    }
+
+    let imageUrl = '';
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    }
+
+    const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
+    connection.query(query, [board_master_id, title, content, userId], (err, result) => {
+      if (err) {
+        console.error('글 저장 중 오류 발생:', err);
+        res.status(500).json({ error: '글 저장 중 오류 발생' });
+        return;
+      }
+      res.status(200).json({ message: '글이 성공적으로 저장되었습니다.', postId: result.insertId });
+    });
+  } catch (error) {
+    console.error('서버 오류:', error);
+    res.status(500).json({ error: '서버 내부 오류' });
   }
 });
+function queryAsync(query, params) {
+  return new Promise((resolve, reject) => {
+    connection.query(query, params, (error, results) => {
+      if (error) reject(error);
+      else resolve(results);
+    });
+  });
+}
+
 
 
 // QnA 게시판만 검색 API

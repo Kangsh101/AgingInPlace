@@ -236,18 +236,18 @@ const QnAContent = () => {
                 )}
 {/* id='QnAupone-content' */}
                 </div>
-                {/* <hr className="qna-title-line" /> */}
-                {/* <div className='QnA-comments'>
+                <hr className="qna-title-line" />
+                <div className='QnA-comments'>
                   <span>댓글</span>
-                </div> */}
-                {/* <hr className="qna-title-line" /> */}
-                  {/* <div className='QnA-comments2'>
+                </div>
+                <hr className="qna-title-line" />
+                  <div className='QnA-comments2'>
                     <p>댓글 단 유저 </p>
                     <span>댓글 내용 </span>
                     <span>data</span>
-                  </div> */}
-                {/* <hr className="qna-title-line" /> */}
-                {/* <div className='QnA-commentInput'>
+                  </div>
+                <hr className="qna-title-line" />
+                <div className='QnA-commentInput'>
                   <input
                     className='QnA-Input'
                     type="text"
@@ -260,7 +260,7 @@ const QnAContent = () => {
                   <button className='QnA-Btt3' onClick={handleCommentSubmit}>
                     댓글 등록
                   </button>
-                </div> */}
+                </div>
               </>
             )}
           </div>

@@ -35,17 +35,19 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
         alert('이메일을 입력하거나 옵션을 선택하세요.');
         return;
       }
-      if (isGuardian && isPatientExist === false) {
-        alert('환자 성함을 확인해주세요.');
-        return;
-      }
-      if (!isPatientExist) {
-        alert('환자 성함과 전화번호가 일치하지 않습니다.');
-        return;
-      }
-      if (isGuardian && !guardianName) {
-        alert('환자 성함을 입력하고 확인해주세요.');
-        return;
+      if (isGuardian) {
+        if (isPatientExist === false) {
+          alert('환자 성함을 확인해주세요.');
+          return;
+        }
+        if (!isPatientExist) {
+          alert('환자 성함과 전화번호가 일치하지 않습니다.');
+          return;
+        }
+        if (!guardianName) {
+          alert('환자 성함을 입력하고 확인해주세요.');
+          return;
+        }
       }
       if (!gender) {
         alert('성별을 선택해주세요.');
@@ -78,6 +80,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       }
     }
   };
+  
   
   
 

@@ -70,8 +70,8 @@ const Notice = () => {
         <table>
           <thead>
             <tr>
-              <th>No</th>
-              <th>분류</th>
+              <th>번호</th>
+              {/* <th>분류</th> */}
               <th>제목</th>
               <th>작성자</th>
               <th>등록일</th>
@@ -82,7 +82,7 @@ const Notice = () => {
                 <React.Fragment key={post.id}>
                   <tr onClick={() => handleClick(index)}>
                     <td>{post.number}</td>
-                    <td>{post.board_type}</td>
+                    {/* <td>{post.board_type}</td> */}
                     <td>{post.title}</td>
                     <td>{post.name}</td>
                     <td>{post.create_at}</td>
