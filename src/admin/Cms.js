@@ -8,15 +8,15 @@ const Cms = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(3);
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
-  const Navigate = useNavigate();
+  const [searchType, setSearchType] = useState("title"); 
+  const [searchKeyword, setSearchKeyword] = useState(""); 
+  const navigate = useNavigate();
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleClick = (index) => {
     setSelectedPostIndex(index);
   };
-
- 
 
   const handleDelete = (id, index) => {
     fetch(`/api/notices/${id}`, {
@@ -34,13 +34,38 @@ const Cms = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const formattedDate = date.toISOString().split('T')[0];
-    return formattedDate;
+    return date.toLocaleDateString(); // 이 부분을 수정하여 원하는 형식으로 변환합니다.
   };
 
   const location = useLocation();
 
+  const handleSearchKeywordChange = (e) => {
+    setSearchKeyword(e.target.value);
+  };
 
+  const handleSearchTypeChange = (e) => {
+    setSearchType(e.target.value);
+  };
+
+  const handleSearch = () => {
+    fetch(`/api/notice/search`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ searchType, searchKeyword }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        const postsWithNumbers = data.reverse().map((post, index) => ({
+          ...post,
+          number: index + 1,
+          created_at: formatDate(post.created_at)
+        }));
+        setPosts(postsWithNumbers);
+      })
+      .catch(err => console.error('검색 중 오류 발생:', err));
+  };
 
   useEffect(() => {
     fetch('/api/checkRole', {
@@ -51,7 +76,7 @@ const Cms = () => {
     .then(data => {
       if (data.role !== 'admin') {
         setIsAdmin(false);
-        Navigate.push('/main'); 
+        navigate('/main');
       } else {
         setIsAdmin(true);
         fetch('/api/notices')
@@ -60,7 +85,7 @@ const Cms = () => {
             const postsWithNumbers = data.reverse().map((post, index) => ({
               ...post,
               number: index + 1,
-              create_at: formatDate(post.create_at)
+              created_at: formatDate(post.created_at)
             }));
             setPosts(postsWithNumbers);
           })
@@ -68,7 +93,7 @@ const Cms = () => {
       }
     })
     .catch(error => console.error('권한 확인 실패:', error));
-  }, [Navigate]);
+  }, [navigate]);
 
   if (!isAdmin) {
     return (
@@ -78,10 +103,13 @@ const Cms = () => {
     );
   }
 
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
   return (
     <div className="cms-container">
       <div className="cms-sidebar">
-        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
         <h2 className='Cms-Aginginplace'>Aging in Place</h2>
         <h2>관리자</h2>
         <ul>
@@ -91,7 +119,7 @@ const Cms = () => {
         </ul>
       </div>
       <div className="cms-main-content">
-      <header className='major' id='major-rest'> 
+        <header className='major' id='major-rest'>
           <h2 className='aaaaaa'>공지사항</h2>
         </header>
         <div className="Cmss-header">
@@ -99,50 +127,47 @@ const Cms = () => {
             <Link to="/Cms"><button className='button' id='cms-nodicego'>공지사항 게시판</button></Link>
             <Link to="/Cmsfaq"><button className='button'>FAQ 게시판</button></Link>
           </div>
-
           <div className="Cmss-options">
-            <select className="Cmss-select">
+            <select className="Cmss-select" onChange={handleSearchTypeChange}>
               <option value="title">제목</option>
               <option value="author">작성자</option>
+              <option value="title_author">제목 + 작성자</option>
             </select>
-            <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
-            <button className="button primary">검색</button>
+            <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" onChange={handleSearchKeywordChange}/>
+            <button className="button primary" onClick={handleSearch}>검색</button>
           </div>
           <Link to="/noticeup">
             <button className="button1" id='saddasdasd'>공지사항 등록</button>
           </Link>
         </div>
-
         <div className="Cmss-content">
           <table>
             <thead>
               <tr>
                 <th>No</th>
-                <th>분류</th>
                 <th>제목</th>
                 <th>작성자</th>
                 <th>등록일</th>
               </tr>
             </thead>
             <tbody>
-              {posts.map((post, index) => (
-                <React.Fragment key={post.id}>
-                  <tr onClick={() => handleClick(index)}>
+              {currentPosts.map((post, index) => (
+                <React.Fragment key={post.post_id}>
+                  <tr className='skskskssksk' onClick={() => navigate(`/cmsnoticecontent/${post.post_id}`)}>
                     <td>{post.number}</td>
-                    <td>{post.board_type}</td>
                     <td>{post.title}</td>
-                    <td>{post.name}</td>
-                    <td>{post.create_at}</td>
+                    <td>{post.user_name}</td>
+                    <td>{post.created_at}</td>
                   </tr>
                   {selectedPostIndex === index && (
                     <tr className='sang-trtag'>
-                      <td colSpan="5">
+                      <td colSpan="4">
                         <div className="selected-post">
                           <p className='sang-title wrap-text'><span className='cms-QA'>제목 </span> : {post.title}</p>
                           <p className='sang-description wrap-text'><span className='cms-QA'>내용 </span> : {post.content}</p>
                           <div className='sang-bttcon'>
-                            <button className='button primary' id='cms-correction'>게시글 수정</button>
-                            <button className='button' onClick={() => handleDelete(post.board_id, index)}>게시글 삭제</button>
+                            <button className='button primary' id='cms-correction' onClick={() => navigate(`/noticeedit/${post.post_id}`)}>게시글 수정</button>
+                            <button className='button' onClick={() => handleDelete(post.post_id, index)}>게시글 삭제</button>
                           </div>
                         </div>
                       </td>
@@ -171,14 +196,12 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div>
-      <div className="Cmss-pagebtt">
-        {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="Cmss-pagebtt">
+      {pageNumbers.map(number => (
+        <button key={number} onClick={() => paginate(number)}>
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

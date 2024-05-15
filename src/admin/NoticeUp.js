@@ -1,11 +1,66 @@
-import { useState } from 'react';
+import React,{ useState ,useRef,useCallback} from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/NoticeUp.css';
+import ReactQuill from 'react-quill';
 
 const NoticeUp = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const naviga = useNavigate();
+  const quillRef = useRef(null); 
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+  const handleContentChange = (content) => {
+    setContent(content);
+  };
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+  
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file);
+  
+        try {
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await response.json();
+  
+          if (response.ok) {
+            const range = quillRef.current.getEditor().getSelection(true);
+            quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
+          } else {
+            throw new Error('서버에서 이미지를 처리할 수 없습니다.');
+          }
+        } catch (error) {
+          console.error('이미지 업로드 중 오류 발생:', error);
+        }
+      }
+    };
+  }, []);
+
+  const modules = React.useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        'image': imageHandler
+      }
+    },
+  }), [imageHandler]);
 
   const handleSubmit = () => {
     fetch('/api/addNotice', {
@@ -30,18 +85,31 @@ const NoticeUp = () => {
   }
   return (
     <div className="NoticeUp-container">
-      <h2>공지사항</h2>
-      <div className="NoticeUp-label">
-        <label>제목:</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-      </div>
-      <div className="NoticeUp-label1">
-        <label>내용:</label>
-        <textarea type="text" value={content} onChange={(e) => setContent(e.target.value)} />
-      </div>
-      <div className="button-group">
-        <button className="cancel-button" onClick={handleBack} >취소</button>
-        <button className="save-button" onClick={handleSubmit}>글 등록</button>
+      <div id='Notice-Plus'>
+        <h2>공지사항</h2>
+        <div className="form-group">
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="제목"
+              className="title-input"
+              id='QnA-titlecss'
+            />
+            <ReactQuill
+            id='QnAup-content'
+              ref={quillRef}
+              value={content}
+              onChange={handleContentChange}
+              placeholder="내용을 입력하세요."
+              modules={modules}
+              
+            />
+          </div>
+        <div className="button-group">
+          <button className="button" onClick={handleBack} >취소</button>
+          <button className="button primary" onClick={handleSubmit}>글 등록</button>
+        </div>
       </div>
     </div>
   );
