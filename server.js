@@ -856,6 +856,53 @@ app.post('/downloadFile', async (req, res) => {
 });
 
 
+app.post('/chart/steps', async (req, res) => {
+  const username = 'Lee'; // 임의의 이름으로 설정
+
+  try {
+    const response = await axios({
+      url: 'http://43.200.2.115:8080/chart/activityUsername/steps',
+      method: 'POST',
+      data: { username }, // 요청 본문에 username 포함
+      responseType: 'json' // JSON 형식으로 설정
+    });
+
+    // 응답을 JSON 형식으로 클라이언트에 전송
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error downloading data from Tomcat:', error);
+    res.status(500).send('Failed to download data');
+  }
+});
+
+
+app.post('/chart/calories', async (req, res) => {
+  const username = 'Lee'; // 임의의 이름으로 설정
+
+  try {
+    const response = await axios({
+      url: 'http://43.200.2.115:8080/chart/activityUsername/calories',
+      method: 'POST',
+      data: { username }, // 요청 본문에 username 포함
+      responseType: 'json' // JSON 형식으로 설정
+    });
+
+    // 응답을 JSON 형식으로 클라이언트에 전송
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error downloading data from Tomcat:', error);
+    res.status(500).send('Failed to download data');
+  }
+});
+
+
+
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 
 
