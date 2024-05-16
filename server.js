@@ -789,6 +789,48 @@ app.delete('/api/faq/:id', (req, res) => {
   });
 });
 
+// 단일 FAQ 조회
+app.get('/api/faq/:id', (req, res) => {
+  const postId = req.params.id;
+  const query = `
+    SELECT bp.*, m.name as user_name 
+    FROM board_posts bp
+    JOIN members m ON bp.user_id = m.id
+    WHERE bp.post_id = ?
+  `;
+
+  connection.query(query, [postId], (err, result) => {
+    if (err) {
+      console.error('FAQ 조회 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 조회 중 오류 발생' });
+      return;
+    }
+    res.json(result[0]);
+  });
+});
+
+// FAQ 수정
+app.put('/api/faq/:id', (req, res) => {
+  const postId = req.params.id;
+  const { title, content } = req.body;
+  const user_id = req.session.userId;
+
+  if (!user_id) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = `UPDATE board_posts SET title = ?, content = ?, user_id = ? WHERE post_id = ?`;
+
+  connection.query(query, [title, content, user_id, postId], (err, result) => {
+    if (err) {
+      console.error('FAQ 수정 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 수정 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: 'FAQ가 성공적으로 수정되었습니다.' });
+  });
+});
+
 
 
 //공지사항 게시글 삭제

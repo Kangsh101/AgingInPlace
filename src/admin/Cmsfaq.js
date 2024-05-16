@@ -39,6 +39,7 @@ const Cmsfaq = () => {
       if (response.ok) {
         const updatedPosts = [...posts];
         updatedPosts.splice(index, 1);
+        alert('게시글이 삭제되었습니다.');
         setPosts(updatedPosts);
       }
     })
@@ -47,7 +48,7 @@ const Cmsfaq = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(); // 원하는 형식으로 날짜 변환
+    return date.toLocaleDateString();
   };
 
   const indexOfLastPost = currentPage * postsPerPage;
