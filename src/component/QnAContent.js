@@ -213,8 +213,8 @@ const QnAContent = () => {
     .then(data => {
       if (data.success) {
         alert('수정이 완료되었습니다.');
+        setPost({ ...post, title: post.title, content: post.content });
         setIsEditing(false);
-        window.location.reload();
       } else {
         console.error('게시글 업데이트 실패:', data);
       }
@@ -280,56 +280,58 @@ const QnAContent = () => {
                 )}
               </div>
               <hr className="qna-title-line" />
-              <div className="qna-comment-section">
-                {comments.map((comment, index) => (
-                  <React.Fragment key={index}>
-                    <div className="qna-comment">
-                      {editingComment === index ? (
-                        <div>
-                          <input
-                            type="text"
-                            value={comment.content}
-                            onChange={(e) => {
-                              const newComments = [...comments];
-                              newComments[index].content = e.target.value;
-                              setComments(newComments);
-                            }}
-                          />
-                          <div className="qna-comment-actions">
-                            <button className='button primary' onClick={() => handleSaveCommentEdit(index)}>수정</button>
-                            <button className='button' onClick={() => setEditingComment(null)}>취소</button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <span className="qna-comment-user">{comment.user_name}</span>
-                          <span className="qna-comment-content">{comment.content}</span>
-                          <span className="qna-comment-date">{formatDateTime(comment.created_at)}</span>
-                          {loggedInUserName === comment.user_name && (
+              {!isEditing && (
+                <div className="qna-comment-section">
+                  {comments.map((comment, index) => (
+                    <React.Fragment key={index}>
+                      <div className="qna-comment">
+                        {editingComment === index ? (
+                          <div>
+                            <input
+                              type="text"
+                              value={comment.content}
+                              onChange={(e) => {
+                                const newComments = [...comments];
+                                newComments[index].content = e.target.value;
+                                setComments(newComments);
+                              }}
+                            />
                             <div className="qna-comment-actions">
-                              <button className="button primary" onClick={() => handleEditComment(index)}>수정</button>
-                              <button className="button" onClick={() => handleDeleteComment(index)}>삭제</button>
+                              <button className='button primary' onClick={() => handleSaveCommentEdit(index)}>수정</button>
+                              <button className='button' onClick={() => setEditingComment(null)}>취소</button>
                             </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                    <hr className="qna-comment-line" />
-                  </React.Fragment>
-                ))}
-                <div id='QnA-CommentInputs' className='QnA-commentInput'>
-                  <input
-                    className='QnA-Input'
-                    type="text"
-                    placeholder="댓글을 입력하세요."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  />
-                  <button id='QnA-CommentButton' className='button primary' onClick={handleCommentSubmit}>
-                    댓글 등록
-                  </button>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="qna-comment-user">{comment.user_name}</span>
+                            <span className="qna-comment-content">{comment.content}</span>
+                            <span className="qna-comment-date">{formatDateTime(comment.created_at)}</span>
+                            {loggedInUserName === comment.user_name && (
+                              <div className="qna-comment-actions">
+                                <button className="button primary" onClick={() => handleEditComment(index)}>수정</button>
+                                <button className="button" onClick={() => handleDeleteComment(index)}>삭제</button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <hr className="qna-comment-line" />
+                    </React.Fragment>
+                  ))}
+                  <div id='QnA-CommentInputs' className='QnA-commentInput'>
+                    <input
+                      className='QnA-Input'
+                      type="text"
+                      placeholder="댓글을 입력하세요."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                    />
+                    <button id='QnA-CommentButton' className='button primary' onClick={handleCommentSubmit}>
+                      댓글 등록
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
         </div>

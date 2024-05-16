@@ -690,23 +690,22 @@ app.delete('/api/qnaposts/:id', (req, res) => {
 });
 
 
-// QnA 게시판 업데이트
+// QnA 게시글 수정 API
 app.put('/api/qnaposts/:postId', (req, res) => {
-  const { title, content } = req.body; 
-  const { postId } = req.params; 
+  const { postId } = req.params;
+  const { title, content } = req.body;
 
-  const query = 'UPDATE board_posts SET title = ?, content = ? WHERE post_id = ?'; 
-
-  connection.query(query, [title, content, postId], (error, results) => { 
-    if (error) {
-      console.error('게시글 업데이트 실패:', error);
-      res.status(500).send('게시글 업데이트 실패');
+  const query = 'UPDATE board_posts SET title = ?, content = ? WHERE post_id = ?';
+  connection.query(query, [title, content, postId], (err, result) => {
+    if (err) {
+      console.error('게시글 업데이트 실패:', err);
+      res.status(500).json({ success: false, message: '게시글 업데이트 실패' });
     } else {
-      console.log('게시글 업데이트 성공');
-      res.status(200).send('게시글 업데이트 성공');
+      res.status(200).json({ success: true, message: '게시글 업데이트 성공' });
     }
   });
 });
+
 
 
 //공지사항 검색 
