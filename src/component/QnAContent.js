@@ -11,13 +11,10 @@ const QnAContent = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [replyComments, setReplyComments] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [replyIndex, setReplyIndex] = useState(null);
   const [editingComment, setEditingComment] = useState(null);
-  const [editingReply, setEditingReply] = useState(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -79,9 +76,15 @@ const QnAContent = () => {
       .then(res => res.json())
       .then(data => {
         setPost(data);
-        setComments(data.comments || []);
       })
       .catch(err => console.error('게시글 가져오기 실패:', err));
+
+    fetch(`/api/qna/comments/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setComments(data);
+      })
+      .catch(err => console.error('댓글 가져오기 실패:', err));
 
     fetch('/api/checklogin')
       .then(res => res.json())
@@ -99,6 +102,19 @@ const QnAContent = () => {
       .catch(err => console.error('로그인 상태 확인 실패:', err));
   }, [id]);
 
+  const formatDateTime = (dateTimeString) => {
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+    return new Date(dateTimeString).toLocaleString('ko-KR', options).replace(/\. /g, '-').replace(/\./g, '');
+  };
+
   const handleCommentSubmit = () => {
     if (!isLoggedIn) {
       alert('로그인이 필요합니다.');
@@ -106,42 +122,27 @@ const QnAContent = () => {
     }
 
     const newCommentData = {
-      user_name: loggedInUserName,
+      postId: id,
       content: newComment,
-      created_at: new Date().toLocaleString(),
-      parent_index: null
     };
 
-    setComments([...comments, newCommentData]);
-    setNewComment('');
-  };
-
-  const handleReplySubmit = (index) => {
-    if (!isLoggedIn) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
-
-    const newReplyData = {
-      user_name: loggedInUserName,
-      content: replyComments[index],
-      created_at: new Date().toLocaleString(),
-      parent_index: index
-    };
-
-    const newComments = comments.map((comment, i) => {
-      if (i === index) {
-        return {
-          ...comment,
-          replies: [...(comment.replies || []), newReplyData]
-        };
-      }
-      return comment;
-    });
-
-    setComments(newComments);
-    setReplyComments({ ...replyComments, [index]: '' });
-    setReplyIndex(null);
+    fetch('/api/qna/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newCommentData),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setComments([...comments, { ...newCommentData, user_name: loggedInUserName, created_at: formatDateTime(new Date()), comment_id: data.commentId }]);
+          setNewComment('');
+        } else {
+          alert('댓글 등록에 실패했습니다.');
+        }
+      })
+      .catch(err => console.error('댓글 등록 실패:', err));
   };
 
   const handleEditComment = (index) => {
@@ -149,33 +150,40 @@ const QnAContent = () => {
   };
 
   const handleSaveCommentEdit = (index) => {
-    setEditingComment(null);
-  };
-
-  const handleEditReply = (commentIndex, replyIndex) => {
-    setEditingReply({ commentIndex, replyIndex });
-  };
-
-  const handleSaveReplyEdit = (commentIndex, replyIndex) => {
-    setEditingReply(null);
+    const comment = comments[index];
+    fetch(`/api/qna/comments/${comment.comment_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: comment.content }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setEditingComment(null);
+          setComments(comments.map((c, i) => i === index ? { ...c, content: comment.content } : c));
+        } else {
+          alert('댓글 수정에 실패했습니다.');
+        }
+      })
+      .catch(err => console.error('댓글 수정 실패:', err));
   };
 
   const handleDeleteComment = (index) => {
-    setComments(comments.filter((_, i) => i !== index));
-  };
-
-  const handleDeleteReply = (commentIndex, replyIndex) => {
-    const updatedComments = comments.map((comment, i) => {
-      if (i === commentIndex) {
-        return {
-          ...comment,
-          replies: comment.replies.filter((_, j) => j !== replyIndex)
-        };
-      }
-      return comment;
-    });
-
-    setComments(updatedComments);
+    const comment = comments[index];
+    fetch(`/api/qna/comments/${comment.comment_id}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setComments(comments.filter((_, i) => i !== index));
+        } else {
+          alert('댓글 삭제에 실패했습니다.');
+        }
+      })
+      .catch(err => console.error('댓글 삭제 실패:', err));
   };
 
   const getTextFromHtml = (htmlString) => {
@@ -201,21 +209,15 @@ const QnAContent = () => {
       },
       body: JSON.stringify({ title: post.title, content: post.content })
     })
-    .then(response => {
-      if (response.ok) {
-        return response.text();
-      } else {
-        response.text().then(text => {
-          console.error('게시글 업데이트 오류:', text);
-        });
-        throw new Error('Network response was not ok.');
-      }
-    })
+    .then(response => response.json())
     .then(data => {
-      console.log(data);
-      alert('수정이 완료되었습니다.');
-      setIsEditing(false);
-      window.location.reload();
+      if (data.success) {
+        alert('수정이 완료되었습니다.');
+        setIsEditing(false);
+        window.location.reload();
+      } else {
+        console.error('게시글 업데이트 실패:', data);
+      }
     })
     .catch(error => {
       console.error('게시글 업데이트 오류:', error);
@@ -230,16 +232,16 @@ const QnAContent = () => {
     fetch(`/api/qnaposts/${id}`, {
       method: 'DELETE',
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert('게시글이 삭제되었습니다.');
-          window.location.href = '/qnapage';
-        } else {
-          alert('게시글 삭제에 실패했습니다.');
-        }
-      })
-      .catch(err => console.error('게시글 삭제 실패:', err));
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('게시글이 삭제되었습니다.');
+        window.location.href = '/qnapage';
+      } else {
+        alert('게시글 삭제에 실패했습니다.');
+      }
+    })
+    .catch(err => console.error('게시글 삭제 실패:', err));
   };
 
   return (
@@ -262,7 +264,7 @@ const QnAContent = () => {
               </div>
               <div className='QnAup-author'>
                 <span>작성자 : </span> {post.user_name}
-                <span>등록일 : </span> {post.created_at}
+                <span>등록일 : </span> {formatDateTime(post.created_at)}
               </div>
               <div id='qnacontent-content' className='QnAup-content'>
                 {isEditing ? (
@@ -293,62 +295,24 @@ const QnAContent = () => {
                               setComments(newComments);
                             }}
                           />
-                          <button className='button primary' onClick={() => handleSaveCommentEdit(index)}>수정</button>
-                          <button className='button' onClick={() => setEditingComment(null)}>취소</button>
+                          <div className="qna-comment-actions">
+                            <button className='button primary' onClick={() => handleSaveCommentEdit(index)}>수정</button>
+                            <button className='button' onClick={() => setEditingComment(null)}>취소</button>
+                          </div>
                         </div>
                       ) : (
                         <>
                           <span className="qna-comment-user">{comment.user_name}</span>
                           <span className="qna-comment-content">{comment.content}</span>
-                          <span className="qna-comment-date">{comment.created_at}</span>
-                          <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
-                          <span className="qna-edit-button" onClick={() => handleEditComment(index)}>수정</span>
-                          <span className="qna-delete-button" onClick={() => handleDeleteComment(index)}>삭제</span>
+                          <span className="qna-comment-date">{formatDateTime(comment.created_at)}</span>
+                          {loggedInUserName === comment.user_name && (
+                            <div className="qna-comment-actions">
+                              <button className="button primary" onClick={() => handleEditComment(index)}>수정</button>
+                              <button className="button" onClick={() => handleDeleteComment(index)}>삭제</button>
+                            </div>
+                          )}
                         </>
                       )}
-                      {replyIndex === index && (
-                        <div className="qna-reply-input">
-                          <input
-                            type="text"
-                            placeholder="답글을 입력하세요."
-                            value={replyComments[index] || ''}
-                            onChange={(e) =>
-                              setReplyComments({ ...replyComments, [index]: e.target.value })
-                            }
-                          />
-                          <button className='button primary' onClick={() => handleReplySubmit(index)}>답글 등록</button>
-                        </div>
-                      )}
-                      <div className="qna-replies">
-                        {comment.replies && comment.replies.map((reply, replyIndex) => (
-                          <div key={replyIndex} className="qna-reply">
-                            {editingReply && editingReply.commentIndex === index && editingReply.replyIndex === replyIndex ? (
-                              <div>
-                                <input
-                                  type="text"
-                                  value={reply.content}
-                                  onChange={(e) => {
-                                    const newComments = [...comments];
-                                    newComments[index].replies[replyIndex].content = e.target.value;
-                                    setComments(newComments);
-                                  }}
-                                />
-                                <button className='button primary' onClick={() => handleSaveReplyEdit(index, replyIndex)}>수정</button>
-                                <button className='button' onClick={() => setEditingReply(null)}>취소</button>
-                              </div>
-                            ) : (
-                              <>
-                                <span className="qna-comment-user">{reply.user_name}</span>
-                                <span className="qna-comment-content">{reply.content}</span>
-                                <span className="qna-comment-date">{reply.created_at}</span>
-                                <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
-                                <span className="qna-edit-button" onClick={() => handleEditReply(index, replyIndex)}>수정</span>
-                                <span className="qna-delete-button" onClick={() => handleDeleteReply(index, replyIndex)}>삭제</span>
-                              </>
-                            )}
-                          </div>
-                        ))}
-                      </div>
                     </div>
                     <hr className="qna-comment-line" />
                   </React.Fragment>

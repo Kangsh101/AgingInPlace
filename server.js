@@ -117,11 +117,6 @@ app.post('/api/signup', (req, res) => {
 });
 
 
-
-
-
-
-
 //로그인
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
@@ -474,8 +469,6 @@ function queryAsync(query, params) {
   });
 }
 
-
-
 // QnA 게시판만 검색 API
 app.get('/api/qnaposts', (req, res) => {
   const query = `
@@ -537,7 +530,7 @@ app.post('/api/search-posts', (req, res) => {
 });
 
 
-
+//QnA 상세 페이지 
 app.get('/api/qnaposts/:postId', (req, res) => {
   const postId = req.params.postId;
   const query = `
@@ -564,6 +557,91 @@ app.get('/api/qnaposts/:postId', (req, res) => {
     res.status(200).json(post);
   });
 });
+
+// 댓글 등록
+app.post('/api/qna/comments', (req, res) => {
+  const { postId, content } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'INSERT INTO board_comment (post_id, user_id, content) VALUES (?, ?, ?)';
+  connection.query(query, [postId, userId, content], (err, result) => {
+    if (err) {
+      console.error('댓글 등록 실패:', err);
+      res.status(500).json({ error: '댓글 등록 실패' });
+    } else {
+      res.status(200).json({ success: true, commentId: result.insertId });
+    }
+  });
+});
+
+// 댓글 수정
+app.put('/api/qna/comments/:commentId', (req, res) => {
+  const { content } = req.body;
+  const { commentId } = req.params;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'UPDATE board_comment SET content = ? WHERE comment_id = ? AND user_id = ?';
+  connection.query(query, [content, commentId, userId], (err, result) => {
+    if (err) {
+      console.error('댓글 수정 실패:', err);
+      res.status(500).json({ error: '댓글 수정 실패' });
+    } else {
+      res.status(200).json({ success: true });
+    }
+  });
+});
+
+// 댓글 삭제
+app.delete('/api/qna/comments/:commentId', (req, res) => {
+  const { commentId } = req.params;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'DELETE FROM board_comment WHERE comment_id = ? AND user_id = ?';
+  connection.query(query, [commentId, userId], (err, result) => {
+    if (err) {
+      console.error('댓글 삭제 실패:', err);
+      res.status(500).json({ error: '댓글 삭제 실패' });
+    } else {
+      res.status(200).json({ success: true });
+    }
+  });
+});
+// 댓글 가져오기
+app.get('/api/qna/comments/:postId', (req, res) => {
+  const postId = req.params.postId;
+
+  const query = `
+    SELECT bc.*, m.name as user_name 
+    FROM board_comment bc
+    JOIN members m ON bc.user_id = m.id
+    WHERE bc.post_id = ?
+    ORDER BY bc.created_at ASC
+  `;
+
+  connection.query(query, [postId], (err, results) => {
+    if (err) {
+      console.error('댓글 조회 실패:', err);
+      res.status(500).json({ error: '댓글 조회 실패' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+
+
 
 
 
@@ -594,16 +672,23 @@ app.get('/api/getUserName', (req, res) => {
 app.delete('/api/qnaposts/:id', (req, res) => {
   const postId = req.params.id;
 
-  connection.query('DELETE FROM board_posts WHERE post_id = ?', postId, (error, results) => {
+  connection.query('DELETE FROM board_comment WHERE post_id = ?', [postId], (error, results) => {
     if (error) {
-      console.error('게시글 삭제 실패:', error);
-      res.status(500).json({ success: false, message: '게시글 삭제 실패' });
-    } else {
-      console.log('게시글 삭제 성공');
-      res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+      console.error('댓글 삭제 실패:', error);
+      return res.status(500).json({ error: '댓글 삭제 실패' });
     }
+    
+    connection.query('DELETE FROM board_posts WHERE post_id = ?', [postId], (error, results) => {
+      if (error) {
+        console.error('게시물 삭제 실패:', error);
+        return res.status(500).json({ error: '게시물 삭제 실패' });
+      }
+
+      res.status(200).json({ success: true, message: '게시물 삭제 성공' });
+    });
   });
 });
+
 
 // QnA 게시판 업데이트
 app.put('/api/qnaposts/:postId', (req, res) => {
