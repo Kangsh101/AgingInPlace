@@ -6,6 +6,7 @@ const cors = require('cors');
 const multer = require('multer');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const qs = require('qs'); 
 
 
 const path = require('path');
@@ -959,9 +960,69 @@ app.post('/downloadFile', async (req, res) => {
   }
 });
 
+app.post('/chart/calories', async (req, res) => {
+  const username = 'Lee'; // username을 'Lee'로 설정
 
+  try {
+    const response = await axios.post('http://43.200.2.115:8080/chart/calories', qs.stringify({ username }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data from Java API server:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error fetching data from Java API server' });
+  }
+});
 
+app.post('/chart/steps', async (req, res) => {
+  const username = 'Lee'; 
 
+  try {
+    const response = await axios.post('http://43.200.2.115:8080/chart/steps', qs.stringify({ username }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data from Java API server:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error fetching data from Java API server' });
+  }
+});
+
+app.post('/chart/sleep_duration', async (req, res) => {
+  const username = 'ChartTest2'; 
+
+  try {
+    const response = await axios.post('http://43.200.2.115:8080/chart/duration', qs.stringify({ username }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data from Java API server:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error fetching data from Java API server' });
+  }
+});
+
+app.post('/chart/rem', async (req, res) => {
+  const username = 'ChartTest2'; 
+
+  try {
+    const response = await axios.post('http://43.200.2.115:8080//chart/rem', qs.stringify({ username }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data from Java API server:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error fetching data from Java API server' });
+  }
+});
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
