@@ -29,7 +29,7 @@ import Download from './component/Download';
 import NoticeContent from './component/NoticeContent';
 import CmsNoticeContent from './admin/CmsNoticeContent';
 import Chart from './component/Chart';
-
+import CmsFaqEdit from './admin/CmsFaqEdit';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -82,10 +82,10 @@ function App() {
           
           <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
-
+          
          
-         
-         
+           
+          <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />
           <Route path="/cms" element={<Cms />} />

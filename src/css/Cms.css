@@ -83,6 +83,7 @@
   margin-right: auto;
   width: 70%;
   display: block; 
+  cursor: pointer;
 }
 .Cmss-header{
   margin-right: 10%;

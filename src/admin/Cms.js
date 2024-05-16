@@ -34,7 +34,7 @@ const Cms = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(); // 이 부분을 수정하여 원하는 형식으로 변환합니다.
+    return date.toLocaleDateString(); 
   };
 
   const location = useLocation();
