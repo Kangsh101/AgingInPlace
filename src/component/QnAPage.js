@@ -9,7 +9,6 @@ const QnAPage = () => {
   const [postsPerPage] = useState(3);
   const [searchType, setSearchType] = useState("title"); 
   const [searchKeyword, setSearchKeyword] = useState(""); 
-  const [post, setPost] = useState(null); 
 
   useEffect(() => {
     fetch('/api/checklogin')
@@ -28,7 +27,7 @@ const QnAPage = () => {
       .then(data => {
         setPosts(data.map(post => ({
           ...post,
-          create_at: post.create_at.split('T')[0] 
+          created_at: post.created_at.split('T')[0]
         })));
       })
       .catch(err => console.error('QNA 게시글 불러오기 실패:', err));
@@ -55,6 +54,7 @@ const QnAPage = () => {
   const handleSearchTypeChange = (e) => {
     setSearchType(e.target.value);
   };
+
   const handleSearch = () => {
     fetch(`/api/search-posts`, {
       method: 'POST',
@@ -70,40 +70,27 @@ const QnAPage = () => {
       .catch(err => console.error('검색 중 오류 발생:', err));
   };
 
-  const handlePostClick = (postId) => {
-    if (!postId) {
-      console.error('게시글 ID가 유효하지 않습니다.');
-      return;
-    }
-    fetch(`/api/qnaposts/${postId}`)
-      .then(res => res.json())
-      .then(data => {
-        setPost(data); 
-      })
-      .catch(err => console.error('게시글 가져오기 실패:', err));
-  };
-
   return (
     <div className="row gtr-150">
       <div className="col-4 col-12-medium">
-      <header className='major'> 
+        <header className='major'>
           <h2 className='aaaaaa'>QnA</h2>
         </header>
         <div className="qna-header">
-          <div className="qna-options">  
-              <select className="qna-select"  id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
-                <option value="title">제목</option>
-                <option value="author">작성자</option>
-              </select>
-              <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
-              <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
-              <div className="search-write-container">
-                  
-                  <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
-                  {isLoggedIn ? '글쓰기' : '글쓰기'}
-                </button>
-              </div>
+          <div className="qna-options">
+            <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
+              <option value="title">제목</option>
+              <option value="author">작성자</option>
+              <option value="title_author">제목 + 작성자</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
+            <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
+            <div className="search-write-container">
+              <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
+                {isLoggedIn ? '글쓰기' : '글쓰기'}
+              </button>
             </div>
+          </div>
         </div>
 
         <div className="qna-content">
@@ -117,15 +104,14 @@ const QnAPage = () => {
               </tr>
             </thead>
             <tbody>
-            {currentPosts.map((post, index) => (
-              <tr key={post.board_id} onClick={() => handlePostClick(post.board_id)}>
-                <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
-                <td className='skskskssksk'><Link to={`/qnacontent/${post.board_id}`}>{post.title}</Link></td>
-                <td>{post.name}</td>
-                <td>{post.create_at}</td>
-              </tr>
-            ))}
-
+              {currentPosts.map((post, index) => (
+                <tr key={post.post_id}>
+                  <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
+                  <td className='skskskssksk'><Link to={`/qnacontent/${post.post_id}`}>{post.title}</Link></td>
+                  <td>{post.user_name}</td>
+                  <td>{post.created_at}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
