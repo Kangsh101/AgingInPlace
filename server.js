@@ -36,10 +36,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(session({  
-  secret: 'mySecretKey', 
+app.use(session({
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true,
+  cookie: { secure: false } 
 }));
 
 app.use(cors({
@@ -660,8 +661,6 @@ app.post('/api/notice/search', (req, res) => {
     res.status(200).json(result);
   });
 });
-
-
 // 공지사항 등록 api
 app.post('/api/addNotice', (req, res) => {
   const { title, content } = req.body;
@@ -733,6 +732,65 @@ app.get('/api/notices/:postId', (req, res) => {
 });
 
 
+
+// FAQ 등록
+app.post('/api/addFaq', (req, res) => {
+  const { title, content } = req.body;
+  const user_id = req.session.userId;
+
+  if (!user_id) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = `INSERT INTO board_posts (board_master_id, title, content, user_id, created_at) VALUES (3, ?, ?, ?, NOW())`;
+
+  connection.query(query, [title, content , user_id], (err, result) => {
+    if (err) {
+      console.error('FAQ 등록 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 등록 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: 'FAQ가 성공적으로 등록되었습니다.' });
+  });
+});
+
+// FAQ 조회
+app.get('/api/faq', (req, res) => {
+  const query = `
+    SELECT bp.*, m.name as user_name 
+    FROM board_posts bp
+    JOIN members m ON bp.user_id = m.id
+    WHERE bp.board_master_id = 3 
+    ORDER BY bp.created_at DESC
+  `;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('FAQ 게시글 조회 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 게시글 조회 중 오류 발생' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// FAQ 삭제
+app.delete('/api/faq/:id', (req, res) => {
+  const postId = req.params.id;
+  const query = 'DELETE FROM board_posts WHERE post_id = ?';
+
+  connection.query(query, [postId], (err, result) => {
+    if (err) {
+      console.error('FAQ 게시글 삭제 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 게시글 삭제 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true });
+  });
+});
+
+
+
 //공지사항 게시글 삭제
 app.delete('/api/notices/:id', (req, res) => {
   const { id } = req.params;
@@ -764,64 +822,43 @@ app.put('/api/notices/:id', (req, res) => {
   });
 });
 
-//FAQ 쪽 server
-//FAQ 등록 API
-app.post('/api/addFaQ', (req, res) => {
-  const { title, content } = req.body;
-  const userId = req.session.userId; 
-  const query = `SELECT name FROM members WHERE id = ?`;
-  connection.query(query, [userId], (err, result) => {
-    if (err) {
-      console.error('사용자 이름 조회 중 오류 발생:', err);
-      res.status(500).json({ error: '사용자 이름 조회 중 오류 발생' });
-      return;
-    }
-    if (result.length === 0) {
-      console.error('사용자를 찾을 수 없습니다.');
-      res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
-      return;
-    }
-    const name = result[0].name;
-    const insertQuery = `INSERT INTO boards (title, content, board_type, is_answer, name, create_at) VALUES (?, ?, 'FAQ', 'N', ?, NOW())`;
-    connection.query(insertQuery, [title, content, name], (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error('공지사항 저장 중 오류 발생:', insertErr);
-        res.status(500).json({ error: 'FAQ 저장 중 오류 발생' });
-        return;
-      }
-      console.log('FAQ 이 성공적으로 저장되었습니다.');
-      res.status(200).json({ message: 'FAQ 페이지가 성공적으로 저장되었습니다.' });
-    });
-  });
-});
 
-//FAQ 조회 API
+
+// FAQ 조회
 app.get('/api/faq', (req, res) => {
-  const query = `SELECT * FROM boards WHERE board_type = 'FAQ' ORDER BY create_at DESC`;
+  const query = `
+    SELECT bp.*, m.name as user_name 
+    FROM board_posts bp
+    JOIN members m ON bp.user_id = m.id
+    WHERE bp.board_master_id = 3 
+    ORDER BY bp.created_at DESC
+  `;
 
   connection.query(query, (err, results) => {
     if (err) {
-      console.error('Error fetching notices from database:', err);
-      res.status(500).json({ error: 'Error fetching notices from database' });
+      console.error('FAQ 게시글 조회 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 게시글 조회 중 오류 발생' });
       return;
     }
     res.json(results);
   });
 });
-//FAQ 게시글 삭제 .
+
+// FAQ 삭제
 app.delete('/api/faq/:id', (req, res) => {
   const postId = req.params.id;
+  const query = 'DELETE FROM board_posts WHERE post_id = ?';
 
-  connection.query('DELETE FROM boards WHERE board_id = ?', postId, (error, results) => {
-    if (error) {
-      console.error('게시글 삭제 실패:', error);
-      res.status(500).json({ success: false, message: '게시글 삭제 실패' });
-    } else {
-      console.log('게시글 삭제 성공');
-      res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+  connection.query(query, [postId], (err, result) => {
+    if (err) {
+      console.error('FAQ 게시글 삭제 중 오류 발생:', err);
+      res.status(500).json({ error: 'FAQ 게시글 삭제 중 오류 발생' });
+      return;
     }
+    res.status(200).json({ success: true });
   });
 });
+
 //FAQ.
 
 // 관리자인지 확인하고 접근 하도록 하기 위한

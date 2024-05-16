@@ -1,5 +1,5 @@
-import React, { useState ,useEffect} from 'react';
-import { Link, Route, Routes ,useLocation} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 
 const Cmsfaq = () => {
@@ -7,6 +7,8 @@ const Cmsfaq = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5); 
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
+  const navigate = useNavigate();
+
   const handleClick = (index) => {
     if (selectedPostIndex === index) {
       setSelectedPostIndex(null);
@@ -14,10 +16,7 @@ const Cmsfaq = () => {
       setSelectedPostIndex(index);
     }
   };
-  
-  // const handleClick = (index) => {
-  //   setSelectedPostIndex(index);
-  // };
+
   useEffect(() => {
     fetch('/api/faq')
       .then(response => response.json())
@@ -25,7 +24,7 @@ const Cmsfaq = () => {
         const postsWithNumbers = data.reverse().map((post, index) => ({
           ...post,
           number: index + 1,
-          create_at: formatDate(post.create_at)
+          created_at: formatDate(post.created_at)
         }));
         setPosts(postsWithNumbers);
       })
@@ -33,7 +32,7 @@ const Cmsfaq = () => {
   }, []);
 
   const handleDelete = (id, index) => {
-    fetch(`/api/notices/${id}`, {
+    fetch(`/api/faq/${id}`, {
       method: 'DELETE'
     })
     .then(response => {
@@ -45,25 +44,23 @@ const Cmsfaq = () => {
     })
     .catch(error => console.error('게시글을 삭제하는 중 에러 발생:', error));
   };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const formattedDate = date.toISOString().split('T')[0];
-    return formattedDate;
+    return date.toLocaleDateString(); // 원하는 형식으로 날짜 변환
   };
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-
   const location = useLocation(); 
+
   return (
     <div className="cms-container">
       <div className="cms-sidebar">
-        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
         <h2 className='Cms-Aginginplace'>Aging in Place</h2>
         <h2>관리자</h2>
         <ul>
@@ -73,78 +70,71 @@ const Cmsfaq = () => {
         </ul>
       </div>
       <div className="cms-main-content">
-      <header className='major' id='major-rest'> 
-          <h2 className='aaaaaa'>FAQ </h2>
+        <header className='major' id='major-rest'> 
+          <h2 className='aaaaaa'>FAQ</h2>
         </header>
-      <div className="Cmss-header">
-        <div className='Cmss-chch'>
-          <Link to="/Cms"><button className='button' id='cmscs-notice' >공지사항 게시판</button></Link>
-          <Link to="/Cmsfaq"><button className='button' id='cms-nodicego'>FAQ 게시판</button></Link>
+        <div className="Cmss-header">
+          <div className='Cmss-chch'>
+            <Link to="/Cms"><button className='button' id='cmscs-notice' >공지사항 게시판</button></Link>
+            <Link to="/Cmsfaq"><button className='button' id='cms-nodicego'>FAQ 게시판</button></Link>
+          </div>
+          <div className="Cmss-options">
+            <select className="Cmss-select">
+              <option value="title">제목</option>
+              <option value="author">작성자</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
+            <button className="button primary">검색</button>
+          </div>
+          <Link to="/faqup">
+            <button className="button1" id='saddasdasd'>FAQ 등록</button>
+          </Link>
         </div>
-
-        <div className="Cmss-options">
-          
-          <select className="Cmss-select">
-            <option value="title">제목</option>
-            <option value="author">작성자</option>
-          </select>
-          <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
-          <button className="button primary">검색</button>
-        </div>
-        <Link to="/faqup">
-             <button className="button1" id='saddasdasd'>FAQ 등록</button>
-        </Link>
-
-
-      </div>
-      
-      <div className="Cmss-content">
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Q</th>
-              <th>A</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentPosts.map((post, index) => (
-              <React.Fragment key={post.id}>
-                <tr onClick={() => handleClick(indexOfFirstPost + index)}>
-                  <td>{indexOfFirstPost + index + 1}</td>
-                  <td className="ellipsis">{post.title}</td>
-                  <td className="ellipsis">{post.content}</td>
-                </tr>
-                {selectedPostIndex === indexOfFirstPost + index && (
-                  <tr className='sang-trtag'>
-                    <td colSpan="5">
-                      <div className="selected-post">
-                        <p className='sang-title wrap-text'><span className='cms-QA'>Q </span> : {post.title}</p>
-                        <p className='sang-description wrap-text'><span className='cms-QA'>A </span> : {post.content}</p>
-                        <div className='sang-bttcon'>
-                          <button className='button primary' id='cms-correction'>게시글 수정</button>
-                          <button className='button' onClick={() => handleDelete(post.id, indexOfFirstPost + index)}>게시글 삭제</button>
-                        </div>
-                      </div>
-                    </td>
+        <div className="Cmss-content">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Q</th>
+                <th>A</th>
+                <th>작성자</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentPosts.map((post, index) => (
+                <React.Fragment key={post.post_id}>
+                  <tr onClick={() => handleClick(indexOfFirstPost + index)}>
+                    <td>{indexOfFirstPost + index + 1}</td>
+                    <td className="ellipsis">{post.title}</td>
+                    <td className="ellipsis">{post.content}</td>
+                    <td>{post.user_name}</td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-
-        </table>
-        
-        <Pagination
-          postsPerPage={postsPerPage}
-          totalPosts={posts.length}
-          paginate={paginate}
-          
-        /> 
+                  {selectedPostIndex === indexOfFirstPost + index && (
+                    <tr className='sang-trtag'>
+                      <td colSpan="4">
+                        <div className="selected-post">
+                          <p className='sang-title wrap-text'><span className='cms-QA'>Q </span> : {post.title}</p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>A </span> : {post.content}</p>
+                          <div className='sang-bttcon'>
+                            <button className='button primary' id='cms-correction' onClick={() => navigate(`/faqedit/${post.post_id}`)}>게시글 수정</button>
+                            <button className='button' onClick={() => handleDelete(post.post_id, indexOfFirstPost + index)}>게시글 삭제</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={posts.length}
+            paginate={paginate}
+          />
+        </div>
       </div>
     </div>
-    </div>
-    
   );
 };
 
@@ -159,7 +149,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <div>
       <div className="Cmss-pagebtt">
         {pageNumbers.map(number => (
-          <button  key={number} onClick={() => paginate(number)}>
+          <button key={number} onClick={() => paginate(number)}>
             {number}
           </button>
         ))}
