@@ -9,8 +9,8 @@ const Chart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response1 = await axios.post('http://43.200.2.115:8080/chart/activityUsername/steps', { username: 'Lee' });
-        const response2 = await axios.post('http://43.200.2.115:8080/chart/activityUsername/calories', { username: 'Lee' });
+        const response1 = await axios.post('/chart/steps', { username: 'Lee' });
+        const response2 = await axios.post('/chart/calories', { username: 'Lee' });
 
         const formattedData1 = response1.data.map(item => ({
           name: new Date(item['activity_data.create_date']).toLocaleDateString(),
