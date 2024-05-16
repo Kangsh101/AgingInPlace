@@ -28,6 +28,7 @@ import AddDiagnosis from './component/AddDiagnosis';
 import Download from './component/Download';
 import NoticeContent from './component/NoticeContent';
 import CmsNoticeContent from './admin/CmsNoticeContent';
+import Chart from './component/Chart';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -80,7 +81,8 @@ function App() {
           <Route path="/Download" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Download /><Footer /></>} />
           
           <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
-         
+          <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
+
          
          
          

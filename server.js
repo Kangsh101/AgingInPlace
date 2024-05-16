@@ -622,7 +622,147 @@ app.put('/api/qnaposts/:postId', (req, res) => {
 });
 
 
+//공지사항 검색 
+app.post('/api/notice/search', (req, res) => {
+  const { searchType, searchKeyword } = req.body;
+  let query = "";
 
+  if (searchType === "title") {
+    query = `SELECT bp.*, m.name as user_name 
+             FROM board_posts bp 
+             JOIN members m ON bp.user_id = m.id 
+             WHERE bp.board_master_id = 2 AND bp.title LIKE ?`;
+  } else if (searchType === "author") {
+    query = `SELECT bp.*, m.name as user_name 
+             FROM board_posts bp 
+             JOIN members m ON bp.user_id = m.id 
+             WHERE bp.board_master_id = 2 AND m.name LIKE ?`;
+  } else if (searchType === "title_author") {
+    query = `SELECT bp.*, m.name as user_name 
+             FROM board_posts bp 
+             JOIN members m ON bp.user_id = m.id 
+             WHERE bp.board_master_id = 2 AND (bp.title LIKE ? OR m.name LIKE ?)`;
+  } else {
+    res.status(400).json({ error: '유효하지 않은 검색 조건입니다.' });
+    return;
+  }
+
+  const searchValue = `%${searchKeyword}%`;
+  const queryValues = searchType === "title_author" ? [searchValue, searchValue] : [searchValue];
+
+  connection.query(query, queryValues, (err, result) => {
+    if (err) {
+      console.error('검색 중 오류 발생:', err);
+      res.status(500).json({ error: '검색 중 오류 발생' });
+      return;
+    }
+
+    res.status(200).json(result);
+  });
+});
+
+
+// 공지사항 등록 api
+app.post('/api/addNotice', (req, res) => {
+  const { title, content } = req.body;
+  const boardMasterId = 2; // 공지사항의 board_master_id는 2번입니다.
+
+  const query = 'INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)';
+
+  // 여기서 user_id는 실제 사용자 ID로 설정해야 합니다. 세션 또는 다른 방법으로 가져올 수 있습니다.
+  const userId = req.session.userId || 1; // 예시로 userId를 1로 설정
+
+  connection.query(query, [boardMasterId, title, content, userId], (error, results) => {
+    if (error) {
+      console.error('공지사항 등록 실패:', error);
+      res.status(500).json({ error: '공지사항 등록 실패' });
+    } else {
+      console.log('공지사항 등록 성공');
+      res.status(200).json({ message: '공지사항이 성공적으로 등록되었습니다.' });
+    }
+  });
+});
+
+// 공지사항 목록
+app.get('/api/notices', (req, res) => {
+  const query = `
+    SELECT bp.*, m.name as user_name, bm.board_name 
+    FROM board_posts bp
+    JOIN members m ON bp.user_id = m.id
+    JOIN board_master bm ON bp.board_master_id = bm.id
+    WHERE bp.board_master_id = 2
+    ORDER BY bp.created_at DESC
+  `;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching notices from database:', err);
+      res.status(500).json({ error: 'Error fetching notices from database' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get('/api/notices/:postId', (req, res) => {
+  const postId = req.params.postId;
+  const query = `
+    SELECT bp.*, m.name as user_name, bm.board_name 
+    FROM board_posts bp
+    JOIN members m ON bp.user_id = m.id
+    JOIN board_master bm ON bp.board_master_id = bm.id
+    WHERE bp.post_id = ?
+  `;
+
+  connection.query(query, [postId], (err, result) => {
+    if (err) {
+      console.error('Error fetching notice from database:', err);
+      res.status(500).json({ error: 'Error fetching notice from database' });
+      return;
+    }
+
+    if (result.length === 0) {
+      console.error('No notice found with the given ID.');
+      res.status(404).json({ error: 'No notice found with the given ID.' });
+      return;
+    }
+
+    const post = result[0];
+    res.status(200).json(post);
+  });
+});
+
+
+//공지사항 게시글 삭제
+app.delete('/api/notices/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM board_posts WHERE post_id = ?`;
+  connection.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('게시글 삭제 중 오류 발생:', err);
+      res.status(500).json({ error: '게시글 삭제 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: '게시글이 삭제되었습니다.' });
+  });
+});
+
+// 공지사항 수정
+app.put('/api/notices/:id', (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  const query = `UPDATE board_posts SET title = ?, content = ? WHERE post_id = ?`;
+  connection.query(query, [title, content, id], (err, result) => {
+    if (err) {
+      console.error('게시글 수정 중 오류 발생:', err);
+      res.status(500).json({ error: '게시글 수정 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: '게시글이 수정되었습니다.' });
+  });
+});
 
 //FAQ 쪽 server
 //FAQ 등록 API
