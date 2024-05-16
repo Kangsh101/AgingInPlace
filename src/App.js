@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './component/Header';
 import Login from './component/Login';
@@ -15,7 +15,7 @@ import Contents from './component/Contents';
 import Cms from './admin/Cms';
 import Cmscontents from './admin/Cmscontents';
 import Cmsuser from './admin/Cmsuser';
-import Cmsfaq from './admin/Cmsfaq'
+import Cmsfaq from './admin/Cmsfaq';
 import QnAUp from './component/QnAUp';
 import QnAContent from './component/QnAContent';
 import FaqUp from './admin/FaqUp';
@@ -30,6 +30,9 @@ import NoticeContent from './component/NoticeContent';
 import CmsNoticeContent from './admin/CmsNoticeContent';
 import Chart from './component/Chart';
 import CmsFaqEdit from './admin/CmsFaqEdit';
+import QnAanswersUp from './component/QnAanswersUp';
+import AnswerDetail from './component/AnswerDetail';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -39,29 +42,25 @@ function App() {
       setIsLoggedIn(JSON.parse(storedIsLoggedIn));
     }
   }, []);
-  
 
   const handleLogin = (loginStatus) => {
     setIsLoggedIn(loginStatus);
     localStorage.setItem('isLoggedIn', JSON.stringify(loginStatus));
   };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem('isLoggedIn');
     window.location.href = '/main';
   };
-  
 
   return (
     <BrowserRouter>
       <div className="App">
-      
         <Routes>
-        {/* {useIntersectionObserver() && <Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} */}
-
-          <Route path="/" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer/></>} />
-          <Route path="/main" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer/></>} />
-          <Route path="/login" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin}/><Footer /></>} />
+          <Route path="/" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer /></>} />
+          <Route path="/main" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Main /><Footer /></>} />
+          <Route path="/login" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Login onLogin={handleLogin} /><Footer /></>} />
           <Route path="/signup" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Signup /><Footer /></>} />
           <Route path="/Idppl" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Idppl /><Footer /></>} />
           <Route path="/Passwordppl" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Passwordppl /><Footer /></>} />
@@ -74,17 +73,16 @@ function App() {
           <Route path="/contents" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Contents /><Footer /></>} />
           <Route path="/qnacontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
           <Route path="/noticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><NoticeContent  /><Footer /></>} />
-          
-          <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent /><Footer /></>} />
+          <Route path="/qnaanswersup" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAanswersUp /><Footer /></>} />
+          <Route path="/qnaanswersup/:postId" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAanswersUp /><Footer /></>} />
+          <Route path="/qnaposts/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><QnAContent /><Footer /></>} />
+          <Route path="/qnaanswers/:answerId" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><AnswerDetail /><Footer /></>} />
           <Route path="/AddDiagnosis" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><AddDiagnosis /><Footer /></>} />
-          
           <Route path="/Download" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Download /><Footer /></>} />
-          
           <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
           
-         
-           
+          <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
           <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />
@@ -96,12 +94,10 @@ function App() {
 
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
- 
       </div>
     </BrowserRouter>
   );
 }
-
 
 const CmsLayout = () => {
   return (

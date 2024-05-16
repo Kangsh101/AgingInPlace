@@ -7,8 +7,8 @@ const QnAPage = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(3);
-  const [searchType, setSearchType] = useState("title"); 
-  const [searchKeyword, setSearchKeyword] = useState(""); 
+  const [searchType, setSearchType] = useState("title");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     fetch('/api/checklogin')
@@ -65,7 +65,7 @@ const QnAPage = () => {
     })
       .then(res => res.json())
       .then(data => {
-        setPosts(data); 
+        setPosts(data);
       })
       .catch(err => console.error('검색 중 오류 발생:', err));
   };
@@ -105,12 +105,22 @@ const QnAPage = () => {
             </thead>
             <tbody>
               {currentPosts.map((post, index) => (
-                <tr key={post.post_id}>
-                  <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
-                  <td className='skskskssksk'><Link to={`/qnacontent/${post.post_id}`}>{post.title}</Link></td>
-                  <td>{post.user_name}</td>
-                  <td>{post.created_at}</td>
-                </tr>
+                <React.Fragment key={post.post_id}>
+                  <tr>
+                    <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
+                    <td className='skskskssksk'><Link to={`/qnacontent/${post.post_id}`}>{post.title}</Link></td>
+                    <td>{post.user_name}</td>
+                    <td>{post.created_at}</td>
+                  </tr>
+                  {post.answers && post.answers.map((answer, answerIndex) => (
+                    <tr key={`${post.post_id}-${answerIndex}`} className="answer-row">
+                      <td></td>
+                      <td className='skskskssksk'><Link to={`/qnaanswers/${answer.answer_id}`}>ㄴ {answer.title}</Link></td>
+                      <td>{answer.user_name}</td>
+                      <td>{answer.created_at.split('T')[0]}</td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

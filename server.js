@@ -469,7 +469,7 @@ function queryAsync(query, params) {
   });
 }
 
-// QnA 게시판만 검색 API
+// QnA 게시판 검색(답글도) API
 app.get('/api/qnaposts', (req, res) => {
   const query = `
     SELECT bp.*, m.name as user_name 
@@ -486,7 +486,36 @@ app.get('/api/qnaposts', (req, res) => {
       return;
     }
     
-    res.status(200).json(results);
+    // Fetching answers for each post
+    const postIds = results.map(post => post.post_id);
+    if (postIds.length === 0) {
+      return res.status(200).json(results);
+    }
+
+    const answersQuery = `
+      SELECT ba.*, m.name as user_name
+      FROM board_answers ba
+      JOIN members m ON ba.user_id = m.id
+      WHERE ba.post_id IN (?)
+      ORDER BY ba.created_at ASC
+    `;
+
+    connection.query(answersQuery, [postIds], (err, answers) => {
+      if (err) {
+        console.error('답글 조회 중 오류 발생:', err);
+        res.status(500).json({ error: '답글 조회 중 오류 발생' });
+        return;
+      }
+
+      const postsWithAnswers = results.map(post => {
+        return {
+          ...post,
+          answers: answers.filter(answer => answer.post_id === post.post_id)
+        };
+      });
+
+      res.status(200).json(postsWithAnswers);
+    });
   });
 });
 
@@ -672,19 +701,26 @@ app.get('/api/getUserName', (req, res) => {
 app.delete('/api/qnaposts/:id', (req, res) => {
   const postId = req.params.id;
 
-  connection.query('DELETE FROM board_comment WHERE post_id = ?', [postId], (error, results) => {
-    if (error) {
-      console.error('댓글 삭제 실패:', error);
-      return res.status(500).json({ error: '댓글 삭제 실패' });
+  connection.query('DELETE FROM board_answers WHERE post_id = ?', [postId], (answerErr) => {
+    if (answerErr) {
+      console.error('답글 삭제 실패:', answerErr);
+      return res.status(500).json({ error: '답글 삭제 실패' });
     }
-    
-    connection.query('DELETE FROM board_posts WHERE post_id = ?', [postId], (error, results) => {
-      if (error) {
-        console.error('게시물 삭제 실패:', error);
-        return res.status(500).json({ error: '게시물 삭제 실패' });
+
+    connection.query('DELETE FROM board_comment WHERE post_id = ?', [postId], (commentErr) => {
+      if (commentErr) {
+        console.error('댓글 삭제 실패:', commentErr);
+        return res.status(500).json({ error: '댓글 삭제 실패' });
       }
 
-      res.status(200).json({ success: true, message: '게시물 삭제 성공' });
+      connection.query('DELETE FROM board_posts WHERE post_id = ?', [postId], (postErr) => {
+        if (postErr) {
+          console.error('게시글 삭제 실패:', postErr);
+          return res.status(500).json({ error: '게시글 삭제 실패' });
+        }
+
+        res.status(200).json({ success: true, message: '게시글 삭제 성공' });
+      });
     });
   });
 });
@@ -706,7 +742,99 @@ app.put('/api/qnaposts/:postId', (req, res) => {
   });
 });
 
+//답글 등록
+app.post('/api/qna/answers', (req, res) => {
+  const { postId, content, title } = req.body; // 여기에서 postId를 정확히 받고 있는지 확인
+  const userId = req.session.userId;
 
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'INSERT INTO board_answers (title, post_id, user_id, content) VALUES (?, ?, ?, ?)';
+  connection.query(query, [title,postId, userId, content], (err, result) => {
+    if (err) {
+      console.error('답글 등록 실패:', err);
+      res.status(500).json({ error: '답글 등록 실패' });
+    } else {
+      res.status(200).json({ success: true, answerId: result.insertId });
+    }
+  });
+});
+
+// 답글 수정
+app.put('/api/qna/answers/:answerId', (req, res) => {
+  const { answerId } = req.params;
+  const { title, content } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'UPDATE board_answers SET title = ?, content = ? WHERE answer_id = ? AND user_id = ?';
+  connection.query(query, [title, content, answerId, userId], (err, result) => {
+    if (err) {
+      console.error('답글 수정 실패:', err);
+      return res.status(500).json({ error: '답글 수정 실패' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(403).json({ error: '수정 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ success: true, message: '답글 수정 성공' });
+  });
+});
+
+
+// 답글 삭제
+app.delete('/api/qna/answers/:answerId', (req, res) => {
+  const { answerId } = req.params;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  const query = 'DELETE FROM board_answers WHERE answer_id = ? AND user_id = ?';
+  connection.query(query, [answerId, userId], (err, result) => {
+    if (err) {
+      console.error('답글 삭제 실패:', err);
+      return res.status(500).json({ error: '답글 삭제 실패' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(403).json({ error: '삭제 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ success: true, message: '답글 삭제 성공' });
+  });
+});
+
+app.get('/api/qna/answers/:answerId', (req, res) => {
+  const { answerId } = req.params;
+
+  const query = `
+    SELECT ba.*, m.name as user_name 
+    FROM board_answers ba
+    JOIN members m ON ba.user_id = m.id
+    WHERE ba.answer_id = ?
+  `;
+
+  connection.query(query, [answerId], (err, result) => {
+    if (err) {
+      console.error('답글 조회 실패:', err);
+      return res.status(500).json({ error: '답글 조회 실패' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: '답글을 찾을 수 없습니다.' });
+    }
+
+    res.status(200).json(result[0]);
+  });
+});
 
 //공지사항 검색 
 app.post('/api/notice/search', (req, res) => {

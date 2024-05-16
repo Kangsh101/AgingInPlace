@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams , useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../css/Page2.css';
@@ -7,14 +7,17 @@ import '../css/qnacontent.css';
 
 const QnAContent = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const quillRef = useRef(null);
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
+  const [editingAnswer, setEditingAnswer] = useState(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -76,6 +79,7 @@ const QnAContent = () => {
       .then(res => res.json())
       .then(data => {
         setPost(data);
+        setAnswers(data.answers || []);
       })
       .catch(err => console.error('게시글 가져오기 실패:', err));
 
@@ -186,6 +190,47 @@ const QnAContent = () => {
       .catch(err => console.error('댓글 삭제 실패:', err));
   };
 
+  const handleEditAnswer = (index) => {
+    setEditingAnswer(index);
+  };
+
+  const handleSaveAnswerEdit = (index) => {
+    const answer = answers[index];
+    fetch(`/api/qna/answers/${answer.answer_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: answer.content }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setEditingAnswer(null);
+          setAnswers(answers.map((a, i) => i === index ? { ...a, content: answer.content } : a));
+        } else {
+          alert('답글 수정에 실패했습니다.');
+        }
+      })
+      .catch(err => console.error('답글 수정 실패:', err));
+  };
+
+  const handleDeleteAnswer = (index) => {
+    const answer = answers[index];
+    fetch(`/api/qna/answers/${answer.answer_id}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setAnswers(answers.filter((_, i) => i !== index));
+        } else {
+          alert('답글 삭제에 실패했습니다.');
+        }
+      })
+      .catch(err => console.error('답글 삭제 실패:', err));
+  };
+
   const getTextFromHtml = (htmlString) => {
     const div = document.createElement("div");
     div.innerHTML = htmlString;
@@ -242,6 +287,14 @@ const QnAContent = () => {
       }
     })
     .catch(err => console.error('게시글 삭제 실패:', err));
+  };
+
+  const handleReply = () => {
+    navigate(`/qnaanswersup/${id}`);
+  };
+
+  const handleAnswerClick = (answerId) => {
+    navigate(`/qnaanswers/${answerId}`);
   };
 
   return (
@@ -318,6 +371,44 @@ const QnAContent = () => {
                       <hr className="qna-comment-line" />
                     </React.Fragment>
                   ))}
+                  {answers.length > 0 && (
+                    <div className="qna-answers">
+                      <h3>답글</h3>
+                      {answers.map((answer, index) => (
+                        <div key={index} className="qna-answer" onClick={() => handleAnswerClick(answer.answer_id)}>
+                          {editingAnswer === index ? (
+                            <div>
+                              <input
+                                type="text"
+                                value={answer.content}
+                                onChange={(e) => {
+                                  const newAnswers = [...answers];
+                                  newAnswers[index].content = e.target.value;
+                                  setAnswers(newAnswers);
+                                }}
+                              />
+                              <div className="qna-answer-actions">
+                                <button className='button primary' onClick={() => handleSaveAnswerEdit(index)}>수정</button>
+                                <button className='button' onClick={() => setEditingAnswer(null)}>취소</button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <span className="qna-answer-user">{answer.user_name}</span>
+                              <span className="qna-answer-content">{answer.content}</span>
+                              <span className="qna-answer-date">{formatDateTime(answer.created_at)}</span>
+                              {loggedInUserName === answer.user_name && (
+                                <div className="qna-answer-actions">
+                                  <button className="button primary" onClick={() => handleEditAnswer(index)}>수정</button>
+                                  <button className="button" onClick={() => handleDeleteAnswer(index)}>삭제</button>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   <div id='QnA-CommentInputs' className='QnA-commentInput'>
                     <input
                       className='QnA-Input'
@@ -347,6 +438,7 @@ const QnAContent = () => {
               <button className='button primary' onClick={handleDeletePost}>글 삭제</button>
             </>
           )}
+          <button className='button primary' onClick={handleReply}>답글</button>
         </div>
       </div>
     </div>
