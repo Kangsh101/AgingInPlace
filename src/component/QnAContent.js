@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
+import 'react-quill/dist/quill.snow.css';
 import '../css/Page2.css';
 import '../css/qnacontent.css';
 
 const QnAContent = () => {
-  const { id } = useParams(); 
-  const quillRef = useRef(null); 
+  const { id } = useParams();
+  const quillRef = useRef(null);
   const [post, setPost] = useState(null);
-  const [newComment, setNewComment] = useState({
-    user_name: "", 
-    content: "", 
-    created_at: "" 
-  });
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [replyComments, setReplyComments] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedInUserName, setLoggedInUserName] = useState(null); 
+  const [loggedInUserName, setLoggedInUserName] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [replyIndex, setReplyIndex] = useState(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -72,28 +71,16 @@ const QnAContent = () => {
       }
     },
   }), [imageHandler]);
-  
-  const getUserName = () => {
-    fetch(`/api/getUserName/${localStorage.getItem('userId')}`)
-      .then(res => res.json())
-      .then(data => {
-        setNewComment(prevComment => ({
-          ...prevComment,
-          user_name: data.name
-        }));
-      })
-      .catch(err => console.error('사용자 이름 가져오기 실패:', err));
-  };
 
   useEffect(() => {
     fetch(`/api/qnaposts/${id}`)
       .then(res => res.json())
       .then(data => {
-        setPost(data); 
+        setPost(data);
+        setComments(data.comments || []);
       })
       .catch(err => console.error('게시글 가져오기 실패:', err));
-    
-    getUserName();
+
     fetch('/api/checklogin')
       .then(res => res.json())
       .then(data => {
@@ -108,7 +95,7 @@ const QnAContent = () => {
         }
       })
       .catch(err => console.error('로그인 상태 확인 실패:', err));
-  }, [id]); 
+  }, [id]);
 
   const handleCommentSubmit = () => {
     if (!isLoggedIn) {
@@ -117,21 +104,42 @@ const QnAContent = () => {
     }
 
     const newCommentData = {
-      user_name: newComment.user_name,
-      content: newComment.content,
-      created_at: new Date().toLocaleString()
+      user_name: loggedInUserName,
+      content: newComment,
+      created_at: new Date().toLocaleString(),
+      parent_index: null
     };
 
-    setPost(prevPost => ({
-      ...prevPost,
-      comments: [...(prevPost.comments || []), newCommentData],
-    }));
+    setComments([...comments, newCommentData]);
+    setNewComment('');
+  };
 
-    setNewComment({
-      user_name: "",
-      content: "",
-      created_at: ""
+  const handleReplySubmit = (index) => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    const newReplyData = {
+      user_name: loggedInUserName,
+      content: replyComments[index],
+      created_at: new Date().toLocaleString(),
+      parent_index: index
+    };
+
+    const newComments = comments.map((comment, i) => {
+      if (i === index) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), newReplyData]
+        };
+      }
+      return comment;
     });
+
+    setComments(newComments);
+    setReplyComments({ ...replyComments, [index]: '' });
+    setReplyIndex(null);
   };
 
   const getTextFromHtml = (htmlString) => {
@@ -234,28 +242,53 @@ const QnAContent = () => {
                 )}
               </div>
               <hr className="qna-title-line" />
-              <div className='QnA-comments'>
-                <span>댓글</span>
-              </div>
-              <hr className="qna-title-line" />
-              <div className='QnA-comments2'>
-                <p>댓글 단 유저 </p>
-                <span>댓글 내용 </span>
-              </div>
-              <hr className="qna-title-line" />
-              <div className='QnA-commentInput'>
-                <input
-                  className='QnA-Input'
-                  type="text"
-                  placeholder="댓글 입력"
-                  value={newComment.content}
-                  onChange={(e) =>
-                    setNewComment({ ...newComment, content: e.target.value })
-                  }
-                />
-                <button className='QnA-Btt3' onClick={handleCommentSubmit}>
-                  댓글 등록
-                </button>
+              <div className="qna-comment-section">
+                {comments.map((comment, index) => (
+                  <React.Fragment key={index}>
+                    <div className="qna-comment">
+                      <span className="qna-comment-user">{comment.user_name}</span>
+                      <span className="qna-comment-content">{comment.content}</span>
+                      <span className="qna-comment-date">{comment.created_at}</span>
+                      <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                      {replyIndex === index && (
+                        <div className="qna-reply-input">
+                          <input
+                            type="text"
+                            placeholder="답글을 입력하세요."
+                            value={replyComments[index] || ''}
+                            onChange={(e) =>
+                              setReplyComments({ ...replyComments, [index]: e.target.value })
+                            }
+                          />
+                          <button className='button primary' onClick={() => handleReplySubmit(index)}>답글 등록</button>
+                        </div>
+                      )}
+                      <div className="qna-replies">
+                        {comment.replies && comment.replies.map((reply, replyIndex) => (
+                          <div key={replyIndex} className="qna-reply">
+                            <span className="qna-comment-user">{reply.user_name}</span>
+                            <span className="qna-comment-content">{reply.content}</span>
+                            <span className="qna-comment-date">{reply.created_at}</span>
+                            <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <hr className="qna-comment-line" />
+                  </React.Fragment>
+                ))}
+                <div className='QnA-commentInput'>
+                  <input
+                    className='QnA-Input'
+                    type="text"
+                    placeholder="댓글을 입력하세요."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  />
+                  <button className='button primary' onClick={handleCommentSubmit}>
+                    댓글 등록
+                  </button>
+                </div>
               </div>
             </>
           )}
