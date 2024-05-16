@@ -16,6 +16,8 @@ const QnAContent = () => {
   const [loggedInUserName, setLoggedInUserName] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [replyIndex, setReplyIndex] = useState(null);
+  const [editingComment, setEditingComment] = useState(null);
+  const [editingReply, setEditingReply] = useState(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -142,6 +144,40 @@ const QnAContent = () => {
     setReplyIndex(null);
   };
 
+  const handleEditComment = (index) => {
+    setEditingComment(index);
+  };
+
+  const handleSaveCommentEdit = (index) => {
+    setEditingComment(null);
+  };
+
+  const handleEditReply = (commentIndex, replyIndex) => {
+    setEditingReply({ commentIndex, replyIndex });
+  };
+
+  const handleSaveReplyEdit = (commentIndex, replyIndex) => {
+    setEditingReply(null);
+  };
+
+  const handleDeleteComment = (index) => {
+    setComments(comments.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteReply = (commentIndex, replyIndex) => {
+    const updatedComments = comments.map((comment, i) => {
+      if (i === commentIndex) {
+        return {
+          ...comment,
+          replies: comment.replies.filter((_, j) => j !== replyIndex)
+        };
+      }
+      return comment;
+    });
+
+    setComments(updatedComments);
+  };
+
   const getTextFromHtml = (htmlString) => {
     const div = document.createElement("div");
     div.innerHTML = htmlString;
@@ -228,7 +264,7 @@ const QnAContent = () => {
                 <span>작성자 : </span> {post.user_name}
                 <span>등록일 : </span> {post.created_at}
               </div>
-              <div className='QnAup-content'>
+              <div id='qnacontent-content' className='QnAup-content'>
                 {isEditing ? (
                   <ReactQuill
                     ref={quillRef}
@@ -246,10 +282,30 @@ const QnAContent = () => {
                 {comments.map((comment, index) => (
                   <React.Fragment key={index}>
                     <div className="qna-comment">
-                      <span className="qna-comment-user">{comment.user_name}</span>
-                      <span className="qna-comment-content">{comment.content}</span>
-                      <span className="qna-comment-date">{comment.created_at}</span>
-                      <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                      {editingComment === index ? (
+                        <div>
+                          <input
+                            type="text"
+                            value={comment.content}
+                            onChange={(e) => {
+                              const newComments = [...comments];
+                              newComments[index].content = e.target.value;
+                              setComments(newComments);
+                            }}
+                          />
+                          <button className='button primary' onClick={() => handleSaveCommentEdit(index)}>수정</button>
+                          <button className='button' onClick={() => setEditingComment(null)}>취소</button>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="qna-comment-user">{comment.user_name}</span>
+                          <span className="qna-comment-content">{comment.content}</span>
+                          <span className="qna-comment-date">{comment.created_at}</span>
+                          <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                          <span className="qna-edit-button" onClick={() => handleEditComment(index)}>수정</span>
+                          <span className="qna-delete-button" onClick={() => handleDeleteComment(index)}>삭제</span>
+                        </>
+                      )}
                       {replyIndex === index && (
                         <div className="qna-reply-input">
                           <input
@@ -266,10 +322,30 @@ const QnAContent = () => {
                       <div className="qna-replies">
                         {comment.replies && comment.replies.map((reply, replyIndex) => (
                           <div key={replyIndex} className="qna-reply">
-                            <span className="qna-comment-user">{reply.user_name}</span>
-                            <span className="qna-comment-content">{reply.content}</span>
-                            <span className="qna-comment-date">{reply.created_at}</span>
-                            <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                            {editingReply && editingReply.commentIndex === index && editingReply.replyIndex === replyIndex ? (
+                              <div>
+                                <input
+                                  type="text"
+                                  value={reply.content}
+                                  onChange={(e) => {
+                                    const newComments = [...comments];
+                                    newComments[index].replies[replyIndex].content = e.target.value;
+                                    setComments(newComments);
+                                  }}
+                                />
+                                <button className='button primary' onClick={() => handleSaveReplyEdit(index, replyIndex)}>수정</button>
+                                <button className='button' onClick={() => setEditingReply(null)}>취소</button>
+                              </div>
+                            ) : (
+                              <>
+                                <span className="qna-comment-user">{reply.user_name}</span>
+                                <span className="qna-comment-content">{reply.content}</span>
+                                <span className="qna-comment-date">{reply.created_at}</span>
+                                <span className="qna-reply-button" onClick={() => setReplyIndex(index)}>답글쓰기</span>
+                                <span className="qna-edit-button" onClick={() => handleEditReply(index, replyIndex)}>수정</span>
+                                <span className="qna-delete-button" onClick={() => handleDeleteReply(index, replyIndex)}>삭제</span>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -277,7 +353,7 @@ const QnAContent = () => {
                     <hr className="qna-comment-line" />
                   </React.Fragment>
                 ))}
-                <div className='QnA-commentInput'>
+                <div id='QnA-CommentInputs' className='QnA-commentInput'>
                   <input
                     className='QnA-Input'
                     type="text"
@@ -285,7 +361,7 @@ const QnAContent = () => {
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                   />
-                  <button className='button primary' onClick={handleCommentSubmit}>
+                  <button id='QnA-CommentButton' className='button primary' onClick={handleCommentSubmit}>
                     댓글 등록
                   </button>
                 </div>
