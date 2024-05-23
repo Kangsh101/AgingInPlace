@@ -25,5 +25,5 @@ yarn-error.log*
 #db.js
 /src/db.js
 
-#images
-/src/uploads
+# #images
+# /src/uploads

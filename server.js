@@ -71,7 +71,15 @@ app.use(express.static(path.join(__dirname, 'build')));
     console.log('DB 연결 성공');
   });
 
-
+  app.post('/api/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: '파일이 업로드되지 않았습니다.' });
+    }
+  
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.status(200).json({ imageUrl });
+  });
+  
 //회원가입
 // app.post('/api/signup', (req, res) => {
 //   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId  } = req.body;
@@ -292,7 +300,20 @@ app.get('/api/cmsusers', (req, res) => {
     }
   );
 });
-
+// 진단명 추가 환자만 가져오는 api
+app.get('/api/cmsusersAdd', (req, res) => {
+  connection.query(
+    "SELECT id, name, gender, role FROM members WHERE role = '환자'",
+    (err, rows, fields) => {
+      if (err) {
+        console.error('사용자 정보 조회 실패: ' + err.stack);
+        res.status(500).send('사용자 정보 조회 실패');
+        return;
+      }
+      res.json(rows);
+    }
+  );
+});
 
 // 비밀번호 변경
 app.post('/api/changepassword', (req, res) => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
-
+import CmsSidebar from './CmsSidebar';
 const Cmsuser = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -84,8 +84,7 @@ const Cmsuser = () => {
   };
   return (
     <div className="cms-container">
-      <div className="cms-sidebar">
-        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
+      {/* <div className="cms-sidebar">
         <h2 className='Cms-Aginginplace'>Aging in Place</h2>
         <h2>관리자 </h2>
         <ul>
@@ -93,7 +92,8 @@ const Cmsuser = () => {
           <li className="cms-item"><Link to="/Cms">게시판 관리</Link></li>
           <li className={`cms-item2 ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}><Link to="/Cmsuser">사용자 관리</Link></li>
         </ul>
-      </div>
+      </div> */}
+      <CmsSidebar/>
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'> 

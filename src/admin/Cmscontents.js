@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmscontents.css';
+import CmsSidebar from './CmsSidebar';
 
 const Cmscontents = () => {
   const [posts, setPosts] = useState([
@@ -19,26 +20,10 @@ const Cmscontents = () => {
     setSelectedPostIndex(index);
   };
 
-  const location = useLocation(); 
 
   return (
     <div className="cms-container">
-      <div className="cms-sidebar">
-        {/* <img src="/images/logo192.png" alt="Your Logo" /> */}
-        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
-        <h2>관리자 </h2>
-        <ul>
-          <li className={`cms-item2 ${location.pathname === "/Cmscontents" ? "cms-active" : ""}`}>
-            <Link to="/Cmscontents">프로그램 컨텐츠</Link>
-          </li>
-          <li className={`cms-item ${location.pathname === "/Cms" ? "cms-active" : ""}`}>
-            <Link to="/Cms">게시판 관리</Link>
-          </li>
-          <li className={`cms-item ${location.pathname === "/Cmsuser" ? "cms-active" : ""}`}>
-            <Link to="/Cmsuser">사용자 관리</Link>
-          </li>
-        </ul>
-      </div>
+      <CmsSidebar/>
       <div className="cms-main-content">
         <div className="Cmss-header">
           <h2>프로그램 콘텐츠 관리</h2>

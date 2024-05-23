@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
+import CmsSidebar from './CmsSidebar';
 
 const Cmsfaq = () => {
   const [posts, setPosts] = useState([]);
@@ -61,18 +62,10 @@ const Cmsfaq = () => {
 
   return (
     <div className="cms-container">
-      <div className="cms-sidebar">
-        <h2 className='Cms-Aginginplace'>Aging in Place</h2>
-        <h2>관리자</h2>
-        <ul>
-          <li className="cms-item"><Link to="/Cmscontents">프로그램 컨텐츠</Link></li>
-          <li className={`cms-item2 ${location.pathname === "/Cms" ? "cms-active" : ""}`}><Link to="/Cms">게시판 관리</Link></li>
-          <li className="cms-item"><Link to="/Cmsuser">사용자 관리</Link></li>
-        </ul>
-      </div>
+      <CmsSidebar/>
       <div className="cms-main-content">
         <header className='major' id='major-rest'> 
-          <h2 className='aaaaaa'>FAQ</h2>
+          <h2>FAQ</h2>
         </header>
         <div className="Cmss-header">
           <div className='Cmss-chch'>

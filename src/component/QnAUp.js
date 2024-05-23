@@ -38,14 +38,13 @@ const QnAUp = () => {
             method: 'POST',
             body: formData,
           });
-          const data = await response.json();
-  
-          if (response.ok) {
-            const range = quillRef.current.getEditor().getSelection(true);
-            quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
-          } else {
+          if (!response.ok) {
             throw new Error('서버에서 이미지를 처리할 수 없습니다.');
           }
+  
+          const data = await response.json();
+          const range = quillRef.current.getEditor().getSelection(true);
+          quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
         } catch (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         }

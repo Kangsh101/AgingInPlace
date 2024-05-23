@@ -32,7 +32,7 @@ import Chart from './component/Chart';
 import CmsFaqEdit from './admin/CmsFaqEdit';
 import QnAanswersUp from './component/QnAanswersUp';
 import AnswerDetail from './component/AnswerDetail';
-
+import CmsAdddiagnosis from './admin/CmsAdddiagnosis';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -91,7 +91,9 @@ function App() {
           <Route path="/cmsfaq" element={<Cmsfaq />} />
           <Route path="/noticeupdate" element={<NoticeUpdate />} />
           <Route path="/Cmscontents" element={<Cmscontents />} />
-
+          <Route path="/Cmscontents" element={<Cmscontents />} />
+          <Route path="/cmsadddiagnosis" element={<CmsAdddiagnosis />} />
+          
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
       </div>
