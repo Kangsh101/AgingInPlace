@@ -188,7 +188,7 @@ app.post('/api/android/login', (req, res) => {
 });
 
 //안드로이드 회원가입
-app.post('/api/signup', (req, res) => {
+app.post('/api/android/signup', (req, res) => {
   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
   const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
