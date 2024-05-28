@@ -1,0 +1,34 @@
+.Cms-AddPatientCriteria{
+    display: flex;
+}
+.criteria-container {
+    padding: 20px;
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .cms-AddPatient-content{
+    margin-left: 15em;
+    padding: 50px;
+  }
+
+  .criteria-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .criteria-item label {
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  
+  .criteria-item input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+  }
+  

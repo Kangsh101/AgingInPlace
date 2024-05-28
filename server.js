@@ -302,18 +302,53 @@ app.get('/api/cmsusers', (req, res) => {
 });
 // 진단명 추가 환자만 가져오는 api
 app.get('/api/cmsusersAdd', (req, res) => {
+  const query = `
+    SELECT p.id, p.name AS patientName, p.gender, p.role, g.name AS guardianName
+    FROM members p
+    LEFT JOIN members g ON p.guardianId = g.id
+    WHERE p.role = '환자'
+  `;
+  connection.query(query, (err, rows, fields) => {
+    if (err) {
+      console.error('사용자 정보 조회 실패: ' + err.stack);
+      res.status(500).send('사용자 정보 조회 실패');
+      return;
+    }
+    res.json(rows);
+  });
+});
+// CMS 수면/운동량 유저정보 가져오기 API
+app.get('/api/PatientCriteriaAdd', (req, res) => {
+  const query = `
+    SELECT id, name, birthdate, gender, role FROM members WHERE role = '환자'
+  `;
+  connection.query(query, (err, rows, fields) => {
+    if (err) {
+      console.error('사용자 정보 조회 실패: ' + err.stack);
+      res.status(500).send('사용자 정보 조회 실패');
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+// 진단명 추가 부분 상세페이지 api
+app.get('/api/patient/:id', (req, res) => {
+  const { id } = req.params;
   connection.query(
-    "SELECT id, name, gender, role FROM members WHERE role = '환자'",
+    `SELECT * FROM members WHERE id = ?`, [id],
     (err, rows, fields) => {
       if (err) {
-        console.error('사용자 정보 조회 실패: ' + err.stack);
-        res.status(500).send('사용자 정보 조회 실패');
+        console.error('환자 정보 조회 실패: ' + err.stack);
+        res.status(500).send('환자 정보 조회 실패');
         return;
       }
-      res.json(rows);
+      res.json(rows[0]);
     }
   );
 });
+
+
 
 // 비밀번호 변경
 app.post('/api/changepassword', (req, res) => {

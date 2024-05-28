@@ -8,8 +8,8 @@ const CmsSidebar = () => {
       { path: "/Cms", label: "게시판 관리", basePaths: ["/Cms", "/Cmsfaq"] },
       { path: "/Cmscontents", label: "프로그램 컨텐츠", basePaths: ["/Cmscontents"] },
       { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"] },
-      { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis"] },
-      { path: "/Cmsuser", label: "환자 수면 / 운동량 추가", basePaths: ["/Cmsuser"] }
+      { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis","/PatientDetail"] },
+      { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria"] }
     ];
   
     const isActive = (basePaths) => {

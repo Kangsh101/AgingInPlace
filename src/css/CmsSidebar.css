@@ -1,9 +1,13 @@
 .cms-sidebar {
+    display: block;
     width: 300px; 
     background-color: rgba(255, 255, 255, 0.075); 
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   }
+  #navPanel {
+    display: none;
+}
   .Cms-Aginginplace{
     border-bottom: 2px solid #e44c65;
     padding-bottom: 10%;
@@ -62,3 +66,66 @@
     border-bottom-left-radius: 5px;
   }
   
+  @media screen and (max-width: 736px) {
+    body.navPanel-visible #navPanel {
+        transform: translateX(0);
+    }
+    #navPanel {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        background: #181920;
+        display: block;
+        height: 100%;
+        left: 0;
+        overflow-y: auto;
+        padding: .75em 1.25em;
+        position: fixed;
+        top: 0;
+        transform: translateX(-275px);
+        transition: transform .5s ease;
+        width: 275px;
+        z-index: 10002;
+    }
+    #titleBar .title {
+        color: #fff;
+        display: block;
+        font-weight: 300;
+        height: 44px;
+        line-height: 44px;
+        text-align: center;
+    }
+    #titleBar .toggle:before {
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: normal;
+        background: #e44c65;
+        color: #ffffff80;
+        content: "\f0c9";
+        display: inline-block;
+        display: block;
+        font-family: 'Font Awesome 5 Free';
+        font-size: 18px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 900;
+        height: 44px;
+        left: 0;
+        line-height: 1;
+        line-height: 44px;
+        position: absolute;
+        text-align: center;
+        text-rendering: auto;
+        text-transform: none !important;
+        top: 0;
+        width: 54px;
+    }
+}
+@media screen and (max-width: 768px) {
+  .cms-sidebar {
+      display: none;
+  }
+
+  #navPanel {
+      display: block;
+  }
+}

@@ -1,0 +1,59 @@
+#PatientDetail-container{
+    display: flex;
+}
+.cmsadd-main-content{
+    padding: 50px;
+    margin-left: 15em;
+}
+.X-Button{
+    padding: 7px;
+    background: white;
+    border: 1px solid #c1c1c1;
+}
+#dosage{
+    width: 8em;
+    margin-right: 5px;
+}
+#frequency{
+    width: 10.38em;
+    margin-right: 5px;
+}
+
+#CmsAdd-container{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+#diagnosis{
+    width: 21em;
+    margin-right: 5px;
+}
+#medication{
+    width: 21em;
+}
+#PatientDetail-Btt{
+    width: 9em;
+}
+.Cms-diagnosis-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+.Cms-medication-container{
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+.saveBtt{
+    align-items: center;
+    display: flex;
+}
+#saveBtt{
+    width: 10em;
+    padding: 1.6em;
+    text-align: center;
+    line-height: 0em;
+    max-width: 70%;
+    line-height: 0em;
+}

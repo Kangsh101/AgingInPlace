@@ -33,6 +33,12 @@ import CmsFaqEdit from './admin/CmsFaqEdit';
 import QnAanswersUp from './component/QnAanswersUp';
 import AnswerDetail from './component/AnswerDetail';
 import CmsAdddiagnosis from './admin/CmsAdddiagnosis';
+import PatientDetail from './admin/PatientDetail';
+import AddPatientCriteria from'./admin/AddPatientCriteria';
+import PatientCriteria from './admin/PatientCriteria';
+import CmsSidebar from './admin/CmsSidebar';
+import CmsNavipanel from './admin/CmsNavipanel';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -83,17 +89,21 @@ function App() {
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
           
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
+          
           <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />
-          <Route path="/cms" element={<Cms />} />
-          <Route path="/cmsuser" element={<Cmsuser />} />
-          <Route path="/cmsfaq" element={<Cmsfaq />} />
-          <Route path="/noticeupdate" element={<NoticeUpdate />} />
-          <Route path="/Cmscontents" element={<Cmscontents />} />
-          <Route path="/Cmscontents" element={<Cmscontents />} />
-          <Route path="/cmsadddiagnosis" element={<CmsAdddiagnosis />} />
-          
+          <Route path="/cms" element={<><CmsNavipanel/><Cms /></>} />
+          <Route path="/cmsuser" element={<><CmsNavipanel/><Cmsuser /></>} />
+          <Route path="/cmsfaq" element={<><CmsNavipanel/><Cmsfaq /></>} />
+          <Route path="/noticeupdate" element={<><CmsNavipanel/><NoticeUpdate /></>} />
+          <Route path="/Cmscontents" element={<><CmsNavipanel/><Cmscontents /></>} />
+          <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis /></>} />
+          <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria /></>} />
+          <Route path="/addpatientcriteria/:id" element={<AddPatientCriteria />} />
+
+
+          <Route path="/patient/:id" element={<PatientDetail/>} />
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
       </div>

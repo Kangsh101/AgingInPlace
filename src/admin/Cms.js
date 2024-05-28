@@ -1,23 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
+
 const Cms = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(3);
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
-  const [searchType, setSearchType] = useState("title"); 
-  const [searchKeyword, setSearchKeyword] = useState(""); 
+  const [searchType, setSearchType] = useState("title");
+  const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
+  // 페이지네이션 함수
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
+  // 게시글 클릭 핸들러
   const handleClick = (index) => {
     setSelectedPostIndex(index);
   };
 
+  // 게시글 삭제 핸들러
   const handleDelete = (id, index) => {
     fetch(`/api/notices/${id}`, {
       method: 'DELETE'
@@ -32,21 +37,23 @@ const Cms = () => {
     .catch(error => console.error('게시글을 삭제하는 중 에러 발생:', error));
   };
 
+  // 날짜 포맷 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(); 
+    return date.toLocaleDateString();
   };
 
-  const location = useLocation();
-
+  // 검색어 변경 핸들러
   const handleSearchKeywordChange = (e) => {
     setSearchKeyword(e.target.value);
   };
 
+  // 검색 유형 변경 핸들러
   const handleSearchTypeChange = (e) => {
     setSearchType(e.target.value);
   };
 
+  // 검색 핸들러
   const handleSearch = () => {
     fetch(`/api/notice/search`, {
       method: 'POST',
@@ -67,49 +74,15 @@ const Cms = () => {
       .catch(err => console.error('검색 중 오류 발생:', err));
   };
 
-  // useEffect(() => {
-  //   fetch('/api/checkRole', {
-  //     method: 'GET',
-  //     credentials: 'include'
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     if (data.role !== 'admin') {
-  //       setIsAdmin(false);
-  //       navigate('/main');
-  //     } else {
-  //       setIsAdmin(true);
-  //       fetch('/api/notices')
-  //         .then(response => response.json())
-  //         .then(data => {
-  //           const postsWithNumbers = data.reverse().map((post, index) => ({
-  //             ...post,
-  //             number: index + 1,
-  //             created_at: formatDate(post.created_at)
-  //           }));
-  //           setPosts(postsWithNumbers);
-  //         })
-  //         .catch(error => console.error('데이터를 불러오는 중 에러 발생:', error));
-  //     }
-  //   })
-  //   .catch(error => console.error('권한 확인 실패:', error));
-  // }, [navigate]);
-
-  // if (!isAdmin) {
-  //   return (
-  //     <div>
-  //       <h1>권한이 없습니다.</h1>
-  //     </div>
-  //   );
-  // }
-
+  // 게시글 페이징
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div className="cms-container">
-      < CmsSidebar/>
+      <CmsSidebar />
+      <CmsNavipanel />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>공지사항</h2>
