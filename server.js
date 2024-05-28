@@ -187,6 +187,34 @@ app.post('/api/android/login', (req, res) => {
   });
 });
 
+//안드로이드 회원가입
+app.post('/api/signup', (req, res) => {
+  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
+
+  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
+
+  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+    if (err) {
+      console.error('회원가입 실패: ' + err.stack);
+      res.status(500).send('회원가입 실패');
+      return;
+    }
+    const guardianId = result.insertId;
+
+    // 환자 레코드에 보호자 ID 추가
+    const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+    connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error('보호자 ID 업데이트 실패:', updateErr);
+        res.status (500).send('보호자 정보 업데이트 실패');
+        return;
+      }
+      console.log('보호자 정보 업데이트 성공');
+      res.status(200).send('회원가입 성공');
+    });
+  });
+});
+
 // 안드로이드 사용자 정보 가져오기
 app.get('/api/android/userinfo', (req, res) => {
   // 쿠키에서 사용자 ID를 추출합니다.
