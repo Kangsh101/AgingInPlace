@@ -199,19 +199,19 @@ app.post('/api/android/signup', (req, res) => {
       res.status(500).send('회원가입 실패');
       return;
     }
-    const guardianId = result.insertId;
+    // const guardianId = result.insertId;
 
     // 환자 레코드에 보호자 ID 추가
-    const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
-    connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
-      if (updateErr) {
-        console.error('보호자 ID 업데이트 실패:', updateErr);
-        res.status (500).send('보호자 정보 업데이트 실패');
-        return;
-      }
-      console.log('보호자 정보 업데이트 성공');
-      res.status(200).send('회원가입 성공');
-    });
+    // const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+    // connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+    //   if (updateErr) {
+    //     console.error('보호자 ID 업데이트 실패:', updateErr);
+    //     res.status (500).send('보호자 정보 업데이트 실패');
+    //     return;
+    //   }
+    //   console.log('보호자 정보 업데이트 성공');
+    //   res.status(200).send('회원가입 성공');
+    // });
   });
 });
 
