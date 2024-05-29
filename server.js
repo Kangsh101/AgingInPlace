@@ -212,6 +212,8 @@ app.post('/api/android/signup', (req, res) => {
     //   console.log('보호자 정보 업데이트 성공');
     //   res.status(200).send('회원가입 성공');
     // });
+    console.log('회원가입 성공');
+    res.status(200).send('회원가입 성공');
   });
 });
 
