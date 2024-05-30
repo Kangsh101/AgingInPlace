@@ -202,7 +202,7 @@ app.post('/api/android/signup', (req, res) => {
     
     // 회원가입이 성공적으로 완료되었음을 클라이언트에게 알림
     console.log('회원가입 성공');
-    res.status(200).send('회원가입 성공');
+     res.status(200).json({ message: '회원가입 성공' });
   });
 });
 
