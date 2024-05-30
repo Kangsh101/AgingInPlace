@@ -38,6 +38,7 @@ import AddPatientCriteria from'./admin/AddPatientCriteria';
 import PatientCriteria from './admin/PatientCriteria';
 import CmsSidebar from './admin/CmsSidebar';
 import CmsNavipanel from './admin/CmsNavipanel';
+import PatientData from './component/PatientData';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -87,7 +88,7 @@ function App() {
           <Route path="/Download" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Download /><Footer /></>} />
           <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
-          
+          <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
           
           <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
