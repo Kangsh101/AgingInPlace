@@ -187,6 +187,25 @@ app.post('/api/android/login', (req, res) => {
   });
 });
 
+//안드로이드 회원가입
+app.post('/api/android/signup', (req, res) => {
+  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
+
+  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
+
+  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+    if (err) {
+      console.error('회원가입 실패: ' + err.stack);
+      res.status(500).send('회원가입 실패');
+      return;
+    }
+    
+    // 회원가입이 성공적으로 완료되었음을 클라이언트에게 알림
+    console.log('회원가입 성공');
+     res.status(200).json({ message: '회원가입 성공' });
+  });
+});
+
 // 안드로이드 사용자 정보 가져오기
 app.get('/api/android/userinfo', (req, res) => {
   // 쿠키에서 사용자 ID를 추출합니다.
