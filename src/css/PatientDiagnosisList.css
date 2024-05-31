@@ -1,0 +1,8 @@
+.DiagnosisList-content{
+    margin-top: 30px;
+    margin-left: auto;
+    /* margin-right: auto; */
+    width: 70%;
+    display: block; 
+    cursor: pointer;
+}

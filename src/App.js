@@ -39,6 +39,7 @@ import PatientCriteria from './admin/PatientCriteria';
 import CmsSidebar from './admin/CmsSidebar';
 import CmsNavipanel from './admin/CmsNavipanel';
 import PatientData from './component/PatientData';
+import PatientDiagnosisList from './admin/PatientDiagnosisList';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -102,9 +103,10 @@ function App() {
           <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis /></>} />
           <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria /></>} />
           <Route path="/addpatientcriteria/:id" element={<AddPatientCriteria />} />
+          <Route path="/patient/:id" element={<PatientDiagnosisList  />} />
 
 
-          <Route path="/patient/:id" element={<PatientDetail/>} />
+          <Route path="/patient/:id/add-diagnosis" element={<PatientDetail/>} />
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
       </div>

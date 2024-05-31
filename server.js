@@ -1390,6 +1390,39 @@ app.get('/api/getPatientDetails', (req, res) => {
   });
 });
 
+// 진단명 추가 API
+app.post('/api/addDiagnosisByAdmin', (req, res) => {
+  const { patientId, diagnoses, enteredBy } = req.body;
+
+  const query = 'INSERT INTO diagnoses (patient_id, diagnosis, diagnosis_date, entered_by) VALUES ?';
+  const values = diagnoses.map(diagnosis => [patientId, diagnosis, new Date(), enteredBy]);
+
+  connection.query(query, [values], (error, results) => {
+    if (error) {
+      console.error('Error adding diagnoses:', error);
+      res.status(500).json({ message: 'Error adding diagnoses', error });
+      return;
+    }
+    res.status(200).json({ message: 'Diagnoses added successfully' });
+  });
+});
+
+// 약물 정보 추가 API
+app.post('/api/addMedicationsByAdmin', (req, res) => {
+  const { patientId, medications, enteredBy } = req.body;
+
+  const query = 'INSERT INTO medications (patient_id, medication, dosage, frequency, start_date, end_date, entered_by) VALUES ?';
+  const values = medications.map(medication => [patientId, medication.name, medication.dosage, medication.frequency, new Date(), null, enteredBy]);
+
+  connection.query(query, [values], (error, results) => {
+    if (error) {
+      console.error('Error adding medications:', error);
+      res.status(500).json({ message: 'Error adding medications', error });
+      return;
+    }
+    res.status(200).json({ message: 'Medications added successfully' });
+  });
+});
 
 // 회원가입 환자 체크
 app.post('/api/check-patient', (req, res) => {
@@ -1422,7 +1455,13 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-
+app.get('/api/currentUser', (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).send('User not logged in');
+  }
+  res.status(200).json({ userId });
+});
 
 // guardianId로 환자 이름 가져오기
 app.get('/api/getPatientName', (req, res) => {
@@ -1437,6 +1476,31 @@ app.get('/api/getPatientName', (req, res) => {
       res.status(404).send('환자 정보를 찾을 수 없습니다.');
     } else {
       res.json({ patientName: result[0].name });
+    }
+  });
+});
+app.get('/api/patient/:id/diagnoses', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT diagnosis FROM diagnoses WHERE patient_id = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching diagnoses:', err);
+      res.status(500).json({ error: 'Error fetching diagnoses' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/api/patient/:id/medications', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT medication AS name, dosage, frequency FROM medications WHERE patient_id = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching medications:', err);
+      res.status(500).json({ error: 'Error fetching medications' });
+    } else {
+      res.json(results);
     }
   });
 });
