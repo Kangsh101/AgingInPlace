@@ -1,0 +1,20 @@
+.diagnosis-list-container {
+    margin: 20px;
+}
+
+.diagnosis-list-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.diagnosis-list {
+    list-style: none;
+    padding: 0;
+}
+
+.diagnosis-list li {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+

@@ -5,6 +5,7 @@ import ChangePassword from './ChangePassword';
 import MyInfo from './MyInfo';
 import EditProfile from './EditProfile';
 import AddDiagnosis from './AddDiagnosis';
+import DiagnosisList from './DiagnosisList';
 import Footer from './Footer';
 
 function MyPage() {
@@ -55,6 +56,7 @@ function MyPage() {
     }, []);
 
     const isGuardian = userInfo.role === "보호자";
+
     return (
         <div className="mypage">
             <div className="sidebar">
@@ -71,8 +73,8 @@ function MyPage() {
                     <li onClick={() => setSelectedSection('editprofile')}>
                         <span>개인정보 수정</span>
                     </li>
-                    <li onClick={() => setSelectedSection('adddiagnosis')}>
-                    <span>진단명 추가</span>
+                    <li onClick={() => setSelectedSection('diagnosislist')}>
+                    <span>진단명 목록</span>
                     </li>
                 </ul>
             </div>
@@ -80,11 +82,21 @@ function MyPage() {
                 {selectedSection === 'myinfo' && <MyInfo userInfo={userInfo} />}
                 {selectedSection === 'changepassword' && <ChangePassword />}
                 {selectedSection === 'editprofile' && <EditProfile />}
-                {selectedSection === 'adddiagnosis' && <AddDiagnosis isGuardian={isGuardian} />}
+                {selectedSection === 'diagnosislist' && (
+                    <DiagnosisList 
+                        isGuardian={isGuardian} 
+                        onAddClick={() => setSelectedSection('adddiagnosis')} 
+                    />
+                )}
+                {selectedSection === 'adddiagnosis' && (
+                    <AddDiagnosis 
+                        isGuardian={isGuardian} 
+                        onCancel={() => setSelectedSection('diagnosislist')}
+                    />
+                )}
             </div>
-            
         </div>
     );
-} 
+}
 
 export default MyPage;

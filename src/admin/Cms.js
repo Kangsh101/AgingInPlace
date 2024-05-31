@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
@@ -14,15 +14,30 @@ const Cms = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
-  // 페이지네이션 함수
+  useEffect(() => {
+    fetchNotices();
+  }, []);
+
+  const fetchNotices = () => {
+    fetch('/api/notices')
+      .then(res => res.json())
+      .then(data => {
+        const postsWithNumbers = data.reverse().map((post, index) => ({
+          ...post,
+          number: index + 1,
+          created_at: formatDate(post.created_at)
+        }));
+        setPosts(postsWithNumbers);
+      })
+      .catch(err => console.error('Failed to fetch notices:', err));
+  };
+
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  // 게시글 클릭 핸들러
   const handleClick = (index) => {
     setSelectedPostIndex(index);
   };
 
-  // 게시글 삭제 핸들러
   const handleDelete = (id, index) => {
     fetch(`/api/notices/${id}`, {
       method: 'DELETE'
@@ -34,26 +49,22 @@ const Cms = () => {
         setPosts(updatedPosts);
       }
     })
-    .catch(error => console.error('게시글을 삭제하는 중 에러 발생:', error));
+    .catch(error => console.error('Error deleting post:', error));
   };
 
-  // 날짜 포맷 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
-  // 검색어 변경 핸들러
   const handleSearchKeywordChange = (e) => {
     setSearchKeyword(e.target.value);
   };
 
-  // 검색 유형 변경 핸들러
   const handleSearchTypeChange = (e) => {
     setSearchType(e.target.value);
   };
 
-  // 검색 핸들러
   const handleSearch = () => {
     fetch(`/api/notice/search`, {
       method: 'POST',
@@ -71,10 +82,9 @@ const Cms = () => {
         }));
         setPosts(postsWithNumbers);
       })
-      .catch(err => console.error('검색 중 오류 발생:', err));
+      .catch(err => console.error('Error during search:', err));
   };
 
-  // 게시글 페이징
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);

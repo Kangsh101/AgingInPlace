@@ -990,7 +990,7 @@ app.get('/api/notices', (req, res) => {
     res.json(results);
   });
 });
-
+// 공지사항 상세페이지
 app.get('/api/notices/:postId', (req, res) => {
   const postId = req.params.postId;
   const query = `
@@ -1019,6 +1019,36 @@ app.get('/api/notices/:postId', (req, res) => {
   });
 });
 
+//공지사항 게시글 삭제
+app.delete('/api/notices/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM board_posts WHERE post_id = ?`;
+  connection.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('게시글 삭제 중 오류 발생:', err);
+      res.status(500).json({ error: '게시글 삭제 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: '게시글이 삭제되었습니다.' });
+  });
+});
+
+// 공지사항 수정
+app.put('/api/notices/:id', (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  const query = `UPDATE board_posts SET title = ?, content = ? WHERE post_id = ?`;
+  connection.query(query, [title, content, id], (err, result) => {
+    if (err) {
+      console.error('게시글 수정 중 오류 발생:', err);
+      res.status(500).json({ error: '게시글 수정 중 오류 발생' });
+      return;
+    }
+    res.status(200).json({ success: true, message: '게시글이 수정되었습니다.' });
+  });
+});
 
 
 // FAQ 등록
@@ -1121,36 +1151,6 @@ app.put('/api/faq/:id', (req, res) => {
 
 
 
-//공지사항 게시글 삭제
-app.delete('/api/notices/:id', (req, res) => {
-  const { id } = req.params;
-
-  const query = `DELETE FROM board_posts WHERE post_id = ?`;
-  connection.query(query, [id], (err, result) => {
-    if (err) {
-      console.error('게시글 삭제 중 오류 발생:', err);
-      res.status(500).json({ error: '게시글 삭제 중 오류 발생' });
-      return;
-    }
-    res.status(200).json({ success: true, message: '게시글이 삭제되었습니다.' });
-  });
-});
-
-// 공지사항 수정
-app.put('/api/notices/:id', (req, res) => {
-  const { id } = req.params;
-  const { title, content } = req.body;
-
-  const query = `UPDATE board_posts SET title = ?, content = ? WHERE post_id = ?`;
-  connection.query(query, [title, content, id], (err, result) => {
-    if (err) {
-      console.error('게시글 수정 중 오류 발생:', err);
-      res.status(500).json({ error: '게시글 수정 중 오류 발생' });
-      return;
-    }
-    res.status(200).json({ success: true, message: '게시글이 수정되었습니다.' });
-  });
-});
 
 
 
@@ -1235,6 +1235,7 @@ app.put('/api/deactivateUser/:userId', (req, res) => {
     }
   });
 });
+// CMS
 // 유저 활성화
 app.put('/api/activateUser/:userId', (req, res) => {
   const userId = req.params.userId;
@@ -1250,6 +1251,145 @@ app.put('/api/activateUser/:userId', (req, res) => {
     }
   });
 });
+// 환자별로 운동량 / 수면시간 설정 엔드포인트
+app.post('/api/patientcriteria', (req, res) => {
+  const { patient_id, sleep_time, exercise_amount, added_date } = req.body;
+
+  const checkQuery = 'SELECT * FROM cms_patientdata WHERE patient_id = ?';
+  connection.query(checkQuery, [patient_id], (err, results) => {
+    if (err) {
+      console.error('Error checking data:', err);
+      res.status(500).json({ error: 'Error saving patient criteria' });
+      return;
+    }
+    if (results.length > 0) {
+      // 기존 데이터가 있는 경우 업데이트
+      const updateQuery = 'UPDATE cms_patientdata SET sleep_time = ?, exercise_amount = ?, added_date = ? WHERE patient_id = ?';
+      connection.query(updateQuery, [sleep_time, exercise_amount, added_date, patient_id], (err, result) => {
+        if (err) {
+          console.error('Error updating data:', err);
+          res.status(500).json({ error: 'Error saving patient criteria' });
+          return;
+        }
+        res.status(200).json({ message: 'Patient criteria updated successfully' });
+      });
+    } else {
+      // 기존 데이터가 없는 경우 삽입
+      const insertQuery = 'INSERT INTO cms_patientdata (patient_id, sleep_time, exercise_amount, added_date) VALUES (?, ?, ?, ?)';
+      connection.query(insertQuery, [patient_id, sleep_time, exercise_amount, added_date], (err, result) => {
+        if (err) {
+          console.error('Error inserting data:', err);
+          res.status(500).json({ error: 'Error saving patient criteria' });
+          return;
+        }
+        res.status(200).json({ message: 'Patient criteria saved successfully' });
+      });
+    }
+  });
+});
+// 환자 기준 데이터를 가져오는 엔드포인트
+app.get('/api/patientcriteria/:id', (req, res) => {
+  const patient_id = req.params.id;
+
+  const query = 'SELECT sleep_time, exercise_amount FROM cms_patientdata WHERE patient_id = ?';
+  connection.query(query, [patient_id], (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      res.status(500).json({ error: 'Error fetching patient criteria' });
+      return;
+    }
+
+    if (results.length > 0) {
+      res.status(200).json(results[0]);
+    } else {
+      res.status(404).json({ error: 'No data found' });
+    }
+  });
+});
+
+// 진단명 추가.
+app.post('/api/addDiagnosis', (req, res) => {
+  const { patientId, diagnoses, enteredBy } = req.body;
+
+  const query = 'INSERT INTO diagnoses (patient_id, diagnosis, diagnosis_date, entered_by) VALUES ?';
+  const values = diagnoses.map(diagnosis => [patientId, diagnosis, new Date(), enteredBy]);
+
+  connection.query(query, [values], (error, results) => {
+    if (error) {
+      console.error('Error adding diagnoses:', error);
+      res.status(500).json({ message: 'Error adding diagnoses', error });
+      return;
+    }
+    res.status(200).json({ message: 'Diagnoses added successfully' });
+  });
+});
+
+
+//약물 추가
+app.post('/api/addMedications', (req, res) => {
+  const { patientId, medications, enteredBy } = req.body;
+
+  const query = 'INSERT INTO medications (patient_id, medication, dosage, frequency, start_date, end_date, entered_by) VALUES ?';
+  const values = medications.map(medication => [patientId, medication.name, medication.dosage, medication.frequency, new Date(), null, enteredBy]);
+
+  connection.query(query, [values], (error, results) => {
+    if (error) {
+      console.error('Error adding medications:', error);
+      res.status(500).json({ message: 'Error adding medications', error });
+      return;
+    }
+    res.status(200).json({ message: 'Medications added successfully' });
+  });
+});
+
+// 추가된 환자 데이터 목록 불러오는 엔드포인트
+app.get('/api/getPatientDetails', (req, res) => {
+  const guardianId = req.session.userId;
+
+  const query = `
+    SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
+    FROM members g
+    JOIN members p ON g.patientId = p.id
+    LEFT JOIN diagnoses d ON p.id = d.patient_id
+    LEFT JOIN medications m ON p.id = m.patient_id
+    WHERE g.id = ?;
+  `;
+  
+  connection.query(query, [guardianId], (err, results) => {
+    if (err) {
+      console.error('환자 정보 조회 실패:', err);
+      res.status(500).json({ message: '환자 정보 조회 실패', error: err });
+    } else {
+      if (results.length === 0) {
+        res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
+      } else {
+        // 중복 데이터 제거 및 환자 정보 구성
+        const diagnoses = new Set();
+        const medications = new Set();
+
+        results.forEach(row => {
+          if (row.diagnosis) diagnoses.add(row.diagnosis);
+          if (row.medication) {
+            medications.add(JSON.stringify({
+              medication: row.medication,
+              dosage: row.dosage,
+              frequency: row.frequency
+            }));
+          }
+        });
+
+        const patientDetails = {
+          patientName: results[0].patientName,
+          diagnoses: Array.from(diagnoses),
+          medications: Array.from(medications).map(item => JSON.parse(item))
+        };
+
+        res.status(200).json(patientDetails);
+      }
+    }
+  });
+});
+
 
 // 회원가입 환자 체크
 app.post('/api/check-patient', (req, res) => {
@@ -1300,6 +1440,38 @@ app.get('/api/getPatientName', (req, res) => {
     }
   });
 });
+
+// 사용자 id 가져오기
+app.get('/api/getUserId', (req, res) => {
+  if (req.session.userId) {
+    res.status(200).json({ userId: req.session.userId });
+  } else {
+    res.status(401).json({ error: 'User not logged in' });
+  }
+});
+// 환자 정보 불러오기
+app.get('/api/getPatientInfo', (req, res) => {
+  const guardianId = req.session.userId;
+
+  const query = `SELECT p.id AS patientId, p.name AS patientName 
+                 FROM members p 
+                 WHERE p.id = (
+                   SELECT g.patientId 
+                   FROM members g 
+                   WHERE g.id = ?
+                 )`;
+  connection.query(query, [guardianId], (err, result) => {
+    if (err) {
+      console.error('환자 정보 조회 실패:', err);
+      res.status(500).send('서버 오류');
+    } else if (result.length === 0) {
+      res.status(404).send('환자 정보를 찾을 수 없습니다.');
+    } else {
+      res.json({ patientName: result[0].patientName, patientId: result[0].patientId });
+    }
+  });
+});
+
 
 
 
