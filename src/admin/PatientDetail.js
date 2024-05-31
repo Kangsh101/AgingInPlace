@@ -120,7 +120,7 @@ const PatientDetail = () => {
                   </div>
                 ))}
                 <button className="button" id='PatientDetail-Btt' onClick={addDiagnosis}>질환 추가</button>
-                <div className='saveBtt'>
+                <div className='Diagnosis-saveBtt'>
                   <button className='button primary' id='saveBtt' onClick={handleSaveDiagnosis}>진단명 저장</button>
                 </div>
               </div>
@@ -155,7 +155,7 @@ const PatientDetail = () => {
                   </div>
                 ))}
                 <button className="button" id='PatientDetail-Btt' onClick={addMedication}>약물 추가</button>
-                <div className='saveBtt'>
+                <div className='Medication-saveBtt'>
                   <button className='button primary' id='saveBtt' onClick={handleSaveMedications}>약물 정보 저장</button>
                 </div>
               </div>

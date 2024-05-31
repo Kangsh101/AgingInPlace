@@ -1480,28 +1480,67 @@ app.get('/api/getPatientName', (req, res) => {
   });
 });
 app.get('/api/patient/:id/diagnoses', (req, res) => {
-  const { id } = req.params;
-  const query = 'SELECT diagnosis FROM diagnoses WHERE patient_id = ?';
-  connection.query(query, [id], (err, results) => {
+  const patientId = req.params.id;
+
+  const query = 'SELECT id, diagnosis, diagnosis_date, entered_by FROM diagnoses WHERE patient_id = ?';
+  connection.query(query, [patientId], (err, results) => {
     if (err) {
       console.error('Error fetching diagnoses:', err);
-      res.status(500).json({ error: 'Error fetching diagnoses' });
-    } else {
-      res.json(results);
+      res.status(500).send('Error fetching diagnoses');
+      return;
     }
+    res.json(results);
   });
 });
 
+// 환자의 복용약물 목록 가져오기
 app.get('/api/patient/:id/medications', (req, res) => {
-  const { id } = req.params;
-  const query = 'SELECT medication AS name, dosage, frequency FROM medications WHERE patient_id = ?';
-  connection.query(query, [id], (err, results) => {
+  const patientId = req.params.id;
+
+  const query = 'SELECT id, medication as name, dosage, frequency FROM medications WHERE patient_id = ?';
+  connection.query(query, [patientId], (err, results) => {
     if (err) {
       console.error('Error fetching medications:', err);
-      res.status(500).json({ error: 'Error fetching medications' });
-    } else {
-      res.json(results);
+      res.status(500).send('Error fetching medications');
+      return;
     }
+    res.json(results);
+  });
+});
+// 진단명 삭제
+app.delete('/api/diagnoses/:id', (req, res) => {
+  const diagnosisId = req.params.id;
+
+  const query = 'DELETE FROM diagnoses WHERE id = ?';
+  connection.query(query, [diagnosisId], (err, result) => {
+    if (err) {
+      console.error('Error deleting diagnosis:', err);
+      res.status(500).send('Error deleting diagnosis');
+      return;
+    }
+    if (result.affectedRows === 0) {
+      res.status(404).send('Diagnosis not found');
+      return;
+    }
+    res.status(200).send('Diagnosis deleted successfully');
+  });
+});
+
+// 복용약물 삭제
+app.delete('/api/medications/:id', (req, res) => {
+  const medicationId = req.params.id;
+  const query = 'DELETE FROM medications WHERE id = ?';
+  connection.query(query, [medicationId], (err, result) => {
+    if (err) {
+      console.error('Error deleting medication:', err);
+      res.status(500).send('Error deleting medication');
+      return;
+    }
+    if (result.affectedRows === 0) {
+      res.status(404).send('Medication not found');
+      return;
+    }
+    res.status(200).send('Medication deleted successfully');
   });
 });
 

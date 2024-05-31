@@ -43,11 +43,14 @@
     align-items: center;
     flex-direction: column;
     margin-bottom: 20px;
-    margin-top: 50px;
 }
-.saveBtt{
+.Medication-saveBtt, .Diagnosis-saveBtt{
     align-items: center;
     display: flex;
+    margin-top: 10px;
+}
+.Diagnosis-saveBtt{
+    margin-bottom: 20px;
 }
 #saveBtt{
     width: 10em;
