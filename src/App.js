@@ -23,7 +23,6 @@ import NoticeUp from './admin/NoticeUp';
 import NoticeUpdate from './admin/NoticeUpdate';
 import Navpanel from './component/Navpanel';
 import useIntersectionObserver from './component/useIntersectionObserver';
-import Rkdtjrgus12 from './component/rkdtjrgus12';
 import AddDiagnosis from './component/AddDiagnosis';
 import Download from './component/Download';
 import NoticeContent from './component/NoticeContent';
@@ -40,6 +39,7 @@ import CmsSidebar from './admin/CmsSidebar';
 import CmsNavipanel from './admin/CmsNavipanel';
 import PatientData from './component/PatientData';
 import PatientDiagnosisList from './admin/PatientDiagnosisList';
+import PatientChart from './component/PatientChart';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -87,11 +87,11 @@ function App() {
           <Route path="/qnaanswers/:answerId" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><AnswerDetail /><Footer /></>} />
           <Route path="/AddDiagnosis" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><AddDiagnosis /><Footer /></>} />
           <Route path="/Download" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Download /><Footer /></>} />
-          <Route path="/rkdtjrgus12" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Rkdtjrgus12/><Footer /></>} />
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
           <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
-          
+          <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
+
           <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
           <Route path="/faqup" element={<FaqUp />} />
           <Route path="/noticeup" element={<NoticeUp />} />

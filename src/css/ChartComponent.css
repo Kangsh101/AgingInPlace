@@ -1,9 +1,8 @@
-body, html {
+/* body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: auto; /* 전체 페이지 스크롤 허용 */
-    /* background-color: #2c2c2c;  */
+    overflow: auto;
   }
   
   .content-main {
@@ -11,7 +10,7 @@ body, html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: 100vh; /* 컨텐츠 높이를 최소 100vh로 설정 */
+    min-height: 100vh;
   }
   
   .user-selector {
@@ -33,23 +32,23 @@ body, html {
   
   .chart-container {
     width: calc(50% - 20px);
-    height: 400px; /* 높이를 300px로 감소 */
+    height: 400px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: white; /* 글자 색상을 흰색으로 설정 */
+    color: white; 
   }
   
   h2 {
-    color: white; /* 제목 색상을 흰색으로 설정 */
-    margin-bottom: 20px; /* 제목과 차트 간의 간격 설정 */
+    color: white;
+    margin-bottom: 20px; 
   }
   
   canvas {
-    background-color: transparent; /* 차트의 배경색을 투명하게 설정 */
+    background-color: transparent; 
     width: 100%;
     height: 100%;
   }
@@ -57,4 +56,4 @@ body, html {
   .chart-container {
     width: 100%;
   }
-}
+} */

@@ -72,7 +72,7 @@ const AnswerDetail = () => {
       .then(data => {
         if (data.success) {
           alert('답글이 삭제되었습니다.');
-          navigate(-1); // 이전 페이지로 이동
+          navigate(-1); 
         } else {
           alert('답글 삭제에 실패했습니다.');
         }
