@@ -1,0 +1,42 @@
+.centered-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Cms-form-group {
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.Cms-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.Cms-form-group input, .Cms-form-group textarea, .Cms-form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.option-input {
+  display: flex;
+  align-items: center;
+}
+
+.option-input input {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.option-input button {
+  padding: 0.5rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}

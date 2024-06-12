@@ -40,6 +40,9 @@ import CmsNavipanel from './admin/CmsNavipanel';
 import PatientData from './component/PatientData';
 import PatientDiagnosisList from './admin/PatientDiagnosisList';
 import PatientChart from './component/PatientChart';
+import CmsCIST from './admin/CmsCIST';
+import AddQuestionCIST from './admin/AddQuestionCIST';
+import EditQuestionCIST from './admin/EditQuestionCIST';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -91,10 +94,13 @@ function App() {
           <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
-
-          <Route path="/faqedit/:id" element={<CmsFaqEdit />} />
-          <Route path="/faqup" element={<FaqUp />} />
-          <Route path="/noticeup" element={<NoticeUp />} />
+          
+          <Route path='/addquestioncist/:id' element={<><CmsNavipanel/><EditQuestionCIST /></>}/>
+          <Route path='/addquestioncist' element={<><CmsNavipanel/><AddQuestionCIST/></>}/>
+          <Route path='/cmscist' element={<><CmsNavipanel/><CmsCIST/></>}/>
+          <Route path="/faqedit/:id" element={<><CmsNavipanel/><CmsFaqEdit /></>} />
+          <Route path="/faqup" element={<><CmsNavipanel/><FaqUp /></>} />
+          <Route path="/noticeup" element={<><CmsNavipanel/><NoticeUp /></>} />
           <Route path="/cms" element={<><CmsNavipanel/><Cms /></>} />
           <Route path="/cmsuser" element={<><CmsNavipanel/><Cmsuser /></>} />
           <Route path="/cmsfaq" element={<><CmsNavipanel/><Cmsfaq /></>} />

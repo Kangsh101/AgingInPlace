@@ -1575,9 +1575,88 @@ app.get('/api/getPatientInfo', (req, res) => {
   });
 });
 
+// 인지선별검사 CIST
+app.post('/api/cist_questions', (req, res) => {
+  const { type, question_text, answer_options, correct_answer } = req.body;
 
+  const query = `INSERT INTO CIST_Questions (type, question_text, answer_options, correct_answer) VALUES (?, ?, ?, ?)`;
 
+  connection.query(query, [type, question_text, JSON.stringify(answer_options), correct_answer], (err, result) => {
+    if (err) {
+      console.error('CIST 질문 저장 실패: ' + err.stack);
+      res.status(500).send('CIST 질문 저장 실패');
+      return;
+    }
+    res.status(200).send('CIST 질문 저장 성공');
+  });
+});
 
+//현재 날짜를 가져옴.
+app.get('/api/current_date', (req, res) => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줌
+  const date = currentDate.getDate();
+  const day = currentDate.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+
+  res.json({ year, month, date, day });
+});
+// 질문 목록 불러오기 API
+app.get('/api/cist_questions', (req, res) => {
+  const query = 'SELECT * FROM CIST_Questions';
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to fetch questions: ' + err.stack);
+      res.status(500).send('Failed to fetch questions');
+      return;
+    }
+    res.json(results);
+  });
+});
+// 질문 삭제
+app.delete('/api/cist_questions/:id', (req, res) => {
+  const questionId = req.params.id;
+  const query = 'DELETE FROM CIST_Questions WHERE id = ?';
+
+  connection.query(query, [questionId], (err, results) => {
+    if (err) {
+      console.error('Failed to delete question: ' + err.stack);
+      res.status(500).send('Failed to delete question');
+      return;
+    }
+    res.status(200).send('Question deleted successfully');
+  });
+});
+// 수정을 위한 특정 질문 가져오기
+app.get('/api/cist_questions/:id', (req, res) => {
+  const questionId = req.params.id;
+  const query = 'SELECT * FROM CIST_Questions WHERE id = ?';
+
+  connection.query(query, [questionId], (err, result) => {
+    if (err) {
+      console.error('Failed to fetch question: ' + err.stack);
+      res.status(500).send('Failed to fetch question');
+      return;
+    }
+    res.json(result[0]);
+  });
+});
+// 질문 업데이트 엔드포인트
+app.put('/api/cist_questions/:id', (req, res) => {
+  const questionId = req.params.id;
+  const { type, question_text, answer_options, correct_answer } = req.body;
+  const query = 'UPDATE CIST_Questions SET type = ?, question_text = ?, answer_options = ?, correct_answer = ? WHERE id = ?';
+
+  connection.query(query, [type, question_text, JSON.stringify(answer_options), correct_answer, questionId], (err, result) => {
+    if (err) {
+      console.error('Failed to update question: ' + err.stack);
+      res.status(500).send('Failed to update question');
+      return;
+    }
+    res.status(200).send('Question updated successfully');
+  });
+});
 //톰캣에서 다운로드 가져오는 로직
 app.post('/downloadFile', async (req, res) => {
   try {
