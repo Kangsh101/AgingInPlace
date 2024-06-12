@@ -43,7 +43,7 @@ import PatientChart from './component/PatientChart';
 import CmsCIST from './admin/CmsCIST';
 import AddQuestionCIST from './admin/AddQuestionCIST';
 import EditQuestionCIST from './admin/EditQuestionCIST';
-
+import QuestionDetailCIST from './admin/QuestionDetailCIST';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -95,6 +95,9 @@ function App() {
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
           
+
+
+          <Route path='/question_detail/:id' element={<><CmsNavipanel/><QuestionDetailCIST /></>}/>
           <Route path='/addquestioncist/:id' element={<><CmsNavipanel/><EditQuestionCIST /></>}/>
           <Route path='/addquestioncist' element={<><CmsNavipanel/><AddQuestionCIST/></>}/>
           <Route path='/cmscist' element={<><CmsNavipanel/><CmsCIST/></>}/>

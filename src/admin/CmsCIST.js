@@ -26,20 +26,6 @@ const CmsCIST = () => {
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const handleDelete = (id, index) => {
-    fetch(`/api/cist_questions/${id}`, {
-      method: 'DELETE'
-    })
-    .then(response => {
-      if (response.ok) {
-        const updatedQuestions = [...questions];
-        updatedQuestions.splice(index, 1);
-        setQuestions(updatedQuestions);
-      }
-    })
-    .catch(error => console.error('Error deleting question:', error));
-  };
-
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
   const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
@@ -56,7 +42,7 @@ const CmsCIST = () => {
         <div className="CIST-content">
         <div className="Cms-header">
           <Link to="/addquestioncist">
-            <button className="button primary">문제 추가</button>
+            <button className="button primary CIST-AddBtt">문제 추가</button>
           </Link>
         </div>
           <table>
@@ -69,24 +55,10 @@ const CmsCIST = () => {
             </thead>
             <tbody>
               {currentQuestions.map((question, index) => (
-                <tr key={question.id}>
+                <tr key={question.id} onClick={() => navigate(`/question_detail/${question.id}`)}>
                   <td>{index + 1}</td>
                   <td>{question.type}</td>
                   <td>{question.question_text}</td>
-                  <td>
-                    <button 
-                      className='button primary' 
-                      onClick={() => navigate(`/addquestioncist/${question.id}`)}
-                    >
-                      수정
-                    </button>
-                    <button 
-                      className='button' 
-                      onClick={() => handleDelete(question.id, index)}
-                    >
-                      삭제
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>

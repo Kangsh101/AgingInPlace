@@ -6,3 +6,14 @@
     display: block;
     cursor: pointer;
 }
+.CIST-AddBtt{
+    float:right
+}
+.QuestionDetail-content{
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 60%;
+}
