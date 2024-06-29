@@ -35,7 +35,7 @@
 
 button {
   color: #fff;
-  background: #20b2aa;
+  background: #83D3C9;
   padding: 10px 20px;
   margin: 5px;
   font-weight: bold;
@@ -43,11 +43,11 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  /* transition: background 0.3s; */
+
 }
 
 button:hover {
-  background: #1e9990;
+  background: #50c2b5;
 }
 
 @media (max-width: 768px) {

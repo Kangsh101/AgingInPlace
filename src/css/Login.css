@@ -74,7 +74,6 @@ border: 0 none;
 border-radius: 6px;
 padding: 10px 20px;
 color: #fff;
-/* background-color: #e44c65; */
 margin-left: 34%;
 }
 
@@ -105,10 +104,10 @@ margin-left: 34%;
 }
 
 .login-btt:hover {
-  background-color: #dc697c;
+  background-color: #50c2b5;
 }
 .login-btt:active {
-  background-color: #e44c65;
+  background-color: #50c2b5;
 }
 
 .social-login {

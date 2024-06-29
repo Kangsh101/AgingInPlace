@@ -15,16 +15,20 @@
   align-items: center; 
 }
 .nav-item {
-  background-color: rgb(185, 182, 182);
+  /* background-color: rgb(185, 182, 182); */
+  background-color: white;
+  border: 1px solid rgb(229, 229, 229);
   color: black;
   padding: 10px;
   margin-right: 10px;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: 400;
 }
 .nav-item.active {
-  background-color: #e44c65;
-  color: white;
+  background-color: #83d3c9;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
 }
 .num {
   margin-right: 5px;
@@ -34,9 +38,16 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 90vh;
+  /* height: 90vh; */
   margin-top: 8%;
 } 
+#section3-container{
+  margin-bottom: 5.1em;
+}
+#section3-btt{
+  font-size: 15px;
+  font-weight: bold;
+}
 .pscheck-box1{
   padding-bottom: 15px;
   font-size: 15px;
@@ -72,12 +83,12 @@
   border: 0 none;
   padding: 10px 20px;
   color: #fff;
-  background-color: #e44c65;
+  background-color: #83d3c9;
   margin-top: 20px;
   border-radius: 4px;
 }
 .nextBtt:hover{
-  background-color:  #e76278;
+  background-color:  #50c2b5;
 }
 
 /* .Allcheckdss{

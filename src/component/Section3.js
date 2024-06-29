@@ -4,7 +4,7 @@ import '../css/Section.css';
 
 const Section3 = () => {
   return (
-    <div className='section-container'>
+    <div className='section-container' id='section3-container'>
       <ol className="nav nav-pills nav-pills-step">
         <li className="nav-item"><span className="num">01</span> 약관동의</li>
         <li className="nav-item"><span className="num">02</span> 가입정보입력</li>
@@ -12,7 +12,7 @@ const Section3 = () => {
       </ol>
       <h3>회원가입이 완료되었습니다.</h3>
       <Link to="/login">
-        <button className='button primary'>로그인</button>
+        <button id='section3-btt' className='button primary'>로그인</button>
       </Link>
     </div>
   );
