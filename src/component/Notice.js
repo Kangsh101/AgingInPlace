@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Page2.css';
+import '../css/backmain.css';
 import '../css/Page4.css';
 
 const NoticePage = () => {
@@ -35,53 +36,55 @@ const NoticePage = () => {
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div className="row gtr-150">
-      <div className="col-4 col-12-medium">
-        <header className='major'>
-          <h2 className='aaaaaa'>공지사항</h2>
-        </header>
-        <div className="qna-header">
-          <div className="qna-options">
-            <select className="qna-select" id='asdadad'>
-              <option value="title">제목</option>
-              <option value="author">작성자</option>
-            </select>
-            <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
-            <button className="button primary" id='QnA-searchBtt'>검색</button>
-            <div className="search-write-container"></div>
+    <article id="main">
+      <div className="row gtr-150">
+        <div className="col-4 col-12-medium">
+          <header className='major'>
+            <h2 className='aaaaaa'>공지사항</h2>
+          </header>
+          <div className="qna-header">
+            <div className="qna-options">
+              <select className="qna-select" id='asdadad'>
+                <option value="title">제목</option>
+                <option value="author">작성자</option>
+              </select>
+              <input type="text" placeholder="검색어를 입력하세요" className="qna-search" />
+              <button className="button primary" id='QnA-searchBtt'>검색</button>
+              <div className="search-write-container"></div>
+            </div>
+          </div>
+          <div className="notice-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>번호</th>
+
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>등록일</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentPosts.map((post, index) => (
+                  <tr key={post.post_id}>
+                    <td>{post.number}</td>
+
+                    <td className='skskskssksk'><Link to={`/noticecontent/${post.post_id}`}>{post.title}</Link></td>
+                    <td>{post.user_name}</td>
+                    <td>{post.created_at}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={posts.length}
+              paginate={paginate}
+            />
           </div>
         </div>
-        <div className="notice-table">
-          <table>
-            <thead>
-              <tr>
-                <th>번호</th>
-
-                <th>제목</th>
-                <th>작성자</th>
-                <th>등록일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentPosts.map((post, index) => (
-                <tr key={post.post_id}>
-                  <td>{post.number}</td>
-
-                  <td className='skskskssksk'><Link to={`/noticecontent/${post.post_id}`}>{post.title}</Link></td>
-                  <td>{post.user_name}</td>
-                  <td>{post.created_at}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={posts.length}
-            paginate={paginate}
-          />
-        </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -91,7 +91,7 @@ table {
 	background-color: #e44c65e2;
   }
   .skskskssksk a{
-	color: white;
+	color: rgb(0, 0, 0);
 	text-decoration: none;
 	border-bottom: none;
   }
@@ -132,7 +132,8 @@ input, select, textarea {
 	}
 
 	html, body {
-		background: #1c1d26;
+		/* background: #1c1d26; */
+		background-color: rgb(244, 246, 248);
 	}
 
 	body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -147,7 +148,7 @@ input, select, textarea {
 	}
 
 	body, input, select, textarea {
-		color: rgba(255, 255, 255, 0.75);
+		color: rgba(0, 0, 0, 0.75);
 		font-family: "Roboto", Helvetica, sans-serif;
 		font-size: 15pt;
 		font-weight: 100;
@@ -160,12 +161,12 @@ input, select, textarea {
 		-ms-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 		transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 		/* border-bottom: dotted 1px; */
-		color: #e44c65;
+		/* color: #e44c65; */
 		text-decoration: none;
 	}
 
 		a:hover {
-			color: #e44c65 !important;
+			/* color: #e44c65 !important; */
 			border-bottom-color: transparent;
 		}
 
@@ -183,10 +184,10 @@ input, select, textarea {
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #ffffff;
+		color: #7C8081;
 		font-weight: 300;
-		line-height: 1em;
-		margin: 0 0 1em 0;
+		line-height: 1.75em;
+		margin-bottom: 1em;
 	}
 
 		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -235,7 +236,7 @@ input, select, textarea {
 
 	hr {
 		border: 0;
-		border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+		border-bottom: solid 1px rgba(0, 0, 0, 0.3);
 		/* margin: 3em 0; */
 	}
 
@@ -244,7 +245,7 @@ input, select, textarea {
 		}
 
 	blockquote {
-		border-left: solid 4px rgba(255, 255, 255, 0.3);
+		border-left: solid 4px rgba(0, 0, 0, 0.3);
 		font-style: italic;
 		margin: 0 0 2em 0;
 		padding: 0.5em 0 0.5em 2em;
@@ -2244,7 +2245,7 @@ input, select, textarea {
 	}
 
 		header.major:after {
-			background: #e44c65;
+			background: #83D3C9;
 			content: '';
 			display: inline-block;
 			height: 0.2em;
@@ -2279,9 +2280,6 @@ input, select, textarea {
 		font-weight: 300;
 		margin: 0 0 1em 0;
 	}
-	#dasasdasd{
-		
-	}
 	  
 	  .qna-options {
 		display: flex;
@@ -2308,7 +2306,7 @@ input, select, textarea {
 		transition: border-color 0.2s ease-in-out;
 		background: transparent;
 		border-radius: 4px;
-		border: solid 1px rgba(255, 255, 255, 0.3);
+		border: solid 1px rgba(124, 128, 129, 0.2);
 		color: inherit;
 		/* display: block; */
 		outline: 0;
@@ -2331,7 +2329,7 @@ input, select, textarea {
 		input[type="email"]:focus,
 		select:focus,
 		textarea:focus {
-			border-color: #ffffff;
+			border-color: #5a5959;
 		}
 
 	select {
@@ -2446,7 +2444,7 @@ input, select, textarea {
 			input[type="checkbox"] + label:before,
 			input[type="radio"] + label:before {
 				border-radius: 4px;
-				border: solid 1px rgba(255, 255, 255, 0.3);
+				border: solid 1px rgba(0, 0, 0, 0.3);
 				content: '';
 				display: inline-block;
 				font-size: 0.7em;
@@ -2480,22 +2478,23 @@ input, select, textarea {
 	}
 
 	::-webkit-input-placeholder {
-		color: rgba(255, 255, 255, 0.5) !important;
+		color: rgba(5, 5, 5, 0.5) !important;
 		opacity: 1.0;
+		font-weight: 500;
 	}
 
 	:-moz-placeholder {
-		color: rgba(255, 255, 255, 0.5) !important;
+		color: rgba(0, 0, 0, 0.5) !important;
 		opacity: 1.0;
 	}
 
 	::-moz-placeholder {
-		color: rgba(255, 255, 255, 0.5) !important;
+		color: rgba(0, 0, 0, 0.5) !important;
 		opacity: 1.0;
 	}
 
 	:-ms-input-placeholder {
-		color: rgba(255, 255, 255, 0.5) !important;
+		color: rgba(0, 0, 0, 0.5) !important;
 		opacity: 1.0;
 	}
 
@@ -2503,7 +2502,7 @@ input, select, textarea {
 
 	.box {
 		border-radius: 4px;
-		border: solid 1px rgba(255, 255, 255, 0.3);
+		border: solid 1px rgba(0, 0, 0, 0.3);
 		margin-bottom: 2em;
 		padding: 1.5em;
 	}
@@ -2703,7 +2702,7 @@ input, select, textarea {
 		}
 
 			ul.alt li {
-				border-top: solid 1px rgba(255, 255, 255, 0.3);
+				border-top: solid 1px rgba(0, 0, 0, 0.3);
 				padding: 0.5em 0;
 			}
 
@@ -2874,7 +2873,7 @@ input, select, textarea {
 	}
 
 		table tbody tr {
-			border: solid 1px rgba(255, 255, 255, 0.3);
+			border: solid 1px  #d1d1d14d;
 			border-left: 0;
 			border-right: 0;
 		}
@@ -2888,7 +2887,7 @@ input, select, textarea {
 		}
 
 		table th {
-			color: #ffffff;
+			color: #000000;
 			font-size: 0.9em;
 			font-weight: 300;
 			padding: 0 0.75em 0.75em 0.75em;
@@ -2896,11 +2895,11 @@ input, select, textarea {
 		}
 
 		table thead {
-			border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+			border-bottom: solid 1px rgba(75, 75, 75, 0.3);
 		}
 
 		table tfoot {
-			border-top: solid 1px rgba(255, 255, 255, 0.3);
+			border-top: solid 1px rgba(0, 0, 0, 0.3);
 		}
 
 		table.alt {
@@ -2908,7 +2907,7 @@ input, select, textarea {
 		}
 
 			table.alt tbody tr td {
-				border: solid 1px rgba(255, 255, 255, 0.3);
+				border: solid 1px rgba(0, 0, 0, 0.3);
 				border-left-width: 0;
 				border-top-width: 0;
 			}
@@ -2946,7 +2945,7 @@ input, select, textarea {
 		background-color: transparent;
 		border-radius: 4px;
 		border: 0;
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
 		color: #ffffff !important;
 		cursor: pointer;
 		display: inline-block;
@@ -3009,7 +3008,7 @@ input, select, textarea {
 		input[type="reset"].primary,
 		input[type="button"].primary,
 		.button.primary {
-			background-color: #e44c65;
+			background-color: #83d3c9;
 			box-shadow: none;
 			color: #ffffff !important;
 		}
@@ -3035,7 +3034,7 @@ input, select, textarea {
 		input[type="button"]:disabled,
 		.button.disabled,
 		.button:disabled {
-			background-color: rgba(255, 255, 255, 0.3) !important;
+			background-color: rgba(0, 0, 0, 0.3) !important;
 			box-shadow: none !important;
 			color: #ffffff !important;
 			cursor: default;
@@ -3483,85 +3482,6 @@ input, select, textarea {
 		margin-top: 0;
 	}
 
-/* Header */
-
-	#page-wrapper {
-		/* padding-top: 3.5em; */
-	}
-
-	#header {
-		background: rgba(39, 40, 51, 0.965);
-		box-shadow: 0 0 0.25em 0 rgba(0, 0, 0, 0.25);
-		cursor: default;
-		height: 3.5em;
-		left: 0;
-		line-height: 3.5em;
-		position: fixed;
-		top: 0;
-		width: 100%;
-		z-index: 100;
-	}
-
-		#header h1 {
-			height: inherit;
-			left: 1.25em;
-			line-height: inherit;
-			margin: 0;
-			position: absolute;
-			top: 0;
-		}
-
-		#header nav {
-			position: absolute;
-			right: 1em;
-			top: 0;
-		}
-
-			#header nav ul {
-				margin: 0;
-			}
-
-				#header nav ul li {
-					display: inline-block;
-					margin-left: 1em;
-				}
-
-					#header nav ul li a, #header nav ul li span {
-						border: 0;
-						color: inherit;
-						display: inline-block;
-						height: inherit;
-						line-height: inherit;
-						outline: 0;
-					}
-
-						#header nav ul li a.button, #header nav ul li span.button {
-							height: 2em;
-							line-height: 2em;
-							padding: 0 1.25em;
-						}
-
-						#header nav ul li a:not(.button):before, #header nav ul li span:not(.button):before {
-							margin-right: 0.5em;
-						}
-
-					#header nav ul li.active > a, #header nav ul li.active > span {
-						color: #e44c65;
-					}
-
-					#header nav ul li > ul {
-						display: none;
-					}
-
-	body.landing #page-wrapper {
-		padding-top: 0;
-	}
-
-	body.landing #header {
-		background: transparent;
-		box-shadow: none;
-		position: absolute;
-	}
 
 /* Banner */
 
@@ -3656,7 +3576,7 @@ input, select, textarea {
 /* Footer */
 
 	#footer {
-		background: #272833;
+		background: #E8EEF4;;
 		padding: 4.5em 0;
 		text-align: center;
 
@@ -3694,11 +3614,12 @@ input, select, textarea {
 		}
 
 			#footer .copyright li {
-				border-left: solid 1px rgba(255, 255, 255, 0.3);
+				border-left: solid 1px rgba(40, 40, 40, 0.3);
 				display: inline-block;
 				list-style: none;
 				margin-left: 1.5em;
 				padding-left: 1.5em;
+				color: black;
 			}
 
 				#footer .copyright li:first-child {
@@ -3715,7 +3636,7 @@ input, select, textarea {
 					background-color: transparent;
 					border-radius: 4px;
 					border: 0;
-					box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+					box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
 					color: #ffffff !important;
 					cursor: pointer;
 					display: inline-block;
@@ -3735,12 +3656,10 @@ input, select, textarea {
 					margin-top: 4%;
 				}
 				.LoginBox {
-					
+					background-color: white;
 					border-radius: 20px;
 					padding: 50px;
 					margin-left: 2.5em;
-					background: rgba(255, 255, 255, 0.075);
-					/* background: rgba(255, 255, 255, 0.075); */
 				  }
 				  .email-container input{
 					width: 14.6em;

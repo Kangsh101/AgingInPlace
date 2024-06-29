@@ -53,7 +53,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <div className="is-preload landing" id="page-wrapper">
       <header id="header">
-        <h1 id="logo"><a href="/">Landed</a></h1>
+        <h1 id="logo"><a href="/">Aging In Place</a></h1>
 
         <nav id="nav" className={isMenuOpen ? 'navPanel-visible' : ''}>
 
@@ -81,7 +81,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
             {!isLoggedIn && (
               <>
                 <li><a href="/signup" >회원가입</a></li>
-                <li><a href="login" className="button primary">로그인</a></li>
+                <li><a href="login" id='font-bold' className="button primary">로그인</a></li>
               </>
             )}
             {isLoggedIn && (

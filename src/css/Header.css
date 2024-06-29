@@ -1,184 +1,90 @@
-/* 
-.header-container {
-  position: fixed; 
-  top: 0;
+/* Header */
+
+#page-wrapper {
+  /* padding-top: 3.5em; */
+}
+
+#header {
+  background: #fff;
+  /* background: white; */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.075);
+  cursor: default;
+  height: 3.3em;
   left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1px 20px;
-  background: rgba(39, 40, 51, 0.965);
-  box-shadow: 0 0 0.25em 0 rgba(0, 0, 0, 0.25);
-  width: 100%;
-  height: 67px;
-  box-sizing: border-box;
-  z-index: 1000;
-  border-radius: 6px;
-  
-}
-.header-container .Header-loginbtt{
-  padding: 10px;
-  font-weight: bold;
-  font-size: 18px;
-  cursor: pointer;
-  border: 0 none;
-  border-radius: 6px;
-  padding: 10px 20px;
-  color: #fff;
-  background-color: #e44c65;
-}
-.header-container .Header-signupbtt{
-  padding: 10px;
-  font-weight: bold;
-  font-size: 18px;
-  cursor: pointer;
-  border: 0 none;
-  border-radius: 6px;
-  padding: 10px 20px;
-  color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-  background-color: transparent;
-}
-
-.nav-container {
-  margin-right: 20%;
-  flex: 1;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 0;
-}
-
-nav li {
-  margin: 0;
-  padding-left: 30px;
-  font-size: 15px;
-}
-.logo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center;
-}
-.logo span{
-  color: white;
-  font-size: 20px;
-}
-
-.logo img {
-  width: 50px;
-  height: 50px;
-}
-
-.nav-container ul li {
-  font-size: 17px;
-  font-weight: bold;
-  padding-left: 66px;
-  
-}
-
-.auth-buttons {
-  display: flex;
-  gap: 10px;
-  position: relative;
-}
-
-
-
-.auth-buttons .Header-nav {
-  background-color: transparent;
-  border-radius: 15px;
-  font-size: 13px;
-  color: white;
-  border: none;
-}
-
-.dropdown-overlay {
+  line-height: 3.5em;
   position: fixed;
-  top: 80px; 
-  left: 0;
+  top: 0;
   width: 100%;
-  height: 33%;
-  background-color: rgba(3, 3, 83, 0.3); 
-  z-index: 2; 
+  z-index: 100;
 }
 
-.dropdown {
+  #header h1 {
+    height: inherit;
+    left: 1.25em;
+    line-height: inherit;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    color: #7C8081;
+    font-weight: bold;
+  }
+
+  #header nav {
+    position: absolute;
+    right: 1em;
+    top: 0;
+  }
+
+    #header nav ul {
+      margin: 0;
+    }
+
+      #header nav ul li {
+        display: inline-block;
+        margin-left: 1em;
+      }
+
+        #header nav ul li a, #header nav ul li span {
+          border: 0;
+          color: #7C8081;
+          display: inline-block;
+          height: inherit;
+          line-height: inherit;
+          outline: 0;
+        }
+
+          #header nav ul li a.button, #header nav ul li span.button {
+            height: 2em;
+            line-height: 2em;
+            padding: 0 1.25em;
+          }
+
+          #header nav ul li a:not(.button):before, #header nav ul li span:not(.button):before {
+            margin-right: 0.5em;
+          }
+
+        #header nav ul li.active > a, #header nav ul li.active > span {
+          color: #e44c65;
+        }
+
+        #header nav ul li > ul {
+          display: none;
+        }
+        #header nav li a{
+          font-size: 1em;
+        }
+        #font-bold{
+          font-weight: bold;
+        }
+body.landing #page-wrapper {
+  padding-top: 0;
+}
+
+body.landing #header {
+  background: transparent;
+  box-shadow: none;
   position: absolute;
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  z-index: 3;
-  
 }
-
-.Header-signupbtt a,
-.Header-loginbtt a,
-.Header-nav a{
-  color: white;
-  font-size: 14px;
+#header h1{
+  margin-left: 150px;
 }
-
-
-.Header-nav a:hover{
-  color: #e44c65;
-}
-.Header-signupbtt a:hover,
-.Header-loginbtt a:hover{
-  color: rgb(212, 211, 211);
-}
-
-.hadervar-logo{
-  width: 25%;
-  margin-left: 90%;
-}
-
-.Header-loginbtt{
-
-}
-
-@media (max-width: 500px) {
-
-  .hadervar-logo{
-    width: 10px;
-    
-    margin-left: 90%;
-  }
-  .auth-buttons button{
-    margin-right: -30px;
-  }
-  .auth-buttons button a{
-    font-size: 12px;
-    
-  }
-  .auth-buttons .Header-loginbtt{
-    padding: 0 3px 0 3px;
-  }
-
-  .auth-buttons .Header-signupbtt{
-    padding: 0 5px 0 5px;
-    margin-left: 10px;
-    margin-right: 5px;
-  }
-
-
-.Header-nav{
-  font-size: 12px;
-}
-.hadervar-logo {
-  width: 50px; 
-  height:auto;
-  margin-left: 10px;
-}
-}
-@media (max-width: 960px) {
-  .nav-container {
-    display: none; 
-  }
-
-} */

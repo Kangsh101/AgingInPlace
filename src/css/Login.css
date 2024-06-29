@@ -2,7 +2,7 @@
 .login-container {
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  /* height: 100vh; */
   width: 100%;
   margin-bottom: 50px;
   padding-top: 15px;
@@ -39,7 +39,7 @@
   display: flex;
   flex-direction: column; 
 }
-
+.form-group input{}
 .form-control {
   width: 100%;
   padding: 10px;
@@ -74,7 +74,7 @@ border: 0 none;
 border-radius: 6px;
 padding: 10px 20px;
 color: #fff;
-background-color: #e44c65;
+/* background-color: #e44c65; */
 margin-left: 34%;
 }
 
@@ -86,21 +86,22 @@ margin-left: 34%;
 }
 .form-group input[type="password"][title="비밀번호"]
 .form-group input[type="text"][title="아이디"] {
-  color: white; 
+  color: rgb(0, 0, 0); 
 }
 .form-group input[type="password"],
 .form-group input[type="text"] {
-  background-color: transparent; 
+  /* background-color: transparent;  */
+  background-color:#fafafa;
 }
 .form-group input[type="password"]:hover,
 .form-group input[type="text"]:hover {
-  border-color: white; 
-  color: white; 
+  border-color: 3fb1a3; 
+  color: 3fb1a3; 
 }
 
 .form-group input[type="password"]:focus,
 .form-group input[type="text"]:focus {
-  border-color: white;
+  border-color: #3fb1a3;
 }
 
 .login-btt:hover {
@@ -131,10 +132,13 @@ margin-left: 34%;
 }
 .findPd {
   padding: 5px 10px;
-  color: white;
+  color: rgb(108, 106, 106);
   border-right: 1px solid #ccc; 
   display: inline-block;
   line-height: 6px; 
+}
+.findPd:hover{
+  color: #83d3c9;
 }
 .find-group a{
   text-decoration: none;
@@ -142,39 +146,9 @@ margin-left: 34%;
   }
   .findPd:last-child {
     border-right: none;
-  }
+  } 
  @media only screen and (max-width: 440px) {
   .find-group {
     font-size: 12px;
   }
 }
-/* @media only screen and (max-width: 768px) {
-  .login-box {
-    width: 80%;
-    padding: 30px;
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  .login-box {
-    width: 90%;
-    padding: 25px;
-    margin-left: -35%;
-  }
-
-  .login-btt {
-    margin-left: 0;
-  }
-
-  .login-layout{
-    margin-top: 45%;
-  }
-  .form-group input{
-    margin-left: -10px;
-  }
-  
-  .login-btt{
-    margin-left: 15%;
-    font-size: 12px;
-  }
-} */

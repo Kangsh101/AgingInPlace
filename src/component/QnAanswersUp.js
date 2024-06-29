@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import '../css/Page3.css'; 
+
 import '../css/Qnaup.css'; 
 import { useParams,useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';

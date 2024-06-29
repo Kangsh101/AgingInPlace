@@ -17,7 +17,8 @@
 
 .content-title {
   font-size: 2em;
-  font-weight: bold;
+  /* font-weight: bold; */
+  font-weight: 400;
 }
 
 .content-layout {

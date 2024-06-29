@@ -74,8 +74,6 @@ const Login = ({ onLogin }) => {
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <input type="text" id="username" title="아이디" name="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control" placeholder="아이디" />
-                
-                
                   <input type="password" id="password" title="비밀번호" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" placeholder="비밀번호" />
                 </div>
                 <div className="find-group">

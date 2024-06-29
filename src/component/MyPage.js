@@ -58,6 +58,7 @@ function MyPage() {
     const isGuardian = userInfo.role === "보호자";
 
     return (
+        <article id='main'>
         <div className="mypage">
             <div className="sidebar">
                     <div className='sidebar-title'>
@@ -96,6 +97,7 @@ function MyPage() {
                 )}
             </div>
         </div>
+        </article>
     );
 }
 

@@ -74,11 +74,13 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      {section === 1 && <Section1 agreed={agreed} handleAgree={handleAgree} handleNext={handleNext} />}
-      {section === 2 && <Section2 userData={userData} passwordMatch={passwordMatch} handleInputChange={handleInputChange} handleNext={handleNext} />}
-      {section === 3 && <Section3 />}
-    </div>
+    <article id="main">
+      <div>
+        {section === 1 && <Section1 agreed={agreed} handleAgree={handleAgree} handleNext={handleNext} />}
+        {section === 2 && <Section2 userData={userData} passwordMatch={passwordMatch} handleInputChange={handleInputChange} handleNext={handleNext} />}
+        {section === 3 && <Section3 />}
+      </div>
+    </article>
   );
 };
 
