@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams , useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import '../css/Page2.css';
 import '../css/qnacontent.css';
 
 const QnAContent = () => {
@@ -362,7 +361,7 @@ const QnAContent = () => {
                             {loggedInUserName === comment.user_name && (
                               <div className="qna-comment-actions">
                                 <button className="button primary" onClick={() => handleEditComment(index)}>수정</button>
-                                <button className="button" onClick={() => handleDeleteComment(index)}>삭제</button>
+                                <button className="button" id='button-del' onClick={() => handleDeleteComment(index)}>삭제</button>
                               </div>
                             )}
                           </>
@@ -400,7 +399,7 @@ const QnAContent = () => {
                               {loggedInUserName === answer.user_name && (
                                 <div className="qna-answer-actions">
                                   <button className="button primary" onClick={() => handleEditAnswer(index)}>수정</button>
-                                  <button className="button" onClick={() => handleDeleteAnswer(index)}>삭제</button>
+                                  <button className="button" id='button-del' onClick={() => handleDeleteAnswer(index)}>삭제</button>
                                 </div>
                               )}
                             </>
@@ -411,7 +410,7 @@ const QnAContent = () => {
                   )}
                   <div id='QnA-CommentInputs' className='QnA-commentInput'>
                     <input
-                      className='QnA-Input'
+                      id='QnA-Input'
                       type="text"
                       placeholder="댓글을 입력하세요."
                       value={newComment}
@@ -428,6 +427,7 @@ const QnAContent = () => {
         </div>
         <div className='QnAup-contentBtt'>
           <button className='button' onClick={handleGoBackToList}>목록</button>
+          <button className='button primary' onClick={handleReply}>답글</button>
           {isLoggedIn && post && loggedInUserName === post.user_name && (
             <>
               {isEditing ? (
@@ -435,10 +435,9 @@ const QnAContent = () => {
               ) : (
                 <button className='button primary' onClick={handleEdit}>글 수정</button>
               )}
-              <button className='button primary' onClick={handleDeletePost}>글 삭제</button>
+              <button className='button primary' id='button-del' onClick={handleDeletePost}>글 삭제</button>
             </>
           )}
-          <button className='button primary' onClick={handleReply}>답글</button>
         </div>
       </div>
     </div>

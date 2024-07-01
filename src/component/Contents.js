@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../css/Contents.css';
+import '../css/pagination.css';
 
 const ContentPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,6 +71,7 @@ const Pagination = ({ videosPerPage, totalVideos, paginate, currentPage }) => {
     </div>
   );
 };
+
 
 const videos = [
   {

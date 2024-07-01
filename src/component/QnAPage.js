@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../css/Page2.css';
+import '../css/pagination.css';
+import '../board_css/QnAPage.css';
 
 const QnAPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -72,65 +73,68 @@ const QnAPage = () => {
 
   return (
     <article id="main">
-      <div className="row gtr-150">
-        <div className="col-4 col-12-medium">
-          <header className='major'>
-            <h2 className='aaaaaa'>QnA</h2>
-          </header>
-          <div className="qna-header">
-            <div className="qna-options">
-              <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
-                <option value="title">제목</option>
-                <option value="author">작성자</option>
-                <option value="title_author">제목 + 작성자</option>
-              </select>
-              <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
-              <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
-              <div className="search-write-container">
-                <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
-                  {isLoggedIn ? '글쓰기' : '글쓰기'}
-                </button>
+      <div className="qna-container">
+        <div className="row gtr-150">
+          <div className="col-4 col-12-medium">
+            <header className='major'>
+              <h2 className='aaaaaa'>QnA</h2>
+            </header>
+            <div className="qna-header">
+              <div className="qna-options">
+                <select className="qna-select" id='asdadad' value={searchType} onChange={handleSearchTypeChange}>
+                  <option value="title">제목</option>
+                  <option value="author">작성자</option>
+                  <option value="title_author">제목 + 작성자</option>
+                </select>
+                <input type="text" placeholder="검색어를 입력하세요" className="qna-search" value={searchKeyword} onChange={handleSearchKeywordChange} />
+                <button className="button primary" id='QnA-searchBtt' onClick={handleSearch}>검색</button>
+                <div className="search-write-container">
+                  <button className="button primary" id='QnA-Upbtt' onClick={handleLoginButtonClick}>
+                    {isLoggedIn ? '글쓰기' : '글쓰기'}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="qna-content">
-            <table>
-              <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>제목</th>
-                  <th>작성자</th>
-                  <th>등록일</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentPosts.map((post, index) => (
-                  <React.Fragment key={post.post_id}>
-                    <tr>
-                      <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
-                      <td className='skskskssksk'><Link to={`/qnacontent/${post.post_id}`}>{post.title}</Link></td>
-                      <td>{post.user_name}</td>
-                      <td>{post.created_at}</td>
-                    </tr>
-                    {post.answers && post.answers.map((answer, answerIndex) => (
-                      <tr key={`${post.post_id}-${answerIndex}`} className="answer-row">
-                        <td></td>
-                        <td className='skskskssksk'><Link to={`/qnaanswers/${answer.answer_id}`}>ㄴ {answer.title}</Link></td>
-                        <td>{answer.user_name}</td>
-                        <td>{answer.created_at.split('T')[0]}</td>
+            <div className="qna-content">
+              <table>
+                <thead>
+                  <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>등록일</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentPosts.map((post, index) => (
+                    <React.Fragment key={post.post_id}>
+                      <tr>
+                        <td>{index + 1 + (currentPage - 1) * postsPerPage}</td>
+                        <td className='skskskssksk'><Link to={`/qnacontent/${post.post_id}`}>{post.title}</Link></td>
+                        <td>{post.user_name}</td>
+                        <td>{post.created_at}</td>
                       </tr>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
+                      {post.answers && post.answers.map((answer, answerIndex) => (
+                        <tr key={`${post.post_id}-${answerIndex}`} className="answer-row">
+                          <td></td>
+                          <td className='skskskssksk'><Link to={`/qnaanswers/${answer.answer_id}`}>ㄴ {answer.title}</Link></td>
+                          <td>{answer.user_name}</td>
+                          <td>{answer.created_at.split('T')[0]}</td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
 
-            <Pagination
-              postsPerPage={postsPerPage}
-              totalPosts={posts.length}
-              paginate={paginate}
-            />
+              <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={posts.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -138,21 +142,24 @@ const QnAPage = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ totalPosts, postsPerPage, paginate, currentPage }) => {
   const pageNumbers = [];
+
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
   }
 
   return (
-    <div>
-      <div className="pagebtt">
-        {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

@@ -181,6 +181,7 @@ input, select, textarea {
 
 	p {
 		margin: 0 0 2em 0;
+		padding-left: 20px;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -199,7 +200,7 @@ input, select, textarea {
 		font-size: 2em;
 		line-height: 1.5em;
 		letter-spacing: -0.025em;
-		margin-top: 100px;
+		margin-top: 20px;
 	}
 
 	h3 {
@@ -807,7 +808,7 @@ input, select, textarea {
 		}
 
 		.row > .col-4 {
-			width: 50.33333%;
+			width: 80%;
 		}
 
 		.row > .off-4 {
@@ -2365,12 +2366,14 @@ input, select, textarea {
 #QnA-Upbtt{
 	margin-top: 70%;
 	margin-left: 20%;
-	background-color: rgb(120, 120, 120);
+	background-color: #ddd;
 	font-weight: bold;
+	color: #5e5d5d !important;
+	/* border: 1px solid #c8c6c6; */
 	
 }
 #QnA-Upbtt:hover{
-	background-color: rgba(120, 120, 120, 0.861);
+	background-color: #c0bebe;
 	font-weight: bold;
 	
 }

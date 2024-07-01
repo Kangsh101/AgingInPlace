@@ -58,7 +58,7 @@
 .description-box a {
   font-size: 1.2em;
   font-weight: bold;
-  color: #007bff;
+  color: #83D3C9;
   text-decoration: none;
 }
 
@@ -75,7 +75,8 @@
 .pagination {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .page-button {
@@ -84,20 +85,25 @@
   border: 1px solid #ddd;
   background-color: #f9f9f9;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s;
+  border-radius: 3px;
+  font-weight: bold;
 }
 
 .page-button:hover {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #eee;
+  border-color: #ccc;
 }
 
 .page-button.active {
-  background-color: #333;
+  background-color: #83d3c9;
   color: #fff;
+  border-color: #50c2b5;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
 }
 
-/* 반응형 스타일 */
 @media screen and (max-width: 730px) {
   .content-title {
     font-size: 2em;

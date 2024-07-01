@@ -53,13 +53,13 @@
 }
 #cancel-btt{
     color: #606060;
-    background-color: #ef9f9e;
+    background-color: #ddd;
     font-weight: bold;
     border: none;
 
 }
 #cancel-btt:hover{
-    background-color: #f09392;
+    background-color: #bbb;
 }
 #Diagnosis-btt{
     margin-top: 10px;

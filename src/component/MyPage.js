@@ -62,7 +62,7 @@ function MyPage() {
         <div className="mypage">
             <div className="sidebar">
                     <div className='sidebar-title'>
-                    <h2>마이페이지</h2>
+                       <h2 id='sidebar-h2'>마이페이지</h2>
                     </div>
                     
                 <ul className='sidebar-menu'>

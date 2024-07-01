@@ -12,7 +12,6 @@ const QnAUp = () => {
   const quillRef = useRef(null); 
   const [image, setImage] = useState(null);
 
-
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('userId');
     if (storedUserId) {
@@ -50,8 +49,6 @@ const QnAUp = () => {
       }
     };
   }, []);
-  
-  
 
   const modules = React.useMemo(() => ({
     toolbar: {
@@ -108,39 +105,41 @@ const QnAUp = () => {
       console.error('글 저장 중 오류 발생:', error);
     }
   };
+  
   const handleCancel = () => {
     navigate(-1);
   };
 
   return (
-    <div className="qna-page">
-      <div id='QnA-Plus'className="qnaplus">
-        <h2>QnA 게시글 작성</h2>
-        <div className="form-group">
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="제목"
-            className="title-input"
-            id='QnA-titlecss'
-          />
-          <ReactQuill
-           id='QnAup-content'
-            ref={quillRef}
-            value={content}
-            onChange={handleContentChange}
-            placeholder="내용을 입력하세요."
-            modules={modules}
-            
-          />
-        </div>
-        <div className="button-group">
-          <button id='QnAbtt' className='button' onClick={handleCancel}>취소</button>
-          <button className='button primary' onClick={handleSave}>글 작성</button>
+    <article id="main">
+      <div className="qna-page">
+        <div id='QnA-Plus' className="qnaplus">
+          <h2>QnA 게시글 작성</h2>
+          <div className="form-group">
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="제목"
+              className="title-input"
+              id='QnA-titlecss'
+            />
+            <ReactQuill
+              id='QnAup-content'
+              ref={quillRef}
+              value={content}
+              onChange={handleContentChange}
+              placeholder="내용을 입력하세요."
+              modules={modules}
+            />
+          </div>
+          <div className="button-group">
+            <button id='QnAbtt' className='button secondary' onClick={handleCancel}>취소</button>
+            <button className='button primary' onClick={handleSave}>글 작성</button>
+          </div>
         </div>
       </div>
-    </div>
+   </article>
   );
 };
 
