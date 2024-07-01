@@ -89,37 +89,39 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                 </div>
                 {isGuardian && (
                     <div className='patient-div'>
-                        <span className='patient-name'>환자 성함: {patientName}</span>
+                        <span className='patient-name'><span id='patientNaem'>환자 성함 : </span> {patientName}</span>
                     </div>
                 )}
-                <div>
-                    <label>진단받은 질환</label>
-                    {diseases.map((disease, index) => (
-                        <div key={index}>
-                            <input type="text" id='disease-input' value={disease} onChange={(e) => handleDiseaseChange(index, e.target.value)} placeholder="질환명 입력" />
-                        </div>
-                    ))}
-                    <button className='button' id='disease-btt' onClick={handleAddDisease}>질환 추가</button>
-                </div>
-                <div>
-                    <button className='button primary' id='Diagnosis-btt' onClick={handleSubmit}>추가</button>
-                </div>
-                <div className='Drug-name'>
-                    <label>복용 중인 약물</label>
-                    {medications.map((med, index) => (
-                        <div key={index}>
-                            <input type="text" id='Drug-width2' className='medication-name' value={med.name} onChange={(e) => handleMedicationChange(index, 'name', e.target.value)} placeholder="약명" />
-                            <div>
-                                <input type="text" id='Drug-width' className='dosage' value={med.dosage} onChange={(e) => handleMedicationChange(index, 'dosage', e.target.value)} placeholder="용량" />
-                                <input type="text" id='Drug-width' className='frequency' value={med.frequency} onChange={(e) => handleMedicationChange(index, 'frequency', e.target.value)} placeholder="복용 횟수" />
+                <div className='diagnosis-box'>
+                    <div>
+                        <label>진단받은 질환</label>
+                        {diseases.map((disease, index) => (
+                            <div key={index}>
+                                <input type="text" id='disease-input' value={disease} onChange={(e) => handleDiseaseChange(index, e.target.value)} placeholder="질환명 입력" />
                             </div>
-                        </div>
-                    ))}
-                    <button className='button' onClick={handleAddMedication}>약물 추가</button>
-                </div>
-                <button className='button primary' id='Medication-btt' onClick={handleSubmit}>추가</button>
-                <div>
-                    <button id='cancel-btt' className='button' onClick={onCancel}>취소</button>
+                        ))}
+                        <button className='button' id='disease-btt' onClick={handleAddDisease}>질환 추가</button>
+                    </div>
+                    <div>
+                        <button className='button primary' id='Diagnosis-btt' onClick={handleSubmit}>추가</button>
+                    </div>
+                    <div className='Drug-name'>
+                        <label>복용 중인 약물</label>
+                        {medications.map((med, index) => (
+                            <div key={index}>
+                                <input type="text" id='Drug-width2' className='medication-name' value={med.name} onChange={(e) => handleMedicationChange(index, 'name', e.target.value)} placeholder="약명" />
+                                <div>
+                                    <input type="text" id='Drug-width' className='dosage' value={med.dosage} onChange={(e) => handleMedicationChange(index, 'dosage', e.target.value)} placeholder="용량" />
+                                    <input type="text" id='Drug-width' className='frequency' value={med.frequency} onChange={(e) => handleMedicationChange(index, 'frequency', e.target.value)} placeholder="복용 횟수" />
+                                </div>
+                            </div>
+                        ))}
+                        <button className='button' onClick={handleAddMedication}>약물 추가</button>
+                    </div>
+                    <button className='button primary' id='Medication-btt' onClick={handleSubmit}>추가</button>
+                    <div>
+                        <button id='cancel-btt' className='button' onClick={onCancel}>취소</button>
+                    </div>
                 </div>
             </div>
         </div>

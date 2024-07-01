@@ -1,119 +1,90 @@
+/* 기본 스타일 */
 .editprofile-container {
-  margin-top: 50px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* 세로 가운데 정렬 */
+  justify-content: center;
   margin-bottom: 100px;
 }
 
 .editprofile-title {
-  margin-bottom: 20px;
-  border-bottom: 1px solid whitesmoke;
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   text-align: center;
-  padding: 50px;
-  font-size: 35px;
-  font-weight: 1000;
+  padding: 20px;
+  font-size: 28px;
+  font-weight: bold;
   user-select: none;
 }
 
 .editprofile-context-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  /* 좌측 정렬 */
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-.editprofile-row,
-.Profile-type {
-  margin-top: 20px;
+.editprofile-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 30px;
+  flex-direction: column;
+  margin-bottom: 5px;
+  width: 100%; 
 }
 
 .Profile-strong {
-  margin-right: 10px;
-  /* 각 strong 요소 사이의 우측 여백 */
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
 }
 
-.editprofile-row #email,
-.editprofile-row #name,
-.editprofile-row #phoneNumber,
+.editprofile-input,
 .Profile-type {
-  padding: 5px;
-  text-align: center;
-  border-radius: 15px;
-  display: inline-block;
-  /* 높이와 너비를 설정하기 위해 inline-block으로 변경 */
-  min-width: 300px;
-  /* 너비 설정 */
-  height: 40px;
-  /* 높이 설정 */
-  border: 1px solid rgba(256, 256, 256, 0.3);
-  /* border 스타일 설정 */
-  margin-left: 120px;
-  /* 각 span 요소 사이의 좌측 여백 설정 */
-  white-space: nowrap;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  transition: border-color 0.2s;
 }
 
-.editprofile-btn {
-  margin-top: 50px;
-  background-color: #e44c65;
-  color: white;
-  width: 400px;
-  height: 80px;
-  border-radius: 35px;
-  border: none;
-  margin-left: 15%;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 20px;
+.editprofile-input:focus,
+.Profile-type:focus {
+  border-color: #50c2b5;
+  outline: none;
 }
 
 .editprofile-btn:hover {
-  background-color: #953142;
+  background-color: #50c2b5;
 }
 
+/* 반응형 스타일 */
 @media screen and (max-width: 730px) {
-
-  .editprofile-row #email,
-  .editprofile-row #name,
-  .editprofile-row #phoneNumber,
-  .Profile-type {
-    width: 10px; 
-    margin-left: 3em;
+  .editprofile-context-container {
+    padding: 15px;
   }
 
   .editprofile-btn {
-    max-width: 60%;
-    margin-left: 20%;
+    padding: 12px;
   }
 }
+
 @media screen and (max-width: 385px) {
+  .editprofile-title {
+    font-size: 24px;
+    padding: 15px;
+  }
+
   .editprofile-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .Profile-strong {
-    margin-left: 20%;
-    margin-bottom: 10px; /* Profile-strong 요소 사이의 간격 설정 */
-  }
-
-  .editprofile-input #name,
-  .editprofile-input #email,
-  .editprofile-input #phoneNumber,
-   .Profile-type {
-    width: 30px;
-    margin-left: 15%;
-    margin-bottom: 20px; /* editprofile-input 요소 사이의 간격 설정 */
+    margin-bottom: 10px;
   }
 
   .editprofile-btn {
-    max-width: 50%;
-    margin-left: 25%;
-    height: 50px;
+    padding: 10px;
+    font-size: 14px;
   }
 }

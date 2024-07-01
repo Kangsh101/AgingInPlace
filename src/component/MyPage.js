@@ -64,6 +64,7 @@ function MyPage() {
                     <div className='sidebar-title'>
                     <h2>마이페이지</h2>
                     </div>
+                    
                 <ul className='sidebar-menu'>
                     <li onClick={() => setSelectedSection('myinfo')}>
                         <span>내 정보</span>

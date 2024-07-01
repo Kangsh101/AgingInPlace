@@ -305,9 +305,9 @@
   .button11{
     margin-bottom: 10px;
   }
-  #role{
+  /* #role{
     width: 95%;
-  }
+  } */
   }
   .button11{
     -moz-appearance: none;
@@ -347,7 +347,7 @@
   }
 
   #patientPhoneNumber{
-    width: 12.5em;
+    width: 10.5em;
     margin-right: 10px;
   }
   .button-container {

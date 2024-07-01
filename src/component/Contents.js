@@ -3,7 +3,7 @@ import '../css/Contents.css';
 
 const ContentPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const videosPerPage = 4;
+  const videosPerPage = 3;
 
   const indexOfLastVideo = currentPage * videosPerPage;
   const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
@@ -19,32 +19,30 @@ const ContentPage = () => {
             <h2 className='content-title'>프로그램 콘텐츠</h2>
           </header>
           <div className="content-layout">
-            <div className="content-row">
-              {currentVideos.map((video, index) => (
-                <div className="video-description-wrapper" key={index}>
-                  <div className="video-box">
-                    <iframe 
-                      src={video.src}
-                      title={video.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <div className="description-box">
-                    <a href={video.src}>{video.title}</a>
-                    <p>{video.description}</p>
-                  </div>
+            {currentVideos.map((video, index) => (
+              <div className="video-description-wrapper" key={index}>
+                <div className="video-box">
+                  <iframe 
+                    src={video.src}
+                    title={video.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
-              ))}
-            </div>
-            <Pagination
-              videosPerPage={videosPerPage}
-              totalVideos={videos.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
+                <div className="description-box">
+                  <a href={video.src} target="_blank" rel="noopener noreferrer">{video.title}</a>
+                  <p>{video.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
+          <Pagination
+            videosPerPage={videosPerPage}
+            totalVideos={videos.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </div>
       </div>
     </article>

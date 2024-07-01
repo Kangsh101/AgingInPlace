@@ -1,4 +1,3 @@
-/* Contents.css */
 .content-main {
   display: flex;
   justify-content: center;
@@ -8,6 +7,11 @@
 .content-container {
   max-width: 1200px;
   width: 100%;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
 }
 
 .major {
@@ -16,51 +20,56 @@
 }
 
 .content-title {
-  font-size: 2em;
-  /* font-weight: bold; */
-  font-weight: 400;
+  font-size: 2.5em;
+  font-weight: 600;
 }
 
 .content-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.content-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .video-description-wrapper {
   display: flex;
   flex-direction: column;
-  margin: 20px;
-  width: 45%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .video-box {
-  margin-bottom: 10px;
+  width: 100%;
+  height: 200px;
+}
+
+.video-box iframe {
+  width: 100%;
+  height: 100%;
 }
 
 .description-box {
-  padding: 10px;
+  padding: 15px;
   background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border-top: 1px solid #ddd;
 }
 
 .description-box a {
   font-size: 1.2em;
   font-weight: bold;
-  color: #333;
+  color: #007bff;
   text-decoration: none;
+}
+
+.description-box a:hover {
+  text-decoration: underline;
 }
 
 .description-box p {
   font-size: 1em;
-  color: #666;
+  color: #333;
+  margin-top: 10px;
 }
 
 .pagination {
@@ -75,9 +84,38 @@
   border: 1px solid #ddd;
   background-color: #f9f9f9;
   cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.page-button:hover {
+  background-color: #007bff;
+  color: #fff;
 }
 
 .page-button.active {
   background-color: #333;
   color: #fff;
 }
+
+/* 반응형 스타일 */
+@media screen and (max-width: 730px) {
+  .content-title {
+    font-size: 2em;
+  }
+}
+
+@media screen and (max-width: 385px) {
+  .description-box a {
+    font-size: 1em;
+  }
+
+  .description-box p {
+    font-size: 0.9em;
+  }
+
+  .page-button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+}
+  

@@ -39,7 +39,6 @@
 }
 .Drug-name{
     margin-top: 20px;
-    margin-left: 2%;
 }
 .dosage{
     margin-right: 10px;
@@ -52,20 +51,39 @@
 #Diagnosis-btt,#Medication-btt,#cancel-btt{
     width: 9em;
 }
+#cancel-btt{
+    color: #606060;
+    background-color: #ef9f9e;
+    font-weight: bold;
+    border: none;
+
+}
+#cancel-btt:hover{
+    background-color: #f09392;
+}
 #Diagnosis-btt{
     margin-top: 10px;
     align-items: start;
+    width: 90%;
 }
 #Medication-btt{
     margin-top: 10px;
+    width: 90%;
 }
 #cancel-btt{
     margin-top: 10px;
+    width: 90%;
+}
+#patientNaem{
+    font-size: 25px;
+    font-weight: 500;
+    color: #5c5c5c;
 }
 @media (max-width: 450px) {
     .medication-name, .dosage, .frequency, .button {
         width: 100%; /* 너비 100%로 설정 */
         min-width: 40%; /* 최소 너비 100%로 확장 */
+        line-height: 2em;
     }
 
     .medication-container, .daskdkasdk > div {
@@ -91,4 +109,7 @@
     #Drug-width2{
         width: 90%;
     }
+}
+.diagnosis-box{
+    margin-left: 5%;
 }
