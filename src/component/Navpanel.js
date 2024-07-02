@@ -58,7 +58,7 @@ const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
     <div className={`wrapper ${isLoaded ? 'is-preload' : ''}`}>
       <div id="titleBar">
         <a href="#navPanel" className={`toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}></a>
-        <span className="title">로고</span>
+        <span className="title">Aging In Place</span>
       </div>
       <div id="navPanel" ref={navPanelRef} className={isNavOpen ? 'visible' : ''}>
         <nav>

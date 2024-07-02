@@ -87,7 +87,7 @@
         z-index: 10002;
     }
     #titleBar .title {
-        color: #fff;
+        color: #393838;
         display: block;
         font-weight: 300;
         height: 44px;
@@ -98,7 +98,7 @@
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
         font-feature-settings: normal;
-        background: #e44c65;
+        background: #83D3C9;
         color: #ffffff80;
         content: "\f0c9";
         display: inline-block;
@@ -125,7 +125,5 @@
       display: none;
   }
 
-  #navPanel {
-      display: block;
-  }
+
 }
