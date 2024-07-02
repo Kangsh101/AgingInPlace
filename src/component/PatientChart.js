@@ -8,7 +8,12 @@ const PatientChart = () => {
   const [patientData, setPatientData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // 기준 값 설정
+  const medicationData = [
+    { medication_name: '약물 A', taken: true },
+    { medication_name: '약물 B', taken: false },
+    { medication_name: '약물 C', taken: true }
+  ];
+
   const sleepStandard = 35449.5;
   const activityStandard = 155.3;
 
@@ -33,7 +38,7 @@ const PatientChart = () => {
             offsetY: 25,
             fontSize: '22px',
             formatter: function (val) {
-              return `${Math.min(Math.round(val), 100)}%`; // 100% 초과하지 않도록 설정
+              return `${Math.min(Math.round(val), 100)}%`; 
             }
           },
         },
@@ -68,7 +73,7 @@ const PatientChart = () => {
             offsetY: 70,
             fontSize: '22px',
             formatter: function (val) {
-              return `${Math.min(Math.round(val), 100)}%`; // 100% 초과하지 않도록 설정
+              return `${Math.min(Math.round(val), 100)}%`; 
             }
           },
         },
@@ -86,7 +91,7 @@ const PatientChart = () => {
     labels: ['운동량'],
   };
 
-  const medicationOptions = {
+  const medicationOptions = (label) => ({
     chart: {
       height: 350,
       type: 'radialBar',
@@ -107,14 +112,14 @@ const PatientChart = () => {
             offsetY: 25,
             fontSize: '22px',
             formatter: function (val) {
-              return `${Math.min(Math.round(val), 100)}%`; // 100% 초과하지 않도록 설정
+              return `${val ? '복용' : '미복용'}`;
             }
           },
         },
       },
     },
-    labels: ['약 섭취'],
-  };
+    labels: [label],
+  });
 
   useEffect(() => {
     const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
@@ -134,11 +139,9 @@ const PatientChart = () => {
       .catch((error) => console.error('Error fetching patient data:', error.message));
   }, [selectedDate]);
 
-  // 기준 값을 사용하여 퍼센트로 변환하고 반올림하여 소수점 제거
   const sleepSeries = patientData.map((pd) => Math.min((pd.sleep_duration / sleepStandard) * 100, 100));
   const activitySeries = patientData.map((pd) => Math.min((pd.activity_cal_active / activityStandard) * 100, 100));
-  const medicationSeries = patientData.map((pd) => Math.min(pd.medication_taken || 0, 100));
-
+  
   return (
     <article id='main'>
       <div className='chart-main'>
@@ -163,9 +166,16 @@ const PatientChart = () => {
               </div>
             </div>
             <div className="chart-row">
-              <div className="chart-item">
-                <ReactApexChart options={medicationOptions} series={medicationSeries} type="radialBar" height={350} />
-              </div>
+              {medicationData.map((med) => (
+                <div key={med.medication_name} className="chart-item">
+                  <ReactApexChart 
+                    options={medicationOptions(med.medication_name)} 
+                    series={[med.taken ? 100 : 0]} 
+                    type="radialBar" 
+                    height={350} 
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
