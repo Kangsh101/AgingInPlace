@@ -33,6 +33,16 @@
   margin-top: 20px;
 }
 
+button {
+  color: #fff;
+  background: #83D3C9;
+  margin: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 button:hover {
   background: #50c2b5;
