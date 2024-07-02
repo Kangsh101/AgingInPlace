@@ -128,8 +128,7 @@ app.post('/api/signup', (req, res) => {
 //로그인
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-
-  const query = `SELECT * FROM members WHERE username = ? AND password = ?`;
+  const query = 'SELECT * FROM members WHERE username = ? AND password = ?';
 
   connection.query(query, [username, password], (err, result) => {
     if (err) {
@@ -147,8 +146,10 @@ app.post('/api/login', (req, res) => {
       return;
     }
     req.session.userId = user.id;
+    req.session.userRole = user.role;
 
     console.log('세션에 저장된 기본키:', req.session.userId);
+    console.log('세션에 저장된 역할:', req.session.userRole);
 
     res.status(200).json(user);
   });
@@ -1150,10 +1151,6 @@ app.put('/api/faq/:id', (req, res) => {
 });
 
 
-
-
-
-
 // FAQ 조회
 app.get('/api/faq', (req, res) => {
   const query = `
@@ -1679,6 +1676,52 @@ app.post('/downloadFile', async (req, res) => {
     res.status(500).send('Failed to download file');
   }
 });
+
+// 환자 데이터 가져오는 API
+app.get('/api/patient-data', (req, res) => {
+  if (!req.session.userId) {
+    res.status(403).send('로그인이 필요합니다');
+    return;
+  }
+
+  const { date } = req.query;
+  let query = '';
+  let queryParams = [];
+
+  console.log('userId:', req.session.userId);
+  console.log('userRole:', req.session.userRole);
+  console.log('date:', date);
+
+  if (req.session.userRole === 'patient') {
+    query = 'SELECT * FROM patient_data WHERE user_id = ? AND DATE(created_at) = ?';
+    queryParams = [req.session.userId, date];
+  } else if (req.session.userRole === 'guardian') {
+    query = 'SELECT * FROM patient_data WHERE user_id = (SELECT patientId FROM members WHERE id = ?) AND DATE(created_at) = ?';
+    queryParams = [req.session.userId, date];
+  } else {
+    // 일반인 역할을 처리하기 위한 로직을 추가합니다.
+    query = 'SELECT * FROM patient_data WHERE user_id = ? AND DATE(created_at) = ?'; // 또는 적절한 쿼리를 설정합니다.
+    queryParams = [req.session.userId, date];
+  }
+
+  if (!query) {
+    console.error('Query not set');
+    res.status(500).send('Query not set');
+    return;
+  }
+
+  connection.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('데이터 조회 실패:', err.stack); // 상세한 오류 메시지 로깅
+      res.status(500).send('데이터 조회 실패');
+      return;
+    }
+    console.log('Fetched patient data:', results); // 데이터 확인용
+    res.json(results);
+  });
+});
+
+
 
 app.post('/chart/calories', async (req, res) => {
   const username = 'Lee'; // username을 'Lee'로 설정
