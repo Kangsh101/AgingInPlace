@@ -1,10 +1,6 @@
 #PatientDetail-container{
     display: flex;
 }
-.cmsadd-main-content{
-    padding: 50px;
-    margin-left: 15em;
-}
 .X-Button{
     padding: 7px;
     background: white;

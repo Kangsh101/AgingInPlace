@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import '../css/FaqUp.css';
+import '../css/Qnaup.css'; // 동일한 CSS 파일을 사용
 
 const FaqUp = () => {
   const [title, setTitle] = useState('');
@@ -53,14 +53,14 @@ const FaqUp = () => {
   const modules = React.useMemo(() => ({
     toolbar: {
       container: [
-        [{ 'header': [1, 2, false] }],
+        [{ header: [1, 2, false] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
         ['link', 'image'],
         ['clean']
       ],
       handlers: {
-        'image': imageHandler
+        image: imageHandler
       }
     },
   }), [imageHandler]);
@@ -89,33 +89,35 @@ const FaqUp = () => {
   }
 
   return (
-    <div className="FaqUp-container">
-      <div id='Faq-Plus'>
-        <h2>FAQ 등록</h2>
-        <div className="form-group">
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="제목"
-            className="title-input"
-            id='Faq-titlecss'
-          />
-          <ReactQuill
-            id='Faq-content'
-            ref={quillRef}
-            value={content}
-            onChange={handleContentChange}
-            placeholder="내용을 입력하세요."
-            modules={modules}
-          />
-        </div>
-        <div className="button-group">
-          <button className="button" onClick={handleBack}>취소</button>
-          <button className="button primary" onClick={handleSubmit}>글 등록</button>
+    <article id="main">
+      <div className="qna-page">
+        <div id='QnA-Plus' className="qnaplus">
+          <h2>FAQ 등록</h2>
+          <div className="form-group">
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="제목"
+              className="title-input"
+              id='QnA-titlecss'
+            />
+            <ReactQuill
+              id='QnAup-content'
+              ref={quillRef}
+              value={content}
+              onChange={handleContentChange}
+              placeholder="내용을 입력하세요."
+              modules={modules}
+            />
+          </div>
+          <div className="button-group">
+            <button id='QnAbtt' className='button secondary' onClick={handleBack}>취소</button>
+            <button className='button primary' onClick={handleSubmit}>글 등록</button>
+          </div>
         </div>
       </div>
-    </div>
+   </article>
   );
 };
 

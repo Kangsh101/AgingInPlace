@@ -98,7 +98,7 @@ const PatientDetail = () => {
       <CmsSidebar />
       <div id='CmsAdd-container'>
         <div className="cms-container">
-          <div className="cmsadd-main-content">
+          <div className="cms-main-content">
             <div className="Cmss-header">
               <header className='major'>
                 <h2>진단명 및 약물 정보 추가</h2>

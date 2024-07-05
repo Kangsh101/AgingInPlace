@@ -49,9 +49,13 @@ const CmsFaqEdit = () => {
       .catch(error => console.error('수정 중 오류 발생:', error));
   };
 
+  const handleCancel = () => {
+    navigate('/cmsfaq');
+  };
+
   return (
     <div className="FaqUp-container">
-      <div id='Faq-Plus'>
+      <div id="Faq-Plus" className="Faq-edit">
         <h2>FAQ 수정</h2>
         <div className="form-group">
           <input
@@ -60,10 +64,10 @@ const CmsFaqEdit = () => {
             onChange={handleTitleChange}
             placeholder="제목"
             className="title-input"
-            id='Faq-titlecss'
+            id="Faq-titlecss"
           />
           <ReactQuill
-            id='Faq-content'
+            id="Faq-content"
             ref={quillRef}
             value={content}
             onChange={handleContentChange}
@@ -71,7 +75,7 @@ const CmsFaqEdit = () => {
           />
         </div>
         <div className="button-group">
-          <button className="button" onClick={() => navigate('/cmsfaq')}>취소</button>
+          <button className="button secondary" onClick={handleCancel}>취소</button>
           <button className="button primary" onClick={handleSaveEdit}>저장</button>
         </div>
       </div>

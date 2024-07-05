@@ -69,7 +69,7 @@ const Cmsfaq = () => {
         </header>
         <div className="Cmss-header">
           <div className='Cmss-chch'>
-            <Link to="/Cms"><button className='button' id='cmscs-notice' >공지사항 게시판</button></Link>
+            <Link to="/Cms"><button className='button' id='Notice-nofaq' >공지사항 게시판</button></Link>
             <Link to="/Cmsfaq"><button className='button' id='cms-nodicego'>FAQ 게시판</button></Link>
           </div>
           <div className="Cmss-options">
@@ -80,9 +80,11 @@ const Cmsfaq = () => {
             <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
             <button className="button primary">검색</button>
           </div>
-          <Link to="/faqup">
-            <button className="button1" id='saddasdasd'>FAQ 등록</button>
-          </Link>
+          <div className='Cms-noticefaqbtt'>
+            <Link to="/faqup">
+              <button className="button1" id='saddasdasd'>FAQ 등록</button>
+            </Link>
+          </div>
         </div>
         <div className="Cmss-content">
           <table>
@@ -107,8 +109,8 @@ const Cmsfaq = () => {
                     <tr className='sang-trtag'>
                       <td colSpan="4">
                         <div className="selected-post">
-                          <p className='sang-title wrap-text'><span className='cms-QA'>Q </span> : {post.title}</p>
-                          <p className='sang-description wrap-text'><span className='cms-QA'>A </span> : {post.content}</p>
+                          <p className='sang-title wrap-text'><span className='cms-QA'>Q</span>{post.title}</p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>A</span>{post.content}</p>
                           <div className='sang-bttcon'>
                             <button className='button primary' id='cms-correction' onClick={() => navigate(`/faqedit/${post.post_id}`)}>게시글 수정</button>
                             <button className='button' onClick={() => handleDelete(post.post_id, indexOfFirstPost + index)}>게시글 삭제</button>
