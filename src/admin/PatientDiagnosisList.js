@@ -89,7 +89,7 @@ const PatientDiagnosisList = () => {
             <ul className="enhanced-list">
               {diagnoses.map((diagnosis) => (
                 <li key={diagnosis.id} className="enhanced-list-item">
-                  {diagnosis.diagnosis}
+                  <span>{diagnosis.diagnosis}</span>
                   <button className='X-Button' onClick={() => handleDeleteDiagnosis(diagnosis.id)}>X</button>
                 </li>
               ))}
@@ -100,7 +100,7 @@ const PatientDiagnosisList = () => {
             <ul className="enhanced-list">
               {medications.map((medication) => (
                 <li key={medication.id} className="enhanced-list-item">
-                  {medication.name} (용량: {medication.dosage}, 복용 횟수: {medication.frequency})
+                  <span>{medication.name} (용량: {medication.dosage}, 복용 횟수: {medication.frequency})</span>
                   <button className='X-Button' onClick={() => handleDeleteMedication(medication.id)}>X</button>
                 </li>
               ))}

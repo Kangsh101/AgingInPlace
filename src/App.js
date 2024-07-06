@@ -111,11 +111,11 @@ function App() {
           <Route path="/Cmscontents" element={<><CmsNavipanel/><Cmscontents /></>} />
           <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis /></>} />
           <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria /></>} />
-          <Route path="/addpatientcriteria/:id" element={<AddPatientCriteria />} />
-          <Route path="/patient/:id" element={<PatientDiagnosisList  />} />
+          <Route path="/addpatientcriteria/:id" element={<><CmsNavipanel/><AddPatientCriteria /></>} />
+          <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList  /></>} />
 
 
-          <Route path="/patient/:id/add-diagnosis" element={<PatientDetail/>} />
+          <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail/></>} />
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
       </div>

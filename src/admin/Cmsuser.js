@@ -3,12 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
+
 const Cmsuser = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetch('/api/cmsusers')
@@ -27,15 +28,9 @@ const Cmsuser = () => {
 
   const location = useLocation();
   const handleUserClick = (index) => {
-    setSelectedUserIndex(selectedUserIndex === index ? null : index); 
+    setSelectedUserIndex(selectedUserIndex === index ? null : index);
   };
-  // if (!isAdmin) {
-  //   return (
-  //     <div>
-  //       <h1>권한이 없습니다.</h1>
-  //     </div>
-  //   );
-  // }
+
   const handleDeactivateUser = (userId) => {
     fetch(`/api/deactivateUser/${userId}`, {
       method: 'PUT',
@@ -132,6 +127,7 @@ const Cmsuser = () => {
             postsPerPage={postsPerPage}
             totalPosts={users.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
         </div>
       </div>
@@ -139,7 +135,7 @@ const Cmsuser = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -147,14 +143,16 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div>
-      <div className="Cmss-pagebtt">
-        {pageNumbers.map(number => (
-          <button  key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

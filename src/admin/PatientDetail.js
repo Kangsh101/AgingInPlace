@@ -94,11 +94,9 @@ const PatientDetail = () => {
   };
 
   return (
-    <div id='PatientDetail-container'>
+    <div className="cms-container">
       <CmsSidebar />
-      <div id='CmsAdd-container'>
-        <div className="cms-container">
-          <div className="cms-main-content">
+      <div className="cms-main-content">
             <div className="Cmss-header">
               <header className='major'>
                 <h2>진단명 및 약물 정보 추가</h2>
@@ -165,8 +163,7 @@ const PatientDetail = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
   );
 };
 

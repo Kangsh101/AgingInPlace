@@ -12,9 +12,20 @@ const PatientCriteria = () => {
   useEffect(() => {
     fetch('/api/PatientCriteriaAdd')
       .then(response => response.json())
-      .then(data => setUsers(data))
+      .then(data => setUsers(data.map(user => ({
+        ...user,
+        birthdate: formatDate(user.birthdate)
+      }))))
       .catch(error => console.error('Error fetching users:', error));
   }, []);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -68,6 +79,7 @@ const PatientCriteria = () => {
             postsPerPage={postsPerPage}
             totalPosts={users.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
         </div>
       </div>
@@ -75,7 +87,7 @@ const PatientCriteria = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -83,14 +95,16 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div>
-      <div className="Cmss-pagebtt">
-        {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

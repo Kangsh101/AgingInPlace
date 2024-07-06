@@ -61,6 +61,7 @@ const QuestionDetailCIST = () => {
             <button 
               className="button" 
               onClick={handleDelete}
+              id='cancle-btt'
             >
               삭제
             </button>

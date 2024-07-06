@@ -158,7 +158,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   }
 
   return (
-    <div className="Cmss-pagebtt">
+    <div className="pagination">
       {pageNumbers.map(number => (
         <button
           key={number}

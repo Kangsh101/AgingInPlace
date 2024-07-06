@@ -127,6 +127,7 @@ const Cmsfaq = () => {
             postsPerPage={postsPerPage}
             totalPosts={posts.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
         </div>
       </div>
@@ -134,7 +135,7 @@ const Cmsfaq = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -142,14 +143,16 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div>
-      <div className="Cmss-pagebtt">
-        {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

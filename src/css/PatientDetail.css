@@ -1,58 +1,92 @@
-#PatientDetail-container{
+#PatientDetail-container {
     display: flex;
-}
-.X-Button{
-    padding: 7px;
-    background: white;
-    border: 1px solid #c1c1c1;
-}
-#dosage{
-    width: 8em;
-    margin-right: 5px;
-}
-#frequency{
-    width: 10.38em;
-    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-#CmsAdd-container{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+.X-Button {
+    padding: 7px;
+    border: 1px solid #c1c1c1;
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
 }
-#diagnosis{
-    width: 21em;
+
+.X-Button:hover {
+    background-color: #ff1a1a;
+}
+
+#dosage, #frequency, #diagnosis, #medication {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.diagnosis-item, .medication-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /* flex-wrap: wrap; */
+}
+.medication-item input{
     margin-right: 5px;
 }
-#medication{
-    width: 21em;
-}
-#PatientDetail-Btt{
-    width: 9em;
-}
-.Cms-diagnosis-container{
-    display: flex;
-    flex-direction: column;
-    margin-top: 50px;
-}
-.Cms-medication-container{
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-.Medication-saveBtt, .Diagnosis-saveBtt{
+#CmsAdd-container {
     align-items: center;
     display: flex;
-    margin-top: 10px;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
 }
-.Diagnosis-saveBtt{
-    margin-bottom: 20px;
+
+.Cms-diagnosis-container, .Cms-medication-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px;
 }
-#saveBtt{
-    width: 10em;
-    padding: 1.6em;
+
+.Medication-saveBtt, .Diagnosis-saveBtt {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.Cmss-header {
     text-align: center;
-    line-height: 0em;
-    max-width: 70%;
-    line-height: 0em;
+    margin-bottom: 20px;
+}
+
+.Cmss-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+#cancelBtt{
+    background-color: #bbb;
+}
+@media (max-width: 768px) {
+    .diagnosis-item, .medication-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .X-Button {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    #PatientDetail-Btt, #saveBtt, #cancelBtt {
+        width: 100%;
+        max-width: none;
+    }
 }
