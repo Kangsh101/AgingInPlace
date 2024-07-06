@@ -109,7 +109,7 @@ const Main = () => {
   };
 
   return (
-    
+
     <div className="is-preload landing" id="page-wrapper">
       <AnimatedContent>
       <section id="banner" style={{ backgroundPosition: 'center -42.6px' }}>
@@ -127,8 +127,9 @@ const Main = () => {
         {/* <a href="#one" className="goto-next scrolly">Next</a> */}
       </section>
       </AnimatedContent>
+      <article id='main'>
       <section id="four" className="wrapper style1 special fade-up">
-        
+      
         <div className="container">
           <header className="major">
             <h2>소개</h2>
@@ -151,7 +152,7 @@ const Main = () => {
             <div className="section-description">
           {selectedSection === 'whatIsDementia' && (
             <div className='sul2'>
-              <h1 className='testsiz'>치매란?</h1>
+              <h2 className='testsiz'>치매란?</h2>
               <p className='sul1'>
                 <span className='sul11'>65세 이상 노인의 약 5~8%가 치매로 추정되고 있으며,</span> 
                 <span className='sul111'>연령이 </span>
@@ -160,7 +161,7 @@ const Main = () => {
           )}
           {selectedSection === 'causes' && (
             <div className='sul2'>
-              <h1 className='testsiz'>치매의 원인</h1>
+              <h2 className='testsiz'>치매의 원인</h2>
               <p className='sul1'>
                 <span className='sul11'>65세 이상</span> 
                 <span className='sul111'>연령</span>
@@ -169,7 +170,7 @@ const Main = () => {
           )}
           {selectedSection === 'treatments' && (
             <div className='sul2'>
-              <h1 className='testsiz'>치료방법</h1>
+              <h2 className='testsiz'>치료방법</h2>
               <p className='sul1'>
                 <span className='sul11'>65세 </span> 
                 <span className='sul111'>연령</span>
@@ -178,7 +179,7 @@ const Main = () => {
           )}
           {selectedSection === 'prevention' && (
             <div className='sul2'>
-              <h1 className='testsiz'>치매 예방법</h1>
+              <h2 className='testsiz'>치매 예방법</h2>
               <p className='sul1'>
                 <span className='sul11'>65세 </span> 
                 <span className='sul111'>연령</span>
@@ -195,6 +196,7 @@ const Main = () => {
           </footer>
         </div>
       </section>
+      </article>
       {/* section1 */}
       <section id="one2" className="spotlight style1 bottom">
         <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>

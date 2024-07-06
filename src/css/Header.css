@@ -46,11 +46,13 @@
 
         #header nav ul li a, #header nav ul li span {
           border: 0;
-          color: #7C8081;
+          color: #656464;
           display: inline-block;
           height: inherit;
           line-height: inherit;
           outline: 0;
+          font-weight: 500;
+          font-size: 17px;
         }
 
           #header nav ul li a.button, #header nav ul li span.button {

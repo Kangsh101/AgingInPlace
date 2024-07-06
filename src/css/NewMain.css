@@ -3407,6 +3407,9 @@ input, select, textarea {
 			-ms-transition: -ms-transform 1s ease, opacity 1s ease;
 			transition: transform 1s ease, opacity 1s ease;
 			opacity: 1;
+			background-color: white;
+			border-radius: 10px;
+			padding: 10px;
 		}
 
 		.wrapper.fade-up.inactive > .container {
@@ -3488,11 +3491,11 @@ input, select, textarea {
 
 
 /* Banner */
-
+		/* , url(/public/images/asddddd.jpg) */
 #banner {
     background-attachment: fixed;
     background-color: #272833;
-    background-image: url(/public/images/cat4.jpg);
+    background-image: url(/public/images/asddddd.jpg);
     background-position: center center;
     background-size: cover;
     box-shadow: 0 0.25em 0.5em 0 rgba(221, 197, 197, 0.25);
@@ -3511,7 +3514,7 @@ input, select, textarea {
 		}
 
 		#banner:after {
-			background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/asddddd.jpg);
+			background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgb(255 255 255 / 95%));
 			content: '';
 			display: block;
 			height: 50%;
@@ -3520,9 +3523,10 @@ input, select, textarea {
 			top: 0;
 			width: 100%;
 		}
+		/* , url(/public/images/asddddd.jpg) */
 		@media screen and (max-width: 736px) {
 			#banner:after {
-				background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgba(23, 24, 32, 0.95)), url(/public/images/asddddd.jpg);
+				background-image: -webkit-linear-gradient(top, rgba(91, 92, 102, 0.95), rgb(255 255 255 / 95%));
 				content: '';
 				display: block;
 				height: 70%;
@@ -3637,17 +3641,17 @@ input, select, textarea {
 				}
 				.centered-button-container button{
 					transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-					background-color: transparent;
+					/* background-color: transparent; */
 					border-radius: 4px;
 					border: 0;
-					box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+					/* box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3); */
 					color: #ffffff !important;
 					cursor: pointer;
 					display: inline-block;
-					font-weight: 300;
+					/* font-weight: 300; */
 					height: 3em;
 					line-height: 3em;
-					padding:  5px 25px 40px 25px;
+					/* padding:  5px 25px 40px 25px; */
 					text-align: center;
 					text-decoration: none;
 					white-space: nowrap;
@@ -3671,7 +3675,11 @@ input, select, textarea {
 				.select-field11{
 					width: 9em;
 				}
-
+				@media screen and (max-width: 738px) {
+					.container button{
+						line-height: 2em;
+					}
+				}
 
 /* XLarge */
 
