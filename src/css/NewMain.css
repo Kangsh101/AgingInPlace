@@ -688,6 +688,9 @@ input, select, textarea {
 		margin: 0 auto;
 		max-width: calc(100% - 4em);
 		width: 70em;
+		/* background-color: white; */
+		border-radius: 10px;
+		padding: 10px;
 	}
 
 		.container.xsmall {
@@ -2214,7 +2217,7 @@ input, select, textarea {
 	}
 
 	header p {
-		color: #ffffff;
+		color: #393838;
 		position: relative;
 		margin: 0 0 1.5em 0;
 	}
@@ -3171,7 +3174,7 @@ input, select, textarea {
 		}
 
 		.spotlight:before {
-			background-image: url("/public/images/cat2.jpg");
+			background-image: url("/public/images/333.jpg");
 			content: '';
 			display: block;
 			height: 100%;
@@ -3197,7 +3200,7 @@ input, select, textarea {
 			-webkit-transition: -webkit-transform 1s ease, opacity 1s ease;
 			-ms-transition: -ms-transform 1s ease, opacity 1s ease;
 			transition: transform 1s ease, opacity 1s ease;
-			background: rgba(23, 24, 32, 0.95);
+			background: rgb(205 204 204 / 95%);
 			/* background: rgba(91, 92, 102, 0.95); */
 			border-style: solid;
 			opacity: 1;
@@ -3495,7 +3498,7 @@ input, select, textarea {
 #banner {
     background-attachment: fixed;
     background-color: #272833;
-    background-image: url(/public/images/asddddd.jpg);
+    background-image: url(/public/images/111.jpg);
     background-position: center center;
     background-size: cover;
     box-shadow: 0 0.25em 0.5em 0 rgba(221, 197, 197, 0.25);
@@ -3774,7 +3777,7 @@ input, select, textarea {
 				}
 
 				.spotlight .content {
-					background-color: #1c1d26;
+					background-color: #ffffff;
 					border-width: 0 !important;
 					border-top-width: 0.35em !important;
 					bottom: auto !important;

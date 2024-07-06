@@ -92,7 +92,7 @@
 	}
 
 	.spotlight2:before {
-		background-image: url("/public/images/cat1.jpg");
+		background-image: url("/public/images/555.jpg");
 		content: '';
 		display: block;
 		height: 100%;
@@ -118,7 +118,7 @@
 		-webkit-transition: -webkit-transform 1s ease, opacity 1s ease;
 		-ms-transition: -ms-transform 1s ease, opacity 1s ease;
 		transition: transform 1s ease, opacity 1s ease;
-		background: rgba(23, 24, 32, 0.95);
+		background: rgb(205 204 204 / 95%);
 		border-style: solid;
 		opacity: 1;
 		position: absolute;
@@ -312,7 +312,7 @@
           }
   
           .spotlight2 .content {
-            background-color: #1c1d26;
+            background-color: #f6f6f6;
             border-width: 0 !important;
             border-top-width: 0.35em !important;
             bottom: auto !important;

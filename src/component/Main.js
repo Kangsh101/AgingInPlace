@@ -127,9 +127,9 @@ const Main = () => {
         {/* <a href="#one" className="goto-next scrolly">Next</a> */}
       </section>
       </AnimatedContent>
-      <article id='main'>
-      <section id="four" className="wrapper style1 special fade-up">
       
+      <section id="four" className="wrapper style1 special fade-up">
+      <article id='main'>
         <div className="container">
           <header className="major">
             <h2>소개</h2>
@@ -195,8 +195,8 @@ const Main = () => {
             </ul>
           </footer>
         </div>
+        </article>
       </section>
-      </article>
       {/* section1 */}
       <section id="one2" className="spotlight style1 bottom">
         <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
@@ -227,30 +227,34 @@ const Main = () => {
       </section>
       
       {/* section2 */}
+      
       <section id="one" className="spotlight2 style1 bottom">
         <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
         <AnimatedContent3 ref={section2Ref} className={animationAdded2 ? 'animation' : ''}>
           
         <div className="content" ref={content2Ref} style={{ display: 'none' }}>
+
           <div className="container">
             <div className="row">
               <div className="col-4 col-12-medium">
                 <header>
-                  <h2>치매 콘텐츠 2</h2>
-                  <p>Nascetur eu nibh vestibulum amet gravida nascetur praesent</p>
+                  <h2>치매 콘텐츠</h2>
+                  <p>eqweqeqeqweㄷㅂ짇ㅂㅈ딥</p>
                 </header>
               </div>
               <div className="col-4 col-12-medium">
-                <p>Feugiat accumsan lorem eu ac lorem amet sed accumsan donec.
-                  Blandit orci porttitor semper. Arcu phasellus tortor enim mi</p>
+                <p>내용123</p>
               </div>
               <div className="col-4 col-12-medium">
-                <p>Morbi enim nascetur et placerat lorem sed iaculis neque ante
-                  adipiscing adipiscing metus massa. Blandit orci porttitor semper.</p>
+                <p>내용 3213123131
+                  dasdaadadadasda
+                  dadasd321ㅇㅁㄴㅇㅁㅇㅁㅇㅁㅇㅁㅇㅇdada<p>dadasdasd</p></p>
               </div>
             </div>
           </div>
+
         </div>
+        
         </AnimatedContent3>
         {/* <a href="#two" className="goto-next scrolly">Next</a> */}
       </section>
