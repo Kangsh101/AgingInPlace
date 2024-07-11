@@ -11,7 +11,7 @@ const PatientChart = () => {
   const medicationData = [
     { medication_name: '약물 A', taken: true },
     { medication_name: '약물 B', taken: false },
-    { medication_name: '약물 C', taken: true }
+
   ];
 
   const sleepStandard = 35449.5;

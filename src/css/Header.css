@@ -27,8 +27,11 @@
     top: 0;
     color: #7C8081;
     font-weight: bold;
+    font-size: 22px;
   }
-
+#header h1:hover{
+  color: #83D3C9;
+}
   #header nav {
     position: absolute;
     right: 1em;
@@ -52,7 +55,7 @@
           line-height: inherit;
           outline: 0;
           font-weight: 500;
-          font-size: 17px;
+          font-size: 18px;
         }
 
           #header nav ul li a.button, #header nav ul li span.button {
@@ -90,3 +93,65 @@ body.landing #header {
 #header h1{
   margin-left: 150px;
 }
+
+/* 기존 스타일을 보존하고, 새 스타일을 추가합니다 */
+#nav ul.submenu {
+  color: #000; /* 원하는 색상으로 변경하세요 */
+}
+
+#nav ul.submenu li.comusub a {
+  color: #000; /* 원하는 색상으로 변경하세요 */
+}
+
+#nav ul.submenu li.comusub a:hover {
+  color: #83D3C9; /* 마우스 오버 시 색상을 변경하려면 여기에 추가하세요 */
+}
+/* 기본 서브메뉴 스타일 */
+/* .submenu {
+  position: absolute;
+  background-color: white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+} */
+
+/* 로그인 상태에 따른 서브메뉴 스타일 */
+/* .submenu-logged-in {
+  left: 100%; 
+  top: 0; 
+} */
+/* 커뮤니티 메뉴가 활성화될 때 서브메뉴 표시 */
+/* .navPanel-visible .submenu {
+  display: block;
+} */
+.submenu {
+	display: flex;
+	flex-direction: column; 
+	position: absolute;
+	top: 70%;
+	left: 33%;
+	padding: 10px;
+	z-index: 1000;
+  }
+  .submenu-logged-in{
+    display: flex;
+    flex-direction: column; 
+    position: absolute;
+    top: 70%;
+    left: 44%;
+    padding: 10px;
+    z-index: 1000;
+  }
+  .submenu li {
+	list-style: none;
+  }
+  .submenu-logged-in li{
+    list-style: none;
+  }
+
+ #nav ul li a:hover{
+  color: #83D3C9;
+  font-weight: bold;
+ }
+

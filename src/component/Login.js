@@ -57,7 +57,7 @@ const Login = ({ onLogin }) => {
 
       {/* Main */}
       <div id="main" className="wrapper style1">
-        <div className="container">
+        <div >
           <header className="major">
             <h2>로그인</h2>
           </header>

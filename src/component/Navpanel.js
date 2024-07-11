@@ -63,7 +63,7 @@ const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
       <div id="navPanel" ref={navPanelRef} className={isNavOpen ? 'visible' : ''}>
         <nav>
           <ul>
-            <li><a href="login" className='link'>Home</a></li>
+            <li><a href="main" className='link'>Home</a></li>
             {!isLoggedIn && (
               <>
                 <li><a href="/login" className='link3'>로그인</a></li>

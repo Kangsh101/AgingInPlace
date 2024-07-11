@@ -369,14 +369,102 @@
       font-size: 27px;
     }
 #four{
-  border-top: 0.35em solid #e44c65;
+  border-top: 0.35em solid #83D3C9;
   margin-bottom: 20px;
-  /* border-bottom: 0.35em solid #1ca347; */
-}
-#one{
-  /* border-bottom: 0.35em solid blue; */
 }
 
-#one2{
-  /* border-bottom: 0.35em solid #e44c65;; */
+
+section.special, article.special {
+	text-align: center;
 }
+
+header.special {
+	padding-top: 3em;
+	position: relative;
+	text-align: center;
+}
+
+	header.special:before, header.special:after {
+		border-bottom: solid 1.5px;
+		border-top: solid 1.5px;
+		content: '';
+		height: 7px;
+		opacity: 0.1;
+		position: absolute;
+		top: 1.75em;
+		width: 43%;
+	}
+
+	header.special:before {
+		left: 0;
+	}
+
+	header.special:after {
+		right: 0;
+	}
+
+	.centered-image {
+		display: block;
+		margin: 0 auto;
+		width: 50%;
+		max-width: 350px; 
+	  }
+.Main-TextLo{
+	font-size: 28px;
+	color: #39c088;
+}
+
+
+/*ㅇㅇ*/
+.dementia-info-container {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+  }
+  
+  .section {
+	margin-bottom: 30px;
+  }
+  
+  .section-title {
+	font-size: 24px;
+	color: #333;
+	border-bottom: 2px solid #ccc;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+  }
+  
+  .section-content {
+	font-size: 18px;
+	color: #555;
+  }
+  
+  .section-content ol,
+  .section-content ul {
+	padding-left: 20px;
+	margin-top: 10px;
+	list-style-type: disc;
+  }
+  
+  .section-content .nested-list {
+	list-style-type: disc;
+	padding-left: 20px;
+  }
+  
+  .section-content li {
+	margin-bottom: 10px;
+	text-align: left;
+  }
+  
+  .centered-image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+  }
+  .Main-liFont{
+	font-size: 20px;
+	font-weight: bold;
+  }

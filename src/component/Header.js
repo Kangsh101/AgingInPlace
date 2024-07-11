@@ -58,12 +58,17 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
         <nav id="nav" className={isMenuOpen ? 'navPanel-visible' : ''}>
 
           <ul>
-            <li><a href="/contents">프로그램 콘텐츠</a></li>
-            <li>
+            {isLoggedIn && (
+                <>
+                  <li><a href="/patientChart">환자 데이터</a></li>
+                </>
+              )}
+              <li><a href="/contents">프로그램 콘텐츠</a></li>
+              <li>
               <Link to="#" onMouseEnter={handleDropdownToggle} onMouseLeave={handleDropdownToggle}>
                 커뮤니티
                 {isMenuOpen && (
-                  <ul className="submenu">
+                  <ul className={`submenu ${isLoggedIn ? 'submenu-logged-in' : ''}`}>
                     <li className='comusub'>
                       <Link to="/notice">공지사항</Link>
                     </li>
@@ -90,6 +95,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
                 <li><button onClick={handleLogout} className="button primary">로그아웃</button></li>
               </>
             )}
+
           </ul>
         </nav>
       </header>
