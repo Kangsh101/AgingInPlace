@@ -151,7 +151,7 @@ const Main = () => {
           <header>
             <h2>Aging In Place</h2>
           </header>
-          <p><strong className='Main-TextLo'>Aging In Place</strong> 에 오신 것을 환영합니다. <br></br><br></br>치매 예방과 관리를 위한 자원을 제공하는 웹사이트입니다.
+          <p><strong className='Main-TextLo'>Aging In Place</strong> 에 오신 것을 환영합니다. <br></br><br></br>치매 예방과 관리를 위한 자원을 제공하는 WebSite 입니다.
             <br />
             정보를 얻고, 연결을 유지하며, 건강한 삶을 주도하세요.
             <br />
