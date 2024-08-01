@@ -1,15 +1,18 @@
 .sidebar {
   background-color: transparent;
   border-bottom: 1px solid rgba(256, 256, 256, 0.3);
-  min-height: 100px; /* 최소 높이 설정 */
+  min-height: 100px; 
   display: flex;
-  flex-direction: column; /* sidebar-title과 sidebar-menu를 세로로 배치 */
+  flex-direction: column; 
   align-items: center;
-  justify-content: center; /* 세로 가운데 정렬 */
-  margin-top: 3%;
+  justify-content: center; 
   position: relative;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 30px;
 }
-
+#sidebar-h2{
+  margin-top: 80px;
+}
 .sidebar-title {
   user-select: none;
   margin-top: -5%;
@@ -17,18 +20,20 @@
   margin-bottom: 10px; 
   width: 200px;
   height: 180px;
-  border-bottom: 4px solid #e44c65;
+  border-bottom: 4px solid #83D3C9;
 }
 
 .sidebar-menu {
   margin-top: 1%;
-  display: flex; /* sidebar-menu를 가로로 배치 */
-  justify-content: center; /* 가로 가운데 정렬 */
+  display: flex; 
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(86, 85, 85);
 }
 
 .sidebar-menu li {
-  margin-right: 20px; /* 메뉴 간의 우측 여백 */
-  cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
+  margin-right: 20px; 
+  cursor: pointer; 
   transition: color 0.3s;
 }
 

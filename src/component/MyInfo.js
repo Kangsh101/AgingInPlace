@@ -9,25 +9,25 @@ function MyInfo({ userInfo }) {
     return (
         <div className='myinfo-container'>
             <div className='myinfo-title'>
-                <strong>내 정보 페이지</strong>
+                <strong>내 정보</strong>
             </div>
             <div className='myinfo-context-container'>
                 {userInfo ? (
                     <>
                         <div className='myinfo-context'>
-                            <p><strong>성 별 </strong><span>{userInfo.gender}</span></p>
+                            <p><strong>성 별</strong><span>{userInfo.gender}</span></p>
                         </div>
                         <div className='myinfo-context'>
-                            <p><strong>이 름 </strong><span>{userInfo.name}</span></p>
+                            <p><strong>이 름</strong><span>{userInfo.name}</span></p>
                         </div>
                         <div className='myinfo-context'>
-                            <p><strong>역 할 </strong><span>{userInfo.role}</span></p>
+                            <p><strong>역 할</strong><span>{userInfo.role}</span></p>
                         </div>
                         <div className='myinfo-context'>
-                            <p><strong>번 호 </strong><span>{userInfo.phoneNumber}</span></p>
+                            <p><strong>번 호</strong><span>{userInfo.phoneNumber}</span></p>
                         </div>
                         <div className='myinfo-context'>
-                            <p><strong>생 일 </strong><span>{formatBirthdate(userInfo.birthdate)}</span></p>
+                            <p><strong>생 일</strong><span>{formatBirthdate(userInfo.birthdate)}</span></p>
                         </div>
                     </>
                 ) : (

@@ -1,5 +1,3 @@
-// ChangePassword.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/ChangePassword.css';
@@ -50,30 +48,33 @@ function ChangePassword() {
     return (
         <div className="changepw-container">
             <div className='changepw-title'>
-                <strong >비밀번호 변경</strong>
+                <strong>비밀번호 변경</strong>
             </div>
-            <div className='changepw-notification'>
-                <p>
-                    <div style={{ color: 'blue', fontSize: '25px', fontWeight:'bold'}}>안전한 비밀번호로 내정보를 보호하세요</div><br></br>
-                    <span style={{ color: 'red' , fontSize: '18px'}}>다른 아이디/사이트에서 사용한 적 없는 비밀번호</span><br></br>
-                    <span style={{ color: 'red', fontSize: '18px' }}> 이전에 사용한 적 없는 비밀번호가 안전합니다</span>
-                </p>
-            </div>
+
             <div className='changepw-context-container'>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <strong className='passwordChange1'>현재 비밀번호</strong>
-                        <input type="password" id="currentPassword" placeholder='현재 비밀번호'  name="currentPassword" value={currentPassword} onChange={handleChange} required />
+                    <div className='changepw-notification'>
+                        <p>
+                            <div style={{ color: 'blue', fontSize: '25px', fontWeight: 'bold' }}>안전한 비밀번호로 내정보를 보호하세요</div><br />
+                            <span style={{ color: 'red', fontSize: '18px' }}>다른 아이디/사이트에서 사용한 적 없는 비밀번호</span><br />
+                            <span style={{ color: 'red', fontSize: '18px' }}> 이전에 사용한 적 없는 비밀번호가 안전합니다</span>
+                        </p>
                     </div>
-                    <div>
-                        <strong className='passwordChange2'>새 비밀번호 </strong>
+                    <div className='passwordChange1'>
+                        <strong>현재 비밀번호</strong>
+                        <input type="password" id="currentPassword" placeholder='현재 비밀번호' name="currentPassword" value={currentPassword} onChange={handleChange} required />
+                    </div>
+                    <div className='passwordChange2'>
+                        <strong>새 비밀번호</strong>
                         <input type="password" id="newPassword" name="newPassword" placeholder='새 비밀번호' value={newPassword} onChange={handleChange} required />
                     </div>
-                    <div>
-                        <strong className='passwordChange3'>비밀번호 확인</strong>
+                    <div className='passwordChange3'>
+                        <strong>비밀번호 확인</strong>
                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder='새 비밀번호 확인' value={confirmPassword} onChange={handleChange} required />
                     </div>
-                    <button type="submit" className='ChangeBtt'>변 경</button>
+                    <div className='ChangeBtt-container'>
+                        <button type="submit" className='ChangeBtt'>비밀번호 변경</button>
+                    </div>
                 </form>
                 {message && <p className="message" style={{ color: messageColor }}>{message}</p>}
             </div>

@@ -6,7 +6,7 @@ import CmsSidebar from './CmsSidebar';
 const Cmsfaq = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5); 
+  const [postsPerPage] = useState(5);
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
   const navigate = useNavigate();
 
@@ -52,24 +52,31 @@ const Cmsfaq = () => {
     return date.toLocaleDateString();
   };
 
+  const truncateText = (htmlString, maxLength) => {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = htmlString;
+    const textContent = tempElement.textContent || tempElement.innerText || "";
+    return textContent.length > maxLength ? textContent.slice(0, maxLength) + "..." : textContent;
+  };
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const location = useLocation(); 
+  const location = useLocation();
 
   return (
     <div className="cms-container">
       <CmsSidebar/>
       <div className="cms-main-content">
-        <header className='major' id='major-rest'> 
+        <header className='major' id='major-rest'>
           <h2>FAQ</h2>
         </header>
         <div className="Cmss-header">
           <div className='Cmss-chch'>
-            <Link to="/Cms"><button className='button' id='cmscs-notice' >공지사항 게시판</button></Link>
+            <Link to="/Cms"><button className='button' id='Notice-nofaq' >공지사항 게시판</button></Link>
             <Link to="/Cmsfaq"><button className='button' id='cms-nodicego'>FAQ 게시판</button></Link>
           </div>
           <div className="Cmss-options">
@@ -80,9 +87,11 @@ const Cmsfaq = () => {
             <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" />
             <button className="button primary">검색</button>
           </div>
-          <Link to="/faqup">
-            <button className="button1" id='saddasdasd'>FAQ 등록</button>
-          </Link>
+          <div className='Cms-noticefaqbtt'>
+            <Link to="/faqup">
+              <button className="button1" id='saddasdasd'>FAQ 등록</button>
+            </Link>
+          </div>
         </div>
         <div className="Cmss-content">
           <table>
@@ -99,16 +108,16 @@ const Cmsfaq = () => {
                 <React.Fragment key={post.post_id}>
                   <tr onClick={() => handleClick(indexOfFirstPost + index)}>
                     <td>{indexOfFirstPost + index + 1}</td>
-                    <td className="ellipsis">{post.title}</td>
-                    <td className="ellipsis">{post.content}</td>
+                    <td className="ellipsis" dangerouslySetInnerHTML={{ __html: truncateText(post.title, 50) }}></td>
+                    <td className="ellipsis" dangerouslySetInnerHTML={{ __html: truncateText(post.content, 50) }}></td>
                     <td>{post.user_name}</td>
                   </tr>
                   {selectedPostIndex === indexOfFirstPost + index && (
                     <tr className='sang-trtag'>
                       <td colSpan="4">
                         <div className="selected-post">
-                          <p className='sang-title wrap-text'><span className='cms-QA'>Q </span> : {post.title}</p>
-                          <p className='sang-description wrap-text'><span className='cms-QA'>A </span> : {post.content}</p>
+                          <p className='sang-title wrap-text'><span className='cms-QA'>Q</span><span dangerouslySetInnerHTML={{ __html: post.title }}></span></p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>A</span><span dangerouslySetInnerHTML={{ __html: post.content }}></span></p>
                           <div className='sang-bttcon'>
                             <button className='button primary' id='cms-correction' onClick={() => navigate(`/faqedit/${post.post_id}`)}>게시글 수정</button>
                             <button className='button' onClick={() => handleDelete(post.post_id, indexOfFirstPost + index)}>게시글 삭제</button>
@@ -125,6 +134,7 @@ const Cmsfaq = () => {
             postsPerPage={postsPerPage}
             totalPosts={posts.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
         </div>
       </div>
@@ -132,7 +142,7 @@ const Cmsfaq = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -140,14 +150,16 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div>
-      <div className="Cmss-pagebtt">
-        {pageNumbers.map(number => (
-          <button key={number} onClick={() => paginate(number)}>
-            {number}
-          </button>
-        ))}
-      </div>
+    <div className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
     </div>
   );
 };

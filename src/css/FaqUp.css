@@ -1,42 +1,93 @@
-/* 
-.FaqUp-container{
-    margin: 0 auto;
-    width: 30%;
-    padding: 80px;
-    margin-left: 33%;
-}
-
-.FaqUp-container h2{
-    color: #0f1813; 
-    margin-bottom: 50px; 
-    font-weight: bold;
-    font-size: 40px;
-}
-
-.FaqUp-label{
-    margin-bottom: 15px;
-}
-.FaqUp-label input[type="text"]{
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+.FaqUp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .Faq-edit {
+    background-color: white;
+    padding: 30px;
     border-radius: 10px;
-    overflow-y: auto;
-
-}
-.FaqUp-label label{
-    display: block;
-    margin-bottom: 5px;
-    
-}
-.FaqUp-label1 textarea[type="text"]{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    box-sizing: border-box;
+  }
+  
+  .Faq-edit h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .title-input {
     width: 100%;
-    height: 30vh;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 10px; 
-}
-.FaqUp-label label{
-    display: block;
-    margin-bottom: 5px;
-} */
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+  
+  #Faq-content .ql-container {
+    min-height: 350px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  #Faq-content .ql-container .ql-editor.ql-blank::before {
+    color: #999;
+    font-size: 16px;
+  }
+  
+  #Faq-content .ql-editor img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .button.primary {
+    background-color: #83d3c9;
+    color: white;
+  }
+  
+  .button.primary:hover {
+    background-color: #50c2b5;
+  }
+  
+  .button.secondary {
+    background-color: #ddd;
+    color: #333;
+  }
+  
+  .button.secondary:hover {
+    background-color: #bbb;
+  }
+  
+  @media (max-width: 600px) {
+    .Faq-edit {
+      width: 90%;
+    }
+  
+    .title-input {
+      font-size: 16px;
+    }
+  
+    .button {
+      font-size: 14px;
+    }
+  }
+  

@@ -40,11 +40,11 @@ const CmsCIST = () => {
         </header>
 
         <div className="CIST-content">
-        <div className="Cms-header">
-          <Link to="/addquestioncist">
-            <button className="button primary CIST-AddBtt">문제 추가</button>
-          </Link>
-        </div>
+          <div className="Cms-header">
+            <Link to="/addquestioncist">
+              <button className="button primary CIST-AddBtt">문제 추가</button>
+            </Link>
+          </div>
           <table>
             <thead>
               <tr>
@@ -67,6 +67,7 @@ const CmsCIST = () => {
             postsPerPage={questionsPerPage}
             totalPosts={questions.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
         </div>
       </div>
@@ -74,7 +75,7 @@ const CmsCIST = () => {
   );
 };
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -82,9 +83,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <div className="Cms-pagebtt">
+    <div className="pagination">
       {pageNumbers.map(number => (
-        <button key={number} onClick={() => paginate(number)}>
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`page-button ${number === currentPage ? 'active' : ''}`}
+        >
           {number}
         </button>
       ))}

@@ -128,8 +128,7 @@ app.post('/api/signup', (req, res) => {
 //로그인
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-
-  const query = `SELECT * FROM members WHERE username = ? AND password = ?`;
+  const query = 'SELECT * FROM members WHERE username = ? AND password = ?';
 
   connection.query(query, [username, password], (err, result) => {
     if (err) {
@@ -147,8 +146,10 @@ app.post('/api/login', (req, res) => {
       return;
     }
     req.session.userId = user.id;
+    req.session.userRole = user.role;
 
     console.log('세션에 저장된 기본키:', req.session.userId);
+    console.log('세션에 저장된 역할:', req.session.userRole);
 
     res.status(200).json(user);
   });
@@ -1188,10 +1189,6 @@ app.put('/api/faq/:id', (req, res) => {
 });
 
 
-
-
-
-
 // FAQ 조회
 app.get('/api/faq', (req, res) => {
   const query = `
@@ -1380,53 +1377,87 @@ app.post('/api/addMedications', (req, res) => {
   });
 });
 
-// 추가된 환자 데이터 목록 불러오는 엔드포인트
-app.get('/api/getPatientDetails', (req, res) => {
-  const guardianId = req.session.userId;
+
+//수정 부분
+
+// 진단명목록 데이터 가져오기 엔드포인트
+app.get('/api/getUserDetails', (req, res) => {
+  const userId = req.session.userId;
 
   const query = `
-    SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
-    FROM members g
-    JOIN members p ON g.patientId = p.id
-    LEFT JOIN diagnoses d ON p.id = d.patient_id
-    LEFT JOIN medications m ON p.id = m.patient_id
-    WHERE g.id = ?;
+    SELECT id, role, name, patientId
+    FROM members
+    WHERE id = ?;
   `;
-  
-  connection.query(query, [guardianId], (err, results) => {
+
+  connection.query(query, [userId], (err, results) => {
     if (err) {
-      console.error('환자 정보 조회 실패:', err);
-      res.status(500).json({ message: '환자 정보 조회 실패', error: err });
+      console.error('사용자 정보 조회 실패:', err);
+      res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+    } else if (results.length === 0) {
+      res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
     } else {
-      if (results.length === 0) {
-        res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
-      } else {
-        // 중복 데이터 제거 및 환자 정보 구성
-        const diagnoses = new Set();
-        const medications = new Set();
-
-        results.forEach(row => {
-          if (row.diagnosis) diagnoses.add(row.diagnosis);
-          if (row.medication) {
-            medications.add(JSON.stringify({
-              medication: row.medication,
-              dosage: row.dosage,
-              frequency: row.frequency
-            }));
-          }
-        });
-
-        const patientDetails = {
-          patientName: results[0].patientName,
-          diagnoses: Array.from(diagnoses),
-          medications: Array.from(medications).map(item => JSON.parse(item))
-        };
-
-        res.status(200).json(patientDetails);
-      }
+      res.status(200).json(results[0]);
     }
   });
 });
+
+// 진단명 목록 보여주기 엔드포인트 
+app.get('/api/getPatientDetails', (req, res) => {
+  const userId = req.session.userId;
+
+  connection.query('SELECT role, patientId FROM members WHERE id = ?', [userId], (err, userResults) => {
+    if (err) {
+      console.error('사용자 정보 조회 실패:', err);
+      res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+    } else if (userResults.length === 0) {
+      res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
+    } else {
+      const userRole = userResults[0].role;
+      const patientId = userRole === '보호자' ? userResults[0].patientId : userId;
+
+      const query = `
+        SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
+        FROM members p
+        LEFT JOIN diagnoses d ON p.id = d.patient_id
+        LEFT JOIN medications m ON p.id = m.patient_id
+        WHERE p.id = ?;
+      `;
+
+      connection.query(query, [patientId], (err, results) => {
+        if (err) {
+          console.error('환자 정보 조회 실패:', err);
+          res.status(500).json({ message: '환자 정보 조회 실패', error: err });
+        } else if (results.length === 0) {
+          res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
+        } else {
+          const diagnoses = new Set();
+          const medications = new Set();
+
+          results.forEach(row => {
+            if (row.diagnosis) diagnoses.add(row.diagnosis);
+            if (row.medication) {
+              medications.add(JSON.stringify({
+                medication: row.medication,
+                dosage: row.dosage,
+                frequency: row.frequency
+              }));
+            }
+          });
+
+          const patientDetails = {
+            patientName: results[0].patientName,
+            diagnoses: Array.from(diagnoses),
+            medications: Array.from(medications).map(item => JSON.parse(item))
+          };
+
+          res.status(200).json(patientDetails);
+        }
+      });
+    }
+  });
+});
+
 
 // 진단명 추가 API
 app.post('/api/addDiagnosisByAdmin', (req, res) => {
@@ -1717,6 +1748,52 @@ app.post('/downloadFile', async (req, res) => {
     res.status(500).send('Failed to download file');
   }
 });
+
+// 환자 데이터 가져오는 API
+app.get('/api/patient-data', (req, res) => {
+  if (!req.session.userId) {
+    res.status(403).send('로그인이 필요합니다');
+    return;
+  }
+
+  const { date } = req.query;
+  let query = '';
+  let queryParams = [];
+
+  console.log('userId:', req.session.userId);
+  console.log('userRole:', req.session.userRole);
+  console.log('date:', date);
+
+  if (req.session.userRole === 'patient') {
+    query = 'SELECT * FROM patient_data WHERE user_id = ? AND DATE(created_at) = ?';
+    queryParams = [req.session.userId, date];
+  } else if (req.session.userRole === 'guardian') {
+    query = 'SELECT * FROM patient_data WHERE user_id = (SELECT patientId FROM members WHERE id = ?) AND DATE(created_at) = ?';
+    queryParams = [req.session.userId, date];
+  } else {
+    // 일반인 역할을 처리하기 위한 로직을 추가합니다.
+    query = 'SELECT * FROM patient_data WHERE user_id = ? AND DATE(created_at) = ?'; // 또는 적절한 쿼리를 설정합니다.
+    queryParams = [req.session.userId, date];
+  }
+
+  if (!query) {
+    console.error('Query not set');
+    res.status(500).send('Query not set');
+    return;
+  }
+
+  connection.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('데이터 조회 실패:', err.stack); // 상세한 오류 메시지 로깅
+      res.status(500).send('데이터 조회 실패');
+      return;
+    }
+    console.log('Fetched patient data:', results); // 데이터 확인용
+    res.json(results);
+  });
+});
+
+
 
 app.post('/chart/calories', async (req, res) => {
   const username = 'Lee'; // username을 'Lee'로 설정

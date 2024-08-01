@@ -65,33 +65,31 @@ const EditProfile = () => {
       <div className='editprofile-context-container'>
         <div className='editprofile-row'>
         <strong className='Profile-strong'>이 름</strong>
-        <input className='editprofile-input'  type="text"  id="name"  value={name}onChange={(e) => setName(e.target.value)}  />
-
+        <input className='editprofile-input' type="text" id="name" value={name} readOnly />
       </div>
-      <div>
-      <strong className='Profile-strong'>분 류</strong>
-        <select value={role} className='Profile-type' onChange={(e) => setRole(e.target.value)}>
+      <div className='editprofile-row'>
+      <strong className='Profile-strong'>역 활</strong>
+        <select value={role} className='Profile-type' disabled>
           <option value="환자">환자</option>
           <option value="보호자">보호자</option>
         </select>
       </div>
-      <div>
+      <div className='editprofile-row'>
       <strong className='Profile-strong'>성 별</strong>
-        <select value={gender} className='Profile-type' onChange={(e) => setGender(e.target.value) }>
+        <select value={gender} className='Profile-type' onChange={(e) => setGender(e.target.value)}>
           <option value="남성">남성</option>
           <option value="여성">여성</option>
         </select>
       </div>
       <div className='editprofile-row'>
         <strong className='Profile-strong'>번 호</strong>
-        <input className='editprofile-input'  type="text"  id="phoneNumber" value={phoneNumber}  onChange={(e) => setPhoneNumber(e.target.value)} />
-
+        <input className='editprofile-input' type="text" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
         </div>
       <div className='editprofile-row'>
         <strong className='Profile-strong'>메 일</strong>
-        <input className='editprofile-input' type="text" id="email" value={email}  onChange={(e) => setEmail(e.target.value)} />
+        <input className='editprofile-input' type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
-      <button className='editprofile-btn' onClick={handleSave}>수정하기</button>
+      <button className='ChangeBtt' onClick={handleSave}>수정하기</button>
     </div>
     </div>
   );

@@ -8,8 +8,7 @@
   padding: 20px;
   box-sizing: border-box;
   margin: 0;
-  height: 100vh; 
-  
+  width: 100%; 
 }
 
 .chart-row {
@@ -17,7 +16,8 @@
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center; /* Center items vertically */
+  align-items: center; 
+  width: 100%;
 }
 
 .chart-item {
@@ -25,6 +25,14 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px); 
+  max-width: 350px; 
+  box-sizing: border-box;
+}
+
+.date-picker-container {
+  width: 100%;
+  max-width: 350px; 
 }
 
 .actions {
@@ -43,7 +51,6 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-
 }
 
 button:hover {
@@ -54,13 +61,50 @@ button:hover {
   .chart-row {
     flex-direction: column;
   }
-  .chart-container{
-    height: 130vh;
-  }
-}
-@media (max-width: 1450px) {
-  .chart-container{
-    
+  .chart-container {
+    height: auto; 
   }
 }
 
+@media (max-width: 1450px) {
+  .chart-container {
+    height: auto; 
+  }
+}
+
+.chart-main {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.PatientChart-container {
+  max-width: 1200px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+.chart-title {
+  font-size: 2.5em;
+  font-weight: 600;
+}
+.date-picker-container input{
+  width: 20em;
+}
+
+@media screen and (max-width: 440px) {
+  .date-picker-container input{
+    width: 18em;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .date-picker-container input{
+    width: 10em;
+    margin-left: 20px;
+  }
+}

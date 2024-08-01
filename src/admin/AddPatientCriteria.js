@@ -64,9 +64,9 @@ const AddPatientCriteria = () => {
   };
 
   return (
-    <div className='Cms-AddPatientCriteria'>
+    <div className='cms-container'>
       <CmsSidebar />
-      <div className="cms-container">
+      <div className="cms-main-content">
         <div className="cms-AddPatient-content">
           <div className="Cmss-header">
             <header className='major' id='major-rest'>

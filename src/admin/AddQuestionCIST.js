@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
@@ -85,7 +85,7 @@ const AddQuestionCIST = () => {
             <textarea 
               value={questionText} 
               onChange={(e) => setQuestionText(e.target.value)} 
-              disabled={type === '지남력'} // 지남력 유형일 경우 텍스트 비활성화
+              disabled={type === '지남력'}
             />
           </div>
           <div className="Cms-form-group">
@@ -95,7 +95,7 @@ const AddQuestionCIST = () => {
                 type="text" 
                 value={currentOption} 
                 onChange={(e) => setCurrentOption(e.target.value)} 
-                disabled={type === '지남력'} // 지남력 유형일 경우 선택지 비활성화
+                disabled={type === '지남력'}
               />
               <button onClick={handleAddOption} disabled={type === '지남력'}>추가</button>
             </div>
@@ -106,7 +106,7 @@ const AddQuestionCIST = () => {
                   <button 
                     className="delete-button" 
                     onClick={() => handleDeleteOption(index)}
-                    disabled={type === '지남력'} // 지남력 유형일 경우 삭제 버튼 비활성화
+                    disabled={type === '지남력'}
                   >
                     삭제
                   </button>
@@ -120,12 +120,12 @@ const AddQuestionCIST = () => {
               type="text" 
               value={correctAnswer} 
               onChange={(e) => setCorrectAnswer(e.target.value)} 
-              disabled={type === '지남력'} // 지남력 유형일 경우 텍스트 비활성화
+              disabled={type === '지남력'}
             />
           </div>
           <div className="Cms-form-buttons">
-            <button className="button" onClick={() => navigate('/cmscist')}>취소</button>
-            <button className="button primary" onClick={handleAddQuestion}>등록</button>
+            <button className="button"  id='CIST-canclebtt' onClick={() => navigate('/cmscist')}>취소</button>
+            <button className="button primary"  onClick={handleAddQuestion}>등록</button>
           </div>
         </div>
       </div>

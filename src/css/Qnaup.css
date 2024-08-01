@@ -1,36 +1,125 @@
+.qna-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
 
-#QnA-Plus{
-    width: 45%;
-    /* margin-left: 27em; */
-    margin-left: 28%;
+.qnaplus {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+.qnaplus h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.title-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+#QnAup-content .ql-container {
+  min-height: 350px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+#QnAup-content .ql-container .ql-editor.ql-blank::before {
+  color: #999;
+  font-size: 16px;
+}
+
+#QnAup-content .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 #QnA-titlecss{
-    width: 100%;
-    border: 1px solid white;
-    border-bottom: none;
-    margin-bottom: 0;
+  width: 100%;
 }
-#QnA-Plus h2{
-    margin-left: 30%;
+.button.primary {
+  background-color: #83d3c9;
+  color: white;
 }
-#QnAup-content .ql-container {
-    /* 내용 입력 칸의 높이 조절 */
-    min-height: 350px; /* 또는 원하는 높이 값 */
-    margin-bottom: 20px;
+#QnAbtt {
+  outline: none; /* 포커스 아웃라인 제거 */
+  box-shadow: none; /* 호버 시 테두리 제거 */
+}
+
+#QnAbtt:hover {
+  border: none; /* 호버 시 테두리 제거 */
+}
+
+.button.primary:hover {
+  background-color: #50c2b5;
+}
+
+.button.secondary {
+  background-color: #ddd;
+  color: #333;
+}
+
+.button.secondary:hover {
+  background-color: #bbb;
+}
+
+@media (max-width: 600px) {
+  .qnaplus {
+    width: 90%;
   }
-  #QnAup-content .ql-container .ql-editor.ql-blank::before {
-    color: rgba(255, 255, 255, 0.5); /* 원하는 색상과 투명도 설정 */
-    font-size: 25px;
+
+  .title-input {
+    font-size: 16px;
   }
-  #QnAup-content .ql-editor img {
-    max-width: 90%;
-    height: auto;
-    cursor: pointer;
+
+  .button {
+    font-size: 14px;
   }
-  .button-group{
-    margin-bottom: 50px;
-    
-  }
-  #QnAbtt{
-    margin-right: 10px;
-  }
+}
+
+.ql-size-8px {
+  font-size: 8px;
+}
+.ql-size-10px {
+  font-size: 10px;
+}
+.ql-size-12px {
+  font-size: 12px;
+}
+.ql-size-14px {
+  font-size: 14px;
+}
+.ql-size-16px {
+  font-size: 16px;
+}
+.ql-size-18px {
+  font-size: 18px;
+}
+.ql-size-20px {
+  font-size: 20px;
+}
+

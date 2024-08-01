@@ -1,59 +1,98 @@
 .myinfo-container {
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 100px;
-  }
-  
-  .myinfo-title {
-    margin-bottom: 20px;
-    border-bottom: 1px solid whitesmoke;
-    width: 500px;
-    text-align: center;
-    padding: 50px;
-    font-size: 35px;
-    font-weight: 1000;
-  }
-  
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.myinfo-title {
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  padding: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  user-select: none;
+}
+
+.myinfo-context-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 550px;
+}
+
+.myinfo-context {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.myinfo-context p {
+  margin: 0;
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myinfo-context strong {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.myinfo-context span {
+  padding: 6px;
+  /* font-size: 14px; */
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  transition: border-color 0.2s;
+  display: inline-block;
+  width: 100%;
+  max-width: 270px;
+  text-align: center;
+  white-space: nowrap;
+  /* margin-bottom: 10px; */
+}
+
+@media screen and (max-width: 730px) {
   .myinfo-context-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* 좌측 정렬 */
+      padding: 15px;
   }
-  
+
+  .myinfo-title {
+      padding: 15px;
+  }
+}
+
+@media screen and (max-width: 385px) {
+  .myinfo-title {
+      font-size: 24px;
+      padding: 15px;
+  }
+
   .myinfo-context {
-    margin-top: 20px;
-    display: flex;
-    align-items: center; /* 가로 가운데 정렬 */
-    margin-bottom: 35px;
+      margin-bottom: 10px;
   }
-  
+
   .myinfo-context p {
-    margin: 0; /* p 요소의 기본 마진 제거 */
+      flex-direction: column;
+      align-items: flex-start;
   }
-  
-  .myinfo-context strong {
-    margin-right: 10px; /* 각 strong 요소 사이의 우측 여백 */
-  }
+
   .myinfo-context span {
-    padding: 5px;
-    text-align: center;
-    border-radius: 15px;
-    display: inline-block; /* 높이와 너비를 설정하기 위해 inline-block으로 변경 */
-    min-width: 300px; /* 너비 설정 */
-    height: 40px; /* 높이 설정 */
-    border: 1px solid rgba(256, 256, 256, 0.3); /* border 스타일 설정 */
-    margin-left: 150px; /* 각 span 요소 사이의 좌측 여백 설정 */
-    white-space: nowrap;
+      margin-top: 5px;
+      width: 100%;
+      text-align: left;
   }
-
-  @media screen and (max-width: 385px) {
-    .myinfo-context span {
-      min-width: 15em; 
-      margin-left: 3em; 
-    }
-  }
-
-  
-  
+}

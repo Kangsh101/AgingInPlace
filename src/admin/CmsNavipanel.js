@@ -48,6 +48,7 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
     };
 
     return (
+        
         <div className={`wrapper ${isLoaded ? 'is-preload' : ''}`}>
             <div id="titleBar">
                 <a href="#navPanel" className={`toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}></a>
@@ -56,7 +57,7 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="navPanel" ref={navPanelRef} className={isNavOpen ? 'visible' : ''}>
                 <nav>
                     <h2 className='Cms-Aginginplace'>Aging in Place</h2>
-                    <h2>관리자</h2>
+                    <h2 className='Navipanel-h2'>관리자</h2>
                     <ul>
                         {links.map((link, index) => (
                             <li key={index} className={`cms-item ${isActive(link.basePaths) ? "cms-active" : ""}`}>

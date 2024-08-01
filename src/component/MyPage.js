@@ -56,14 +56,15 @@ function MyPage() {
     }, []);
 
     const isGuardian = userInfo.role === "보호자";
+    const isPatientOrGuardian = userInfo.role === "환자" || userInfo.role === "보호자";
 
     return (
         <article id='main'>
         <div className="mypage">
             <div className="sidebar">
-                    <div className='sidebar-title'>
-                    <h2>마이페이지</h2>
-                    </div>
+                <div className='sidebar-title'>
+                   <h2 id='sidebar-h2'>마이페이지</h2>
+                </div>            
                 <ul className='sidebar-menu'>
                     <li onClick={() => setSelectedSection('myinfo')}>
                         <span>내 정보</span>
@@ -74,9 +75,11 @@ function MyPage() {
                     <li onClick={() => setSelectedSection('editprofile')}>
                         <span>개인정보 수정</span>
                     </li>
-                    <li onClick={() => setSelectedSection('diagnosislist')}>
-                    <span>진단명 목록</span>
-                    </li>
+                    {isPatientOrGuardian && (
+                        <li onClick={() => setSelectedSection('diagnosislist')}>
+                            <span>진단명 목록</span>
+                        </li>
+                    )}
                 </ul>
             </div>
             <div className="content">

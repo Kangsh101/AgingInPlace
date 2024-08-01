@@ -92,7 +92,7 @@ function App() {
           <Route path="/Download" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Download /><Footer /></>} />
           <Route path="/chart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Chart/><Footer /></>} />
           <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
-          <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/><Footer /></>} />
+          <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/></>} />
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
           
 
@@ -111,11 +111,11 @@ function App() {
           <Route path="/Cmscontents" element={<><CmsNavipanel/><Cmscontents /></>} />
           <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis /></>} />
           <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria /></>} />
-          <Route path="/addpatientcriteria/:id" element={<AddPatientCriteria />} />
-          <Route path="/patient/:id" element={<PatientDiagnosisList  />} />
+          <Route path="/addpatientcriteria/:id" element={<><CmsNavipanel/><AddPatientCriteria /></>} />
+          <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList  /></>} />
 
 
-          <Route path="/patient/:id/add-diagnosis" element={<PatientDetail/>} />
+          <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail/></>} />
           <Route path="/cms/*" element={<CmsLayout />} />
         </Routes>
       </div>
