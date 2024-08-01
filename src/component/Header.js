@@ -91,7 +91,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
             )}
             {isLoggedIn && (
               <>
-                <li><a href="/mypage">내정보</a></li>
+                <li><a href="/mypage">내 정보</a></li>
                 <li><button onClick={handleLogout} className="button primary">로그아웃</button></li>
               </>
             )}
