@@ -10,6 +10,14 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
     const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '' }]);
 
     useEffect(() => {
+        axios.get('/api/getUserId')
+            .then(response => {
+                setUserId(response.data.userId); // 사용자 ID 설정
+            })
+            .catch(error => {
+                console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
+            });
+
         if (isGuardian) {
             axios.get('/api/getPatientInfo')
                 .then(response => {
@@ -20,15 +28,17 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                 .catch(error => {
                     console.error('환자 정보를 가져오는 데 실패했습니다.', error);
                 });
+        } else {
+            // 환자의 정보 가져오기
+            axios.get('/api/getUserDetails')
+                .then(response => {
+                    setPatientName(response.data.name);
+                    setPatientId(response.data.id); // 환자 ID 설정
+                })
+                .catch(error => {
+                    console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
+                });
         }
-
-        axios.get('/api/getUserId')
-            .then(response => {
-                setUserId(response.data.userId); // 사용자 ID 설정
-            })
-            .catch(error => {
-                console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
-            });
     }, [isGuardian]);
 
     const handleAddDisease = () => {
@@ -59,20 +69,35 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
             alert('환자 ID를 확인할 수 없습니다.');
             return;
         }
-    
+
+        // 입력값 검사
+        for (let i = 0; i < diseases.length; i++) {
+            if (diseases[i].trim() === '') {
+                alert('질환명을 입력해주세요.');
+                return;
+            }
+        }
+
+        for (let i = 0; i < medications.length; i++) {
+            if (medications[i].name.trim() === '' || medications[i].dosage.trim() === '' || medications[i].frequency.trim() === '') {
+                alert('약물 정보를 모두 입력해주세요.');
+                return;
+            }
+        }
+
         try {
             await axios.post('/api/addDiagnosis', {
                 patientId,
                 diagnoses: diseases,
                 enteredBy: userId // 현재 사용자 ID
             });
-    
+
             await axios.post('/api/addMedications', {
                 patientId,
                 medications,
                 enteredBy: userId // 현재 사용자 ID
             });
-    
+
             alert('정보가 성공적으로 저장되었습니다.');
             onCancel(); // 추가 후 취소(이전 페이지로 이동)
         } catch (error) {
@@ -87,11 +112,9 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                 <div className='diagnosis-title'>
                     <strong>진단명 추가</strong>
                 </div>
-                {isGuardian && (
-                    <div className='patient-div'>
-                        <span className='patient-name'><span id='patientNaem'>환자 성함 : </span> {patientName}</span>
-                    </div>
-                )}
+                <div className='patient-div'>
+                    <span className='patient-name'><span id='patientNaem'>환자 성함 : </span> {patientName}</span>
+                </div>
                 <div className='diagnosis-box'>
                     <div>
                         <label>진단받은 질환</label>
@@ -102,9 +125,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                         ))}
                         <button className='button' id='disease-btt' onClick={handleAddDisease}>질환 추가</button>
                     </div>
-                    <div>
-                        <button className='button primary' id='Diagnosis-btt' onClick={handleSubmit}>추가</button>
-                    </div>
+
                     <div className='Drug-name'>
                         <label>복용 중인 약물</label>
                         {medications.map((med, index) => (

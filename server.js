@@ -1339,53 +1339,87 @@ app.post('/api/addMedications', (req, res) => {
   });
 });
 
-// 추가된 환자 데이터 목록 불러오는 엔드포인트
-app.get('/api/getPatientDetails', (req, res) => {
-  const guardianId = req.session.userId;
+
+//수정 부분
+
+// 진단명목록 데이터 가져오기 엔드포인트
+app.get('/api/getUserDetails', (req, res) => {
+  const userId = req.session.userId;
 
   const query = `
-    SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
-    FROM members g
-    JOIN members p ON g.patientId = p.id
-    LEFT JOIN diagnoses d ON p.id = d.patient_id
-    LEFT JOIN medications m ON p.id = m.patient_id
-    WHERE g.id = ?;
+    SELECT id, role, name, patientId
+    FROM members
+    WHERE id = ?;
   `;
-  
-  connection.query(query, [guardianId], (err, results) => {
+
+  connection.query(query, [userId], (err, results) => {
     if (err) {
-      console.error('환자 정보 조회 실패:', err);
-      res.status(500).json({ message: '환자 정보 조회 실패', error: err });
+      console.error('사용자 정보 조회 실패:', err);
+      res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+    } else if (results.length === 0) {
+      res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
     } else {
-      if (results.length === 0) {
-        res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
-      } else {
-        // 중복 데이터 제거 및 환자 정보 구성
-        const diagnoses = new Set();
-        const medications = new Set();
-
-        results.forEach(row => {
-          if (row.diagnosis) diagnoses.add(row.diagnosis);
-          if (row.medication) {
-            medications.add(JSON.stringify({
-              medication: row.medication,
-              dosage: row.dosage,
-              frequency: row.frequency
-            }));
-          }
-        });
-
-        const patientDetails = {
-          patientName: results[0].patientName,
-          diagnoses: Array.from(diagnoses),
-          medications: Array.from(medications).map(item => JSON.parse(item))
-        };
-
-        res.status(200).json(patientDetails);
-      }
+      res.status(200).json(results[0]);
     }
   });
 });
+
+// 진단명 목록 보여주기 엔드포인트 
+app.get('/api/getPatientDetails', (req, res) => {
+  const userId = req.session.userId;
+
+  connection.query('SELECT role, patientId FROM members WHERE id = ?', [userId], (err, userResults) => {
+    if (err) {
+      console.error('사용자 정보 조회 실패:', err);
+      res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+    } else if (userResults.length === 0) {
+      res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
+    } else {
+      const userRole = userResults[0].role;
+      const patientId = userRole === '보호자' ? userResults[0].patientId : userId;
+
+      const query = `
+        SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
+        FROM members p
+        LEFT JOIN diagnoses d ON p.id = d.patient_id
+        LEFT JOIN medications m ON p.id = m.patient_id
+        WHERE p.id = ?;
+      `;
+
+      connection.query(query, [patientId], (err, results) => {
+        if (err) {
+          console.error('환자 정보 조회 실패:', err);
+          res.status(500).json({ message: '환자 정보 조회 실패', error: err });
+        } else if (results.length === 0) {
+          res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
+        } else {
+          const diagnoses = new Set();
+          const medications = new Set();
+
+          results.forEach(row => {
+            if (row.diagnosis) diagnoses.add(row.diagnosis);
+            if (row.medication) {
+              medications.add(JSON.stringify({
+                medication: row.medication,
+                dosage: row.dosage,
+                frequency: row.frequency
+              }));
+            }
+          });
+
+          const patientDetails = {
+            patientName: results[0].patientName,
+            diagnoses: Array.from(diagnoses),
+            medications: Array.from(medications).map(item => JSON.parse(item))
+          };
+
+          res.status(200).json(patientDetails);
+        }
+      });
+    }
+  });
+});
+
 
 // 진단명 추가 API
 app.post('/api/addDiagnosisByAdmin', (req, res) => {

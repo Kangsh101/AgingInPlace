@@ -6,7 +6,7 @@ import CmsSidebar from './CmsSidebar';
 const Cmsfaq = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5); 
+  const [postsPerPage] = useState(5);
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
   const navigate = useNavigate();
 
@@ -52,19 +52,26 @@ const Cmsfaq = () => {
     return date.toLocaleDateString();
   };
 
+  const truncateText = (htmlString, maxLength) => {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = htmlString;
+    const textContent = tempElement.textContent || tempElement.innerText || "";
+    return textContent.length > maxLength ? textContent.slice(0, maxLength) + "..." : textContent;
+  };
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const location = useLocation(); 
+  const location = useLocation();
 
   return (
     <div className="cms-container">
       <CmsSidebar/>
       <div className="cms-main-content">
-        <header className='major' id='major-rest'> 
+        <header className='major' id='major-rest'>
           <h2>FAQ</h2>
         </header>
         <div className="Cmss-header">
@@ -101,16 +108,16 @@ const Cmsfaq = () => {
                 <React.Fragment key={post.post_id}>
                   <tr onClick={() => handleClick(indexOfFirstPost + index)}>
                     <td>{indexOfFirstPost + index + 1}</td>
-                    <td className="ellipsis">{post.title}</td>
-                    <td className="ellipsis">{post.content}</td>
+                    <td className="ellipsis" dangerouslySetInnerHTML={{ __html: truncateText(post.title, 50) }}></td>
+                    <td className="ellipsis" dangerouslySetInnerHTML={{ __html: truncateText(post.content, 50) }}></td>
                     <td>{post.user_name}</td>
                   </tr>
                   {selectedPostIndex === indexOfFirstPost + index && (
                     <tr className='sang-trtag'>
                       <td colSpan="4">
                         <div className="selected-post">
-                          <p className='sang-title wrap-text'><span className='cms-QA'>Q</span>{post.title}</p>
-                          <p className='sang-description wrap-text'><span className='cms-QA'>A</span>{post.content}</p>
+                          <p className='sang-title wrap-text'><span className='cms-QA'>Q</span><span dangerouslySetInnerHTML={{ __html: post.title }}></span></p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>A</span><span dangerouslySetInnerHTML={{ __html: post.content }}></span></p>
                           <div className='sang-bttcon'>
                             <button className='button primary' id='cms-correction' onClick={() => navigate(`/faqedit/${post.post_id}`)}>게시글 수정</button>
                             <button className='button' onClick={() => handleDelete(post.post_id, indexOfFirstPost + index)}>게시글 삭제</button>

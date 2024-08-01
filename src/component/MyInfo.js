@@ -9,7 +9,7 @@ function MyInfo({ userInfo }) {
     return (
         <div className='myinfo-container'>
             <div className='myinfo-title'>
-                <strong>내 정보 페이지</strong>
+                <strong>내 정보</strong>
             </div>
             <div className='myinfo-context-container'>
                 {userInfo ? (

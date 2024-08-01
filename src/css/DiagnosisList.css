@@ -58,7 +58,13 @@
   .button:hover {
     background-color: #50c2b5;
   }
-  
+  .patient-list-name{
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .patient-name-list{
+    font-size: 30px;
+  }
   /* 반응형 스타일 */
   @media screen and (max-width: 730px) {
     .patient-info,

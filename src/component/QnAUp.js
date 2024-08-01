@@ -3,6 +3,12 @@ import '../css/Qnaup.css';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Quill from 'quill';
+
+// Custom font sizes
+const Size = Quill.import('attributors/style/size');
+Size.whitelist = ['8px', '10px', '12px', '14px', '16px', '18px', '20px'];
+Quill.register(Size, true);
 
 const QnAUp = () => {
   const [title, setTitle] = useState('');
@@ -54,8 +60,11 @@ const QnAUp = () => {
     toolbar: {
       container: [
         [{ 'header': [1, 2, false] }],
+        [{ 'font': [] }],
+        [{ 'size': Size.whitelist }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        [{ 'align': [] }],
         ['link', 'image'],
         ['clean']
       ],
@@ -64,6 +73,11 @@ const QnAUp = () => {
       }
     },
   }), [imageHandler]);
+
+  const formats = [
+    'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent', 'align', 'link', 'image'
+  ];
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -131,6 +145,7 @@ const QnAUp = () => {
               onChange={handleContentChange}
               placeholder="내용을 입력하세요."
               modules={modules}
+              formats={formats}
             />
           </div>
           <div className="button-group">

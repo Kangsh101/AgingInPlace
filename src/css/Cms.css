@@ -145,6 +145,13 @@
 .cmsuser-btt:hover {
   background-color: #bbb;
 }
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; 
+  vertical-align: top;
+}
 
 @media (max-width: 768px) {
   .Cmss-chch {

@@ -34,10 +34,10 @@ const FaqPage = () => {
               {faqItems.map((item, index) => (
                 <div key={index} className="faq-item">
                   <div className="faq-question" onClick={() => toggleAnswer(index)}>
-                    Q : {item.title}
+                    Q : <span dangerouslySetInnerHTML={{ __html: item.title }} />
                   </div>
                   <div className={`faq-answer ${answersVisible[index] ? 'visible' : ''}`}>
-                    A : {item.content}
+                   <span dangerouslySetInnerHTML={{ __html: item.content }} />
                   </div>
                 </div>
               ))}
