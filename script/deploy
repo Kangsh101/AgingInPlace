@@ -1,5 +1,5 @@
 #!/bin/sh
-ssh ec2-user@15.164.57.70<<EOF	
+ssh -o StrictHostKeyChecking=no ec2-user@15.164.57.70 <<EOF
     cd ~/AgingInPlace
     git pull origin master
     curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
