@@ -7,7 +7,7 @@
   background-color: #f5f5f5;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 70%; /* Changed from max-width to width */
+  width: 70%;
   margin: 30px auto;
 }
 
@@ -127,15 +127,15 @@
   background-color: #bbb;
 }
 
-.user-details {
+/* .user-details {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-}
+} */
 
-
+/* 
 .cmsuser-btt {
   background-color: #ddd;
 
@@ -151,6 +151,69 @@
   text-overflow: ellipsis;
   max-width: 200px; 
   vertical-align: top;
+} */
+.user-details {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  position: relative;
+}
+
+.user-details p {
+  margin: 10px 0; 
+  padding: 10px 0; 
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.user-details p:last-child {
+  border-bottom: none;
+}
+
+.cmsuser-bttt, .cmsuser-btt {
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.cmsuser-bttt:hover, .cmsuser-btt:hover {
+  background-color: #bbb;
+}
+
+.cmsuser-bttt {
+  color: green;
+}
+
+.cmsuser-btt {
+  color: red;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.details-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+.details-table td:first-child {
+  width: 20%;
+  font-weight: bold;
+  text-align: left;
+  color: #555;
+}
+
+.details-table td:last-child {
+  width: 80%; 
+  text-align: left;
 }
 
 @media (max-width: 768px) {

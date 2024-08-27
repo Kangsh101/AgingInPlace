@@ -3,20 +3,22 @@ import { Link, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; 
 
 const Cmsuser = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetch('/api/cmsusers')
       .then(response => response.json())
-      .then(data => setUsers(data.map(user => ({ ...user, joinDate: user.joinDate.split('T')[0],
-            birthdate: user.birthdate.split('T')[0] 
-    }))))
+      .then(data => setUsers(data.map(user => ({ 
+        ...user, 
+        joinDate: user.joinDate.split('T')[0],
+        birthdate: user.birthdate.split('T')[0]
+      }))))
       .catch(error => console.error('Error fetching users:', error));
   }, []);
 
@@ -26,7 +28,6 @@ const Cmsuser = () => {
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const location = useLocation();
   const handleUserClick = (index) => {
     setSelectedUserIndex(selectedUserIndex === index ? null : index);
   };
@@ -38,9 +39,9 @@ const Cmsuser = () => {
     })
     .then(response => {
       if (response.ok) {
-        alert('비활성화 되었습니다.');
+        alert('사용자가 비활성화되었습니다.');
       } else {
-        console.log('비활성화 실패 오류')
+        console.log('비활성화 실패');
       }
     })
     .catch(error => console.error('사용자 비활성화 오류:', error));
@@ -53,9 +54,9 @@ const Cmsuser = () => {
     })
     .then(response => {
       if (response.ok) {
-        alert('활성화 되었습니다.');
+        alert('사용자가 활성화되었습니다.');
       } else {
-        console.log('활성화 실패 오류');
+        console.log('활성화 실패');
       }
     })
     .catch(error => console.error('사용자 활성화 오류:', error));
@@ -104,18 +105,51 @@ const Cmsuser = () => {
                   {selectedUserIndex === index && ( 
                     <tr>
                       <td colSpan="6">
-                        <div className="user-details">
-                          <p><strong>아이디:</strong> {user.username} </p>
-                          <p><strong>타입:</strong> {user.role}</p>
-                          <p><strong>이름:</strong> {user.name}</p>
-                          <p><strong>성별:</strong> {user.gender}</p>
-                          <p><strong>이메일:</strong> {user.email}</p>
-                          <p><strong>생년월일:</strong> {user.birthdate}</p>
-                          <p><strong>전화번호:</strong> {user.phoneNumber}</p>
-                          <p><strong>가입일:</strong> {user.joinDate}</p>
-                          <button className='cmsuser-bttt' onClick={()=> handleActivateUser(user.id)}>활성화</button>
-                          <button className='cmsuser-btt' onClick={() => handleDeactivateUser(user.id)}>비활성화</button>
-                        </div>
+                      <div className="user-details">
+                        <table className="details-table">
+                          <tbody>
+                            <tr>
+                              <td><strong>아이디</strong></td>
+                              <td>{user.username}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>타입</strong></td>
+                              <td>{user.role}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>이름</strong></td>
+                              <td>{user.name}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>성별</strong></td>
+                              <td>{user.gender}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>이메일</strong></td>
+                              <td>{user.email}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>생년월일</strong></td>
+                              <td>{user.birthdate}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>전화번호</strong></td>
+                              <td>{user.phoneNumber}</td>
+                            </tr>
+                            <tr>
+                              <td><strong>가입일</strong></td>
+                              <td>{user.joinDate}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <button className='cmsuser-bttt' onClick={()=> handleActivateUser(user.id)}>
+                          <FaCheckCircle /> 활성화
+                        </button>
+                        <button className='cmsuser-btt' onClick={() => handleDeactivateUser(user.id)}>
+                          <FaTimesCircle /> 비활성화
+                        </button>
+                      </div>
+
                       </td>
                     </tr>
                   )}
