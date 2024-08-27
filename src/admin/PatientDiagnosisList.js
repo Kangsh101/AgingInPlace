@@ -45,30 +45,39 @@ const PatientDiagnosisList = () => {
   };
 
   const handleDeleteDiagnosis = async (diagnosisId) => {
-    try {
-      const response = await axios.delete(`/api/diagnoses/${diagnosisId}`);
-      if (response.status === 200) {
-        setDiagnoses(diagnoses.filter(diagnosis => diagnosis.id !== diagnosisId));
-      } else {
-        console.error('Error deleting diagnosis:', response.status);
+    const confirmed = window.confirm('정말 이 진단명을 삭제하시겠습니까?');
+  
+    if (confirmed) {
+      try {
+        const response = await axios.delete(`/api/diagnoses/${diagnosisId}`);
+        if (response.status === 200) {
+          setDiagnoses(diagnoses.filter(diagnosis => diagnosis.id !== diagnosisId));
+        } else {
+          console.error('Error deleting diagnosis:', response.status);
+        }
+      } catch (error) {
+        console.error('Error deleting diagnosis:', error);
       }
-    } catch (error) {
-      console.error('Error deleting diagnosis:', error);
     }
   };
-
+  
   const handleDeleteMedication = async (medicationId) => {
-    try {
-      const response = await axios.delete(`/api/medications/${medicationId}`);
-      if (response.status === 200) {
-        setMedications(medications.filter(medication => medication.id !== medicationId));
-      } else {
-        console.error('Error deleting medication:', response.status);
+    const confirmed = window.confirm('정말 이 약물 정보를 삭제하시겠습니까?');
+  
+    if (confirmed) {
+      try {
+        const response = await axios.delete(`/api/medications/${medicationId}`);
+        if (response.status === 200) {
+          setMedications(medications.filter(medication => medication.id !== medicationId));
+        } else {
+          console.error('Error deleting medication:', response.status);
+        }
+      } catch (error) {
+        console.error('Error deleting medication:', error);
       }
-    } catch (error) {
-      console.error('Error deleting medication:', error);
     }
   };
+  
 
   const handleCancel = () => {
     navigate(-1);

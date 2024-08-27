@@ -2,7 +2,7 @@
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 80%;
   display: block;
   cursor: pointer;
 }
@@ -25,47 +25,33 @@
   background-color: #ff1a1a;
 }
 
-#PatientDetail-container {
-  display: flex;
-}
-
 #CmsAdd-container {
   align-items: center;
   display: flex;
   flex-direction: column;
 }
 
-#PatientDetail-Btt {
-  width: 9em;
-}
-
-.Cms-diagnosis-container {
+.Cms-diagnosis-container, .Cms-medication-container {
   display: flex;
   flex-direction: column;
   margin-top: 30px;
-}
-
-.Cms-medication-container {
-  /* display: flex; */
-  flex-direction: column;
-  margin-top: 30px;
-}
-
-.enhanced-section {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
   font-size: 1.5em;
   margin-bottom: 10px;
+  text-align: center;
+  color: #555;
 }
 
 .enhanced-list {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .enhanced-list-item {
@@ -84,4 +70,48 @@
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+/* .primary-button {
+  padding: 10px 20px;
+  background-color: #0275d8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.primary-button:hover {
+  background-color: #025aa5;
+}
+
+.secondary-button {
+  padding: 10px 20px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background-color: #4cae4c;
+} */
+
+@media (max-width: 768px) {
+  .enhanced-section {
+    width: 100%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #Diagnosis-addBtt, .primary-button, .secondary-button {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 10px;
+  }
 }

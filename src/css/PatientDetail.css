@@ -8,8 +8,8 @@
 }
 
 .X-Button {
-    padding: 7px;
-    border: 1px solid #c1c1c1;
+    padding: 5px 10px;
+    border: none;
     background-color: #ff4d4d;
     color: white;
     border-radius: 5px;
@@ -22,8 +22,8 @@
 }
 
 #dosage, #frequency, #diagnosis, #medication {
-    width: 100%;
-    max-width: 400px;
+    width: 80%;
+    max-width: 300px;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -34,18 +34,27 @@
 .diagnosis-item, .medication-item {
     display: flex;
     align-items: center;
+    justify-content: center; 
     margin-bottom: 10px;
-    /* flex-wrap: wrap; */
+    width: 100%;
+    max-width: 600px;
 }
-.medication-item input{
-    margin-right: 5px;
+
+.medication-item input, .diagnosis-item input {
+    flex: 1;
+    margin-right: 10px;
 }
+
 #CmsAdd-container {
-    align-items: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .Cms-diagnosis-container, .Cms-medication-container {
@@ -53,13 +62,58 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
-.Medication-saveBtt, .Diagnosis-saveBtt {
+.Medication-saveBtt, .Diagnosis-saveBtt, .saveBtt {
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-top: 10px;
+}
+
+.diagnosis-item input, .medication-item input {
+    margin-bottom: 0; 
+}
+
+.primary-button {
+    padding: 10px 20px;
+    background-color: #0275d8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.primary-button:hover {
+    background-color: #025aa5;
+}
+
+.secondary-button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.secondary-button:hover {
+    background-color: #4cae4c;
+}
+
+#cancelBtt {
+    background-color: #bbb;
+    /* padding: 10px 20px; */
+    border-radius: 5px;
+    /* margin-top: 10px; */
+}
+
+#cancelBtt:hover {
+    background-color: #999;
 }
 
 .Cmss-header {
@@ -73,13 +127,12 @@
     align-items: center;
     width: 100%;
 }
-#cancelBtt{
-    background-color: #bbb;
-}
+
 @media (max-width: 768px) {
     .diagnosis-item, .medication-item {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        width: 100%;
     }
     .X-Button {
         margin-left: 0;
