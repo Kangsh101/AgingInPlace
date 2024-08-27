@@ -1,6 +1,6 @@
 module.exports = { 
     apps: [{
-      name    : "aginginplace-web",	
+      name    : "AgingInPlace",	
       script  : "server.js"
     }]
   }

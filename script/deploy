@@ -1,13 +1,13 @@
 #!/bin/sh
-ssh ec2-user@15.164.57.70<<EOF	
-    cd ~/newReact
+ssh -o StrictHostKeyChecking=no ec2-user@15.164.57.70 <<EOF
+    cd ~/AgingInPlace
     git pull origin master
     curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
     . ~/.nvm/nvm.sh 
-    nvm install 21.6.2
+    nvm install 22.5.1
     npm install
     npm install -g pm2
-    npm run build
+    npm run build 
     pm2 restart ecosystem.config.js
     exit
 EOF
