@@ -139,8 +139,8 @@ const PatientChart = () => {
       .catch((error) => console.error('Error fetching patient data:', error.message));
   }, [selectedDate]);
 
-  const sleepSeries = patientData.map((pd) => Math.min((pd.sleep_duration / sleepStandard) * 100, 100));
-  const activitySeries = patientData.map((pd) => Math.min((pd.activity_cal_active / activityStandard) * 100, 100));
+  const sleepSeries = patientData.map((pd) => Math.min((pd.duration / sleepStandard) * 100, 100));
+  const activitySeries = patientData.map((pd) => Math.min((pd.calActive / activityStandard) * 100, 100));
   
   return (
     <article id='main'>

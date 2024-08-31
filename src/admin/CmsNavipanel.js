@@ -12,22 +12,22 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
         { path: "/Cms", label: "게시판 관리", basePaths: ["/Cms", "/Cmsfaq"] },
         { path: "/Cmscontents", label: "프로그램 컨텐츠", basePaths: ["/Cmscontents"] },
         { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"] },
-        { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis","/PatientDetail"] },
-        { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria"] }
+        { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail"] },
+        { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria", "/addpatientcriteria"] } // basePaths에 "/addpatientcriteria" 추가
     ];
 
     const isActive = (basePaths) => {
-        return basePaths.includes(location.pathname);
+        return basePaths.some(basePath => location.pathname.startsWith(basePath));
     };
 
     useEffect(() => {
         const handleScroll = () => {
-            // Add any scroll-related actions here if needed
+            // 필요한 경우 스크롤 관련 작업 추가
         };
 
         window.addEventListener('scroll', handleScroll);
 
-        // Trigger the load animation
+        // 로드 애니메이션 트리거
         const timeout = setTimeout(() => {
             setIsLoaded(true);
         }, 100);
@@ -48,7 +48,6 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
     };
 
     return (
-        
         <div className={`wrapper ${isLoaded ? 'is-preload' : ''}`}>
             <div id="titleBar">
                 <a href="#navPanel" className={`toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}></a>
@@ -68,7 +67,7 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
                 </nav>
             </div>
             <div className="content">
-                {/* Add your content here */}
+                {/* 여기에 콘텐츠 추가 */}
             </div>
         </div>
     );
