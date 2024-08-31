@@ -7,7 +7,8 @@ import CmsSidebar from './CmsSidebar';
 
 const AddPatientCriteria = () => {
   const { id } = useParams();
-  const [sleepTime, setSleepTime] = useState('');
+  const [sleepStartTime, setSleepStartTime] = useState('');
+  const [sleepEndTime, setSleepEndTime] = useState('');
   const [exerciseAmount, setExerciseAmount] = useState('');
   const [patient, setPatient] = useState(null);
   const [savedCriteria, setSavedCriteria] = useState(null);
@@ -25,11 +26,12 @@ const AddPatientCriteria = () => {
   }, [id]);
 
   const handleSave = () => {
-    const roundedExerciseAmount = parseFloat(exerciseAmount).toFixed(1);
+    const roundedExerciseAmount = parseInt(exerciseAmount, 10);
 
     const criteria = {
       patient_id: id,
-      sleep_time: sleepTime,
+      sleep_startTime: sleepStartTime,
+      sleep_endTime: sleepEndTime,
       exercise_amount: roundedExerciseAmount,
       added_date: new Date().toISOString()
     };
@@ -77,20 +79,30 @@ const AddPatientCriteria = () => {
             {patient && (
               <div className="criteria-container">
                 <div className="criteria-item">
-                  <label htmlFor="sleepTime">수면 시간 (HH:MM):</label>
+                  <label htmlFor="sleepStartTime">수면 시작 시간 (HH:MM):</label>
                   <input
                     type="time"
-                    id="sleepTime"
-                    value={sleepTime}
-                    onChange={(e) => setSleepTime(e.target.value)}
-                    placeholder="수면 시간을 입력하세요"
+                    id="sleepStartTime"
+                    value={sleepStartTime}
+                    onChange={(e) => setSleepStartTime(e.target.value)}
+                    placeholder="수면 시작 시간을 입력하세요"
+                  />
+                </div>
+                <div className="criteria-item">
+                  <label htmlFor="sleepEndTime">수면 종료 시간 (HH:MM):</label>
+                  <input
+                    type="time"
+                    id="sleepEndTime"
+                    value={sleepEndTime}
+                    onChange={(e) => setSleepEndTime(e.target.value)}
+                    placeholder="수면 종료 시간을 입력하세요"
                   />
                 </div>
                 <div className="criteria-item">
                   <label htmlFor="exerciseAmount">운동량 (칼로리):</label>
                   <input
                     type="number"
-                    step="0.1"
+                    step="1"
                     id="exerciseAmount"
                     value={exerciseAmount}
                     onChange={(e) => setExerciseAmount(e.target.value)}
@@ -103,7 +115,8 @@ const AddPatientCriteria = () => {
             {savedCriteria && (
               <div className="saved-criteria">
                 <h3>저장된 환자 데이터 :</h3>
-                <p>수면 시간 : {savedCriteria.sleep_time || '없음'}</p>
+                <p>수면 시작 시간 : {savedCriteria.sleep_startTime || '없음'}</p>
+                <p>수면 종료 시간 : {savedCriteria.sleep_endTime || '없음'}</p>
                 <p>운동량(칼로리) : {savedCriteria.exercise_amount || '없음'}</p>
               </div>
             )}

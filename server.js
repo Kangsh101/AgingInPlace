@@ -1287,8 +1287,9 @@ app.put('/api/activateUser/:userId', (req, res) => {
   });
 });
 // 환자별로 운동량 / 수면시간 설정 엔드포인트
+// 수정된 환자 기준 저장/업데이트 엔드포인트
 app.post('/api/patientcriteria', (req, res) => {
-  const { patient_id, sleep_time, exercise_amount, added_date } = req.body;
+  const { patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date } = req.body;
 
   const checkQuery = 'SELECT * FROM cms_patientdata WHERE patient_id = ?';
   connection.query(checkQuery, [patient_id], (err, results) => {
@@ -1299,8 +1300,11 @@ app.post('/api/patientcriteria', (req, res) => {
     }
     if (results.length > 0) {
       // 기존 데이터가 있는 경우 업데이트
-      const updateQuery = 'UPDATE cms_patientdata SET sleep_time = ?, exercise_amount = ?, added_date = ? WHERE patient_id = ?';
-      connection.query(updateQuery, [sleep_time, exercise_amount, added_date, patient_id], (err, result) => {
+      const updateQuery = `
+        UPDATE cms_patientdata 
+        SET sleep_startTime = ?, sleep_endTime = ?, exercise_amount = ?, added_date = ?
+        WHERE patient_id = ?`;
+      connection.query(updateQuery, [sleep_startTime, sleep_endTime, exercise_amount, added_date, patient_id], (err, result) => {
         if (err) {
           console.error('Error updating data:', err);
           res.status(500).json({ error: 'Error saving patient criteria' });
@@ -1310,8 +1314,10 @@ app.post('/api/patientcriteria', (req, res) => {
       });
     } else {
       // 기존 데이터가 없는 경우 삽입
-      const insertQuery = 'INSERT INTO cms_patientdata (patient_id, sleep_time, exercise_amount, added_date) VALUES (?, ?, ?, ?)';
-      connection.query(insertQuery, [patient_id, sleep_time, exercise_amount, added_date], (err, result) => {
+      const insertQuery = `
+        INSERT INTO cms_patientdata (patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date) 
+        VALUES (?, ?, ?, ?, ?)`;
+      connection.query(insertQuery, [patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date], (err, result) => {
         if (err) {
           console.error('Error inserting data:', err);
           res.status(500).json({ error: 'Error saving patient criteria' });
@@ -1326,7 +1332,10 @@ app.post('/api/patientcriteria', (req, res) => {
 app.get('/api/patientcriteria/:id', (req, res) => {
   const patient_id = req.params.id;
 
-  const query = 'SELECT sleep_time, exercise_amount FROM cms_patientdata WHERE patient_id = ?';
+  const query = `
+    SELECT sleep_startTime, sleep_endTime, exercise_amount 
+    FROM cms_patientdata 
+    WHERE patient_id = ?`;
   connection.query(query, [patient_id], (err, results) => {
     if (err) {
       console.error('Error fetching data:', err);
