@@ -116,7 +116,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                     <span className='patient-name'><span id='patientNaem'>환자 성함 : </span> {patientName}</span>
                 </div>
                 <div className='diagnosis-box'>
-                    <div>
+                    <div>   
                         <label>진단받은 질환</label>
                         {diseases.map((disease, index) => (
                             <div key={index}>

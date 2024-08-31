@@ -7,17 +7,15 @@ function DiagnosisList({ onAddClick }) {
     const [patientDetails, setPatientDetails] = useState({ patientName: '', diagnoses: [], medications: [] });
 
     useEffect(() => {
-        // 사용자 정보 가져오기
         axios.get('/api/getUserDetails')
             .then(response => {
                 if (response.data) {
                     setUserDetails(response.data);
-                    // 환자 정보 가져오기
                     const patientId = response.data.role === '보호자' ? response.data.patientId : response.data.id;
                     axios.get(`/api/getPatientDetails?patientId=${patientId}`)
                         .then(response => {
                             if (response.data) {
-                                setPatientDetails(response.data);
+                                setPatientDetails(response.data);  // 기존 상태를 덮어쓰는 방식으로 초기화
                             } else {
                                 console.error('Invalid data format');
                                 setPatientDetails({ patientName: '', diagnoses: [], medications: [] });
@@ -38,6 +36,43 @@ function DiagnosisList({ onAddClick }) {
             });
     }, []);
 
+    // 진단명 삭제 핸들러
+    const handleDeleteDiagnosis = (index) => {
+        const confirmed = window.confirm('정말 이 진단명을 삭제하시겠습니까?');
+        if (confirmed) {
+            const diagnosisId = patientDetails.diagnoses[index].id;
+            const updatedDiagnoses = patientDetails.diagnoses.filter((_, i) => i !== index);
+            setPatientDetails({ ...patientDetails, diagnoses: updatedDiagnoses });
+
+            // 서버로 삭제 요청 보내기
+            axios.delete(`/api/deleteDiagnosis`, { data: { diagnosisId } })
+                .then(response => {
+                    console.log(response.data.message);
+                })
+                .catch(error => console.error('진단명 삭제에 실패했습니다.', error));
+        }
+    };
+
+    // 약물 삭제 핸들러
+    const handleDeleteMedication = (index) => {
+        const confirmed = window.confirm('정말 이 약물을 삭제하시겠습니까?');
+        if (confirmed) {
+            const medicationId = patientDetails.medications[index].id; 
+            if (!medicationId) {
+                console.error('약물 ID를 찾을 수 없습니다.');
+                return;
+            }
+
+            const updatedMedications = patientDetails.medications.filter((_, i) => i !== index);
+            setPatientDetails({ ...patientDetails, medications: updatedMedications });
+            axios.delete(`/api/deleteMedication`, { data: { medicationId } })
+                .then(response => {
+                    console.log(response.data.message);
+                })
+                .catch(error => console.error('약물 삭제에 실패했습니다.', error));
+        }
+    };
+
     return (
         <div className='diagnosis-list-container'>
             <div className='patient-info'>
@@ -48,7 +83,10 @@ function DiagnosisList({ onAddClick }) {
             </div>
             <ul className='diagnosis-list'>
                 {patientDetails.diagnoses.map((diagnosis, index) => (
-                    <li key={index}>{diagnosis}</li>
+                    <li key={diagnosis.id}> 
+                        {diagnosis.name}
+                        <button className='X-Button' onClick={() => handleDeleteDiagnosis(index)}>X</button>
+                    </li>
                 ))}
             </ul>
             <div className='medication-list-title'>
@@ -56,8 +94,9 @@ function DiagnosisList({ onAddClick }) {
             </div>
             <ul className='medication-list'>
                 {patientDetails.medications.map((med, index) => (
-                    <li key={index}>
+                    <li key={med.id}> 
                         {med.medication} (용량: {med.dosage}, 복용 횟수: {med.frequency})
+                        <button className='X-Button' onClick={() => handleDeleteMedication(index)}>X</button>
                     </li>
                 ))}
             </ul>

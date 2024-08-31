@@ -79,21 +79,24 @@
     font-weight: 500;
     color: #5c5c5c;
 }
+#disease-input,#Drug-width2{
+    width: 90%;
+}
 @media (max-width: 450px) {
     .medication-name, .dosage, .frequency, .button {
-        width: 100%; /* 너비 100%로 설정 */
-        min-width: 40%; /* 최소 너비 100%로 확장 */
+        width: 100%; 
+        min-width: 40%; 
         line-height: 2em;
     }
 
     .medication-container, .daskdkasdk > div {
-        flex-direction: column; /* 수직 배치 */
+        flex-direction: column; 
     }
     .medication-name, .dosage, .frequency {
-        flex: 1;  /* 모든 필드가 화면 너비에 맞게 조정 */
+        flex: 1;  
     }
     .diagnosis-title {
-        padding: 10px; /* 타이틀 패딩 축소 */
+        padding: 10px; 
     }
     #disease-input{
         width: 90%;

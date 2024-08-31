@@ -44,6 +44,8 @@ import CmsCIST from './admin/CmsCIST';
 import AddQuestionCIST from './admin/AddQuestionCIST';
 import EditQuestionCIST from './admin/EditQuestionCIST';
 import QuestionDetailCIST from './admin/QuestionDetailCIST';
+import NotFound from './component/NotFound';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -94,7 +96,7 @@ function App() {
           <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/></>} />
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
-          
+          <Route path="/notfound" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><NotFound/><Footer /></>} />
 
 
           <Route path='/question_detail/:id' element={<><CmsNavipanel/><QuestionDetailCIST /></>}/>

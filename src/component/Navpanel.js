@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/NewMain.css';
-import { Link , useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isNavOpen, setIsNavOpen] = useState(false); 
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const navPanelRef = useRef(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       const response = await fetch('/api/logout', {
         method: 'POST',
       });
-  
+
       if (response.ok) {
-        setIsLoggedIn(false); 
-        localStorage.removeItem('isLoggedIn'); 
-        navigate('/main'); 
+        setIsLoggedIn(false);
+        localStorage.removeItem('isLoggedIn');
+        navigate('/main');
       } else {
         throw new Error('로그아웃 실패');
       }
@@ -26,6 +26,7 @@ const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
       alert('로그아웃에 실패했습니다.');
     }
   };
+
   useEffect(() => {
     const handleScroll = () => {
       // 스크롤 이벤트에 따른 동작 수행
@@ -53,7 +54,7 @@ const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
       document.body.classList.remove('navPanel-visible');
     }
   };
-  
+
   return (
     <div className={`wrapper ${isLoaded ? 'is-preload' : ''}`}>
       <div id="titleBar">
@@ -64,26 +65,27 @@ const Navpanel = ({ isLoggedIn, setIsLoggedIn }) => {
         <nav>
           <ul>
             <li><a href="main" className='link'>Home</a></li>
+            {isLoggedIn && (
+              <>
+                <li><a href="/patientChart" className='link3'>환자 데이터</a></li> 
+                <li><a onClick={handleLogout} className="link3">로그아웃</a></li>
+                <li><a href="/mypage" className='link3'>내정보</a></li>
+              </>
+            )}
             {!isLoggedIn && (
               <>
                 <li><a href="/login" className='link3'>로그인</a></li>
                 <li><a href="/signup" className='link3'>회원가입</a></li>
               </>
             )}
-            {isLoggedIn && (
-              <>
-                <li><a onClick={handleLogout} className="link3">로그아웃</a></li>
-                <li><a href="/mypage" className='link3'>내정보</a></li>
-              </>
-            )}
             <li><a href="contents" className='link3'>프로그램 콘텐츠</a></li>
             <li>
-                <a href="notice" className='link3'>커뮤니티</a>
-                <ul>
-                    <li><a href="notice" className='link2'>공지사항</a></li>
-                    <li><a href="qnapage" className='link2'>QnA 게시판</a></li>
-                    <li><a href="faqpage" className='link2'>FAQ 게시판</a></li>
-                </ul>
+              <a href="#" className='link3'>커뮤니티</a>
+              <ul>
+                <li><a href="notice" className='link2'>공지사항</a></li>
+                <li><a href="qnapage" className='link2'>QnA 게시판</a></li>
+                <li><a href="faqpage" className='link2'>FAQ 게시판</a></li>
+              </ul>
             </li>
           </ul>
         </nav>

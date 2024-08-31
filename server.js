@@ -1378,8 +1378,6 @@ app.post('/api/addMedications', (req, res) => {
 });
 
 
-//수정 부분
-
 // 진단명목록 데이터 가져오기 엔드포인트
 app.get('/api/getUserDetails', (req, res) => {
   const userId = req.session.userId;
@@ -1407,54 +1405,49 @@ app.get('/api/getPatientDetails', (req, res) => {
   const userId = req.session.userId;
 
   connection.query('SELECT role, patientId FROM members WHERE id = ?', [userId], (err, userResults) => {
-    if (err) {
-      console.error('사용자 정보 조회 실패:', err);
-      res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
-    } else if (userResults.length === 0) {
-      res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
-    } else {
-      const userRole = userResults[0].role;
-      const patientId = userRole === '보호자' ? userResults[0].patientId : userId;
+      if (err) {
+          console.error('사용자 정보 조회 실패:', err);
+          res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+      } else if (userResults.length === 0) {
+          res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
+      } else {
+          const userRole = userResults[0].role;
+          const patientId = userRole === '보호자' ? userResults[0].patientId : userId;
 
-      const query = `
-        SELECT p.name AS patientName, d.diagnosis, m.medication, m.dosage, m.frequency
-        FROM members p
-        LEFT JOIN diagnoses d ON p.id = d.patient_id
-        LEFT JOIN medications m ON p.id = m.patient_id
-        WHERE p.id = ?;
-      `;
+          // 환자 정보 가져오기
+          connection.query('SELECT name AS patientName FROM members WHERE id = ?', [patientId], (err, patientResults) => {
+              if (err || patientResults.length === 0) {
+                  console.error('환자 이름 조회 실패:', err);
+                  res.status(500).json({ message: '환자 이름 조회 실패', error: err });
+              } else {
+                  const patientName = patientResults[0].patientName;
 
-      connection.query(query, [patientId], (err, results) => {
-        if (err) {
-          console.error('환자 정보 조회 실패:', err);
-          res.status(500).json({ message: '환자 정보 조회 실패', error: err });
-        } else if (results.length === 0) {
-          res.status(404).json({ message: '환자 정보를 찾을 수 없습니다.' });
-        } else {
-          const diagnoses = new Set();
-          const medications = new Set();
+                  // 진단명 가져오기
+                  connection.query('SELECT id, diagnosis AS name FROM diagnoses WHERE patient_id = ?', [patientId], (err, diagnosesResults) => {
+                      if (err) {
+                          console.error('진단명 조회 실패:', err);
+                          res.status(500).json({ message: '진단명 조회 실패', error: err });
+                      } else {
+                          // 약물 가져오기
+                          connection.query('SELECT id, medication, dosage, frequency FROM medications WHERE patient_id = ?', [patientId], (err, medicationsResults) => {
+                              if (err) {
+                                  console.error('약물 조회 실패:', err);
+                                  res.status(500).json({ message: '약물 조회 실패', error: err });
+                              } else {
+                                  const patientDetails = {
+                                      patientName: patientName,
+                                      diagnoses: diagnosesResults,
+                                      medications: medicationsResults
+                                  };
 
-          results.forEach(row => {
-            if (row.diagnosis) diagnoses.add(row.diagnosis);
-            if (row.medication) {
-              medications.add(JSON.stringify({
-                medication: row.medication,
-                dosage: row.dosage,
-                frequency: row.frequency
-              }));
-            }
+                                  res.status(200).json(patientDetails);
+                              }
+                          });
+                      }
+                  });
+              }
           });
-
-          const patientDetails = {
-            patientName: results[0].patientName,
-            diagnoses: Array.from(diagnoses),
-            medications: Array.from(medications).map(item => JSON.parse(item))
-          };
-
-          res.status(200).json(patientDetails);
-        }
-      });
-    }
+      }
   });
 });
 
@@ -1612,6 +1605,46 @@ app.delete('/api/medications/:id', (req, res) => {
     res.status(200).send('Medication deleted successfully');
   });
 });
+
+
+// 진단명을 삭제하는 API
+app.delete('/api/deleteDiagnosis', (req, res) => {
+  const { diagnosisId } = req.body;
+
+  if (!diagnosisId) {
+      return res.status(400).json({ message: '진단 ID가 필요합니다.' });
+  }
+
+  const query = 'DELETE FROM diagnoses WHERE id = ?';
+  connection.query(query, [diagnosisId], (err, results) => {
+      if (err) {
+          console.error('진단명 삭제 실패:', err);
+          res.status(500).json({ message: '진단명 삭제 실패', error: err });
+      } else {
+          res.status(200).json({ message: '진단명이 성공적으로 삭제되었습니다.' });
+      }
+  });
+});
+
+// 약물을 삭제하는 API
+app.delete('/api/deleteMedication', (req, res) => {
+  const { medicationId } = req.body;
+
+  if (!medicationId) {
+      return res.status(400).json({ message: '약물 ID가 필요합니다.' });
+  }
+
+  const query = 'DELETE FROM medications WHERE id = ?';
+  connection.query(query, [medicationId], (err, results) => {
+      if (err) {
+          console.error('약물 삭제 실패:', err);
+          res.status(500).json({ message: '약물 삭제 실패', error: err });
+      } else {
+          res.status(200).json({ message: '약물이 성공적으로 삭제되었습니다.' });
+      }
+  });
+});
+
 
 // 사용자 id 가져오기
 app.get('/api/getUserId', (req, res) => {

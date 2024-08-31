@@ -60,7 +60,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
           <ul>
             {isLoggedIn && (
                 <>
-                  <li><a href="/patientChart">환자 data</a></li>
+                  <li><a href="/patientChart">환자 데이터</a></li>
                 </>
               )}
               <li><a href="/contents">프로그램 콘텐츠</a></li>
