@@ -80,80 +80,128 @@ app.use(express.static(path.join(__dirname, 'build')));
     res.status(200).json({ imageUrl });
   });
   
-//회원가입
-// app.post('/api/signup', (req, res) => {
-//   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId  } = req.body;
+  const bcrypt = require('bcrypt');
+  const saltRounds = 10; 
 
-//   const query = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
+  app.post('/api/signup', (req, res) => {
+    const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
-//   connection.query(query, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId ], (err, result) => {
-//     if (err) {
-//       console.error('회원가입 실패: ' + err.stack);
-//       res.status(500).send('회원가입 실패');
-//       return;
-//     }
-//     console.log('회원가입 성공');
-//     res.status(200).send('회원가입 성공');
-//   });
-// });
-
-app.post('/api/signup', (req, res) => {
-  const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
-
-  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
-
-  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
-    if (err) {
-      console.error('회원가입 실패: ' + err.stack);
-      res.status(500).send('회원가입 실패');
-      return;
-    }
-    const guardianId = result.insertId;
-
-    // 환자 레코드에 보호자 ID 추가
-    const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
-    connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
-      if (updateErr) {
-        console.error('보호자 ID 업데이트 실패:', updateErr);
-        res.status (500).send('보호자 정보 업데이트 실패');
+    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error('비밀번호 해싱 실패: ' + err.stack);
+        res.status(500).send('회원가입 실패');
         return;
       }
-      console.log('보호자 정보 업데이트 성공');
-      res.status(200).send('회원가입 성공');
+  
+      const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
+
+      connection.query(insertGuardianQuery, [username, hashedPassword, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+        if (err) {
+          console.error('회원가입 실패: ' + err.stack);
+          res.status(500).send('회원가입 실패');
+          return;
+        }
+        const guardianId = result.insertId;
+
+        const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+        connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+          if (updateErr) {
+            console.error('보호자 ID 업데이트 실패:', updateErr);
+            res.status(500).send('보호자 정보 업데이트 실패');
+            return;
+          }
+          console.log('보호자 정보 업데이트 성공');
+          res.status(200).send('회원가입 성공');
+        });
+      });
     });
   });
-});
-
 
 //로그인
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM members WHERE username = ? AND password = ?';
+  const query = 'SELECT * FROM members WHERE username = ?';
 
-  connection.query(query, [username, password], (err, result) => {
+  connection.query(query, [username], (err, results) => {
     if (err) {
       console.error('로그인 실패: ' + err.stack);
       res.status(500).send('로그인 실패');
       return;
     }
-    if (result.length === 0) {
+    
+    if (results.length === 0) {
+
       res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
       return;
     }
-    const user = result[0];
-    if (user.is_active !== 1) {
-      res.status(401).send('비활성화된 계정입니다');
-      return;
+
+    const user = results[0];
+
+    if (!user.password.startsWith('$2b$')) {
+
+      if (user.password === password) {
+
+        bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+          if (err) {
+            console.error('비밀번호 해싱 실패: ' + err.stack);
+            res.status(500).send('로그인 실패');
+            return;
+          }
+
+          const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
+          connection.query(updateQuery, [hashedPassword, user.id], (err) => {
+            if (err) {
+              console.error('비밀번호 업데이트 실패: ' + err.stack);
+              res.status(500).send('로그인 실패');
+              return;
+            }
+
+            req.session.userId = user.id;
+            req.session.userRole = user.role;
+
+            console.log('세션에 저장된 기본키:', req.session.userId);
+            console.log('세션에 저장된 역할:', req.session.userRole);
+
+            res.status(200).json(user);
+          });
+        });
+      } else {
+
+        res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+    } else {
+
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          console.error('비밀번호 비교 실패: ' + err.stack);
+          res.status(500).send('로그인 실패');
+          return;
+        }
+
+        if (!isMatch) {
+
+          res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
+          return;
+        }
+
+        if (user.is_active !== 1) {
+
+          res.status(401).send('비활성화된 계정입니다');
+          return;
+        }
+
+        req.session.userId = user.id;
+        req.session.userRole = user.role;
+
+        console.log('세션에 저장된 기본키:', req.session.userId);
+        console.log('세션에 저장된 역할:', req.session.userRole);
+
+        res.status(200).json(user);
+      });
     }
-    req.session.userId = user.id;
-    req.session.userRole = user.role;
-
-    console.log('세션에 저장된 기본키:', req.session.userId);
-    console.log('세션에 저장된 역할:', req.session.userRole);
-
-    res.status(200).json(user);
   });
 });
+
 
 // 안드로이드 로그인
 app.post('/api/android/login', (req, res) => {
@@ -177,11 +225,9 @@ app.post('/api/android/login', (req, res) => {
       return;
     }
 
-    // 여기서 사용자를 인증하고 고유한 식별자를 생성하여 반환합니다.
-    const userId = user.id; // 사용자의 고유한 ID
+    const userId = user.id;
 
-    // 쿠키에 사용자 ID를 저장합니다.
-    res.cookie('userId', userId, { httpOnly: true }); // httpOnly: true로 설정하여 JavaScript에서 쿠키에 접근하지 못하도록 합니다.
+    res.cookie('userId', userId, { httpOnly: true }); 
 
     console.log('사용자 인증 및 식별자 생성:', userId);
     res.status(200).json({ userId });
