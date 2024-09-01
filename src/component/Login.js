@@ -5,53 +5,54 @@ import '../css/Login.css';
 import axios from 'axios';
 
 const Login = ({ onLogin }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-  
-      if (!username || !password) {
-        alert('아이디와 비밀번호를 입력하세요.');
-        return;
-      }
-  
-      try {
-        const response = await axios.post('/api/login', {
-          username,
-          password
-        });
-      
-        if (response.status === 200) {
-          const user = response.data;
-          if (user) {
-            if (user.is_active === 1) {
-              onLogin(true);
-              navigate('/main');
-            } else {
-              alert('비활성화된 계정입니다.');
-            }
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!username || !password) {
+      alert('아이디와 비밀번호를 입력하세요.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('/api/login', {
+        username,
+        password
+      });
+    
+      if (response.status === 200) {
+        const user = response.data;
+        if (user) {
+          if (user.is_active === 1) {
+            // 로그인 성공 시 user.role을 함께 전달
+            onLogin(true, user.role);
+            navigate('/main');
           } else {
-            alert('아이디 또는 비밀번호를 확인하세요.');
-          }
-        } else if (response.status === 401) {
-          const errorMessage = response.data;
-          if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
-            alert('아이디 또는 비밀번호를 확인하세요.');
-          } else if (errorMessage === '비활성화된 계정입니다') {
             alert('비활성화된 계정입니다.');
-          } else {
-            alert('서버 오류가 발생했습니다.');
           }
+        } else {
+          alert('아이디 또는 비밀번호를 확인하세요.');
+        }
+      } else if (response.status === 401) {
+        const errorMessage = response.data;
+        if (errorMessage === '아이디 또는 비밀번호가 올바르지 않습니다.') {
+          alert('아이디 또는 비밀번호를 확인하세요.');
+        } else if (errorMessage === '비활성화된 계정입니다') {
+          alert('비활성화된 계정입니다.');
         } else {
           alert('서버 오류가 발생했습니다.');
         }
-      } catch (error) {
-        console.error('로그인 오류:', error);
-        alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+      } else {
+        alert('서버 오류가 발생했습니다.');
       }
-    }       
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+  } 
   return (
     <div id="page-wrapper" >
 

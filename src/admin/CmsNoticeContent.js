@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import '../css/qnacontent.css';
+import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const CmsNoticeContent = () => {
+const CmsNoticeContent = ({ userRole }) => {
   const { id } = useParams(); 
   const quillRef = useRef(null); 
   const navigate = useNavigate();
@@ -89,6 +91,8 @@ const CmsNoticeContent = () => {
 
   return (
     <div className="qnaup-page">
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="qnaup-header">
         <div className='qnacontent-container'>
           {post && (

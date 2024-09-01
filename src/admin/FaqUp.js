@@ -2,9 +2,10 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import '../css/Qnaup.css'; // 동일한 CSS 파일을 사용
+import '../css/Qnaup.css'; 
+import CmsNavipanel from './CmsNavipanel';
 
-const FaqUp = () => {
+const FaqUp = ({userRole}) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
@@ -91,6 +92,7 @@ const FaqUp = () => {
   return (
     <article id="main">
       <div className="qna-page">
+      <CmsNavipanel userRole={userRole}  />
         <div id='QnA-Plus' className="qnaplus">
           <h2>FAQ 등록</h2>
           <div className="form-group">

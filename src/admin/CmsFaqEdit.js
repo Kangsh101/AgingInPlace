@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../css/FaqUp.css';
+import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const CmsFaqEdit = () => {
+const CmsFaqEdit = ({ userRole }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -55,6 +57,7 @@ const CmsFaqEdit = () => {
 
   return (
     <div className="FaqUp-container">
+      <CmsNavipanel userRole={userRole}  />
       <div id="Faq-Plus" className="Faq-edit">
         <h2>FAQ 수정</h2>
         <div className="form-group">

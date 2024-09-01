@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const Cmsfaq = () => {
+const Cmsfaq = ({ userRole }) => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
@@ -69,7 +70,8 @@ const Cmsfaq = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar/>
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>FAQ</h2>

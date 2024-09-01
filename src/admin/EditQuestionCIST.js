@@ -5,7 +5,7 @@ import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 // import '../admin_css/EditQuestionCIST.css';
 
-const EditQuestionCIST = () => {
+const EditQuestionCIST = ({ userRole }) => {
   const { id } = useParams();
   const [type, setType] = useState('');
   const [questionText, setQuestionText] = useState('');
@@ -63,8 +63,8 @@ const EditQuestionCIST = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar />
-      <CmsNavipanel />
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>문제 수정</h2>

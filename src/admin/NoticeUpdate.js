@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/NoticeUp.css';
+import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const NoticeUpdate = () => {
+const NoticeUpdate = ({ userRole }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const naviga = useNavigate();
@@ -12,6 +14,7 @@ const NoticeUpdate = () => {
   }
   return (
     <div className="NoticeUp-container">
+      <CmsSidebar userRole={userRole} />
       <h2>공지사항 수정</h2>
       <div className="NoticeUp-label">
         <label>제목:</label>

@@ -4,8 +4,9 @@ import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; 
+import CmsNavipanel from './CmsNavipanel';
 
-const Cmsuser = () => {
+const Cmsuser = ({ userRole }) => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
@@ -64,7 +65,8 @@ const Cmsuser = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar/>
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'> 
@@ -109,11 +111,11 @@ const Cmsuser = () => {
                         <table className="details-table">
                           <tbody>
                             <tr>
-                              <td><strong>아이디</strong></td>
+                              <td><strong>ID</strong></td>
                               <td>{user.username}</td>
                             </tr>
                             <tr>
-                              <td><strong>타입</strong></td>
+                              <td><strong>사용자유형</strong></td>
                               <td>{user.role}</td>
                             </tr>
                             <tr>

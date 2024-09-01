@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes,Navigate } from 'react-router-dom';
 import Header from './component/Header';
 import Login from './component/Login';
 import Signup from './component/Signup';
@@ -48,24 +48,44 @@ import NotFound from './component/NotFound';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    const storedIsLoggedIn = sessionStorage.getItem('isLoggedIn');
+    const storedUserRole = sessionStorage.getItem('userRole');
     if (storedIsLoggedIn) {
       setIsLoggedIn(JSON.parse(storedIsLoggedIn));
+      setUserRole(storedUserRole); 
     }
-  }, []);
+}, []);
 
-  const handleLogin = (loginStatus) => {
-    setIsLoggedIn(loginStatus);
-    localStorage.setItem('isLoggedIn', JSON.stringify(loginStatus));
-  };
+
+const handleLogin = (loginStatus, role) => {
+  setIsLoggedIn(loginStatus);
+  setUserRole(role); 
+  sessionStorage.setItem('isLoggedIn', JSON.stringify(loginStatus));
+  sessionStorage.setItem('userRole', role); 
+};
+
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserRole(null); 
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userRole');
     window.location.href = '/main';
   };
+
+  const ProtectedRoute = ({ element, role }) => {
+    if (!isLoggedIn) {
+      return <Navigate to="/login" />;
+    }
+    if (role && role !== userRole) {
+      return <Navigate to="/unauthorized" />;
+    }
+    return element;
+  };
+
 
   return (
     <BrowserRouter>
@@ -96,29 +116,31 @@ function App() {
           <Route path="/patientdata" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientData/><Footer /></>} />
           <Route path="/cmsnoticecontent/:id" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><CmsNoticeContent/></>} />
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
-          <Route path="/notfound" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><NotFound/><Footer /></>} />
+          <Route path="*" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><NotFound/><Footer /></>} />
 
+          {/* 관리자 */}
+          <Route path="/cms" element={<><CmsNavipanel/><Cms userRole={userRole} /></>} />
 
-          <Route path='/question_detail/:id' element={<><CmsNavipanel/><QuestionDetailCIST /></>}/>
-          <Route path='/addquestioncist/:id' element={<><CmsNavipanel/><EditQuestionCIST /></>}/>
-          <Route path='/addquestioncist' element={<><CmsNavipanel/><AddQuestionCIST/></>}/>
-          <Route path='/cmscist' element={<><CmsNavipanel/><CmsCIST/></>}/>
-          <Route path="/faqedit/:id" element={<><CmsNavipanel/><CmsFaqEdit /></>} />
-          <Route path="/faqup" element={<><CmsNavipanel/><FaqUp /></>} />
-          <Route path="/noticeup" element={<><CmsNavipanel/><NoticeUp /></>} />
-          <Route path="/cms" element={<><CmsNavipanel/><Cms /></>} />
-          <Route path="/cmsuser" element={<><CmsNavipanel/><Cmsuser /></>} />
-          <Route path="/cmsfaq" element={<><CmsNavipanel/><Cmsfaq /></>} />
-          <Route path="/noticeupdate" element={<><CmsNavipanel/><NoticeUpdate /></>} />
-          <Route path="/Cmscontents" element={<><CmsNavipanel/><Cmscontents /></>} />
-          <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis /></>} />
-          <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria /></>} />
-          <Route path="/addpatientcriteria/:id" element={<><CmsNavipanel/><AddPatientCriteria /></>} />
-          <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList  /></>} />
-
-
-          <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail/></>} />
+          <Route path="/cmsuser" element={<><CmsNavipanel/><Cmsuser userRole={userRole} /></>} />
           <Route path="/cms/*" element={<CmsLayout />} />
+          <Route path="/faqup" element={<><CmsNavipanel/><FaqUp userRole={userRole}/></>} />
+          <Route path="/noticeup" element={<><CmsNavipanel/><NoticeUp userRole={userRole}/></>} />
+          <Route path="/faqedit/:id" element={<><CmsNavipanel/><CmsFaqEdit userRole={userRole}/></>} />
+          <Route path="/Cmscontents" element={<><CmsNavipanel/><Cmscontents userRole={userRole}/></>} />
+          <Route path="/cmsfaq" element={<><CmsNavipanel/><Cmsfaq userRole={userRole}/></>} />
+          <Route path="/noticeupdate" element={<><CmsNavipanel/><NoticeUpdate userRole={userRole} /></>} />
+         
+          {/* 의사 */}
+          <Route path='/question_detail/:id' element={<><CmsNavipanel/><QuestionDetailCIST userRole={userRole}/></>}/>
+          <Route path='/addquestioncist/:id' element={<><CmsNavipanel/><EditQuestionCIST userRole={userRole}/></>}/>
+          <Route path='/addquestioncist' element={<><CmsNavipanel/><AddQuestionCIST userRole={userRole}/></>}/>
+          <Route path='/cmscist' element={<><CmsNavipanel/><CmsCIST userRole={userRole}/></>}/>
+          <Route path="/cmsadddiagnosis" element={<><CmsNavipanel/><CmsAdddiagnosis userRole={userRole}/></>} />
+          <Route path="/patientcriteria" element={<><CmsNavipanel/><PatientCriteria userRole={userRole}/></>} />
+          <Route path="/addpatientcriteria/:id" element={<><CmsNavipanel/><AddPatientCriteria userRole={userRole} /></>} />
+          <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList userRole={userRole} /></>} />
+          <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail userRole={userRole}/></>} />
+          
         </Routes>
       </div>
     </BrowserRouter>

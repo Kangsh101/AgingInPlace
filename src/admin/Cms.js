@@ -4,7 +4,7 @@ import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 
-const Cms = () => {
+const Cms = ({ userRole }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,8 +15,12 @@ const Cms = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    if (userRole === 'admin') {
+      navigate('/Cms'); 
+    } else if (userRole === 'doctor') {
+      navigate('/CmsAdddiagnosis');
+    }
+  }, [userRole, navigate]);
 
   const fetchNotices = () => {
     fetch('/api/notices')
@@ -87,8 +91,8 @@ const Cms = () => {
 
   return (
 <div className="cms-container">
-  <CmsSidebar />
-  <CmsNavipanel />
+  <CmsSidebar userRole={userRole} />
+  <CmsNavipanel userRole={userRole}  />
 
   <div className="cms-main-content">
     <header className='major'>

@@ -4,8 +4,9 @@ import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import '../css/AddPatientCriteria.css';
 import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const AddPatientCriteria = () => {
+const AddPatientCriteria = ({ userRole }) => {
   const { id } = useParams();
   const [sleepStartTime, setSleepStartTime] = useState('');
   const [sleepEndTime, setSleepEndTime] = useState('');
@@ -67,7 +68,8 @@ const AddPatientCriteria = () => {
 
   return (
     <div className='cms-container'>
-      <CmsSidebar />
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <div className="cms-AddPatient-content">
           <div className="Cmss-header">

@@ -2,23 +2,30 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/CmsSidebar.css';
 
-const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
+const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn, userRole }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false); 
     const navPanelRef = useRef(null);
     const location = useLocation();
 
-    const links = [
-        { path: "/Cms", label: "게시판 관리", basePaths: ["/Cms", "/Cmsfaq"] },
-        { path: "/Cmscontents", label: "프로그램 컨텐츠", basePaths: ["/Cmscontents"] },
-        { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"] },
-        { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail"] },
-        { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria", "/addpatientcriteria"] } // basePaths에 "/addpatientcriteria" 추가
+    const allLinks = [
+        { path: "/Cms", label: "게시판 관리", basePaths: ["/Cms", "/Cmsfaq"], role: ["admin"] },
+        { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"], role: ["admin"] },
+        { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail"], role: ["admin", "doctor"] },
+        { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria"], role: ["admin", "doctor"] },
+        { path: "/CmsCIST", label: "인지선별검사 관리", basePaths: ["/CmsCIST"], role: ["admin", "doctor"] }
     ];
 
+    const visibleLinks = allLinks.filter(link => link.role.includes(userRole));
+
     const isActive = (basePaths) => {
-        return basePaths.some(basePath => location.pathname.startsWith(basePath));
+        return basePaths.some(basePath => 
+            location.pathname === basePath || 
+            location.pathname.startsWith(basePath + '/')
+        );
     };
+    
+    
 
     useEffect(() => {
         const handleScroll = () => {
@@ -58,7 +65,7 @@ const CmsNavipanel = ({ isLoggedIn, setIsLoggedIn }) => {
                     <h2 className='Cms-Aginginplace'>Aging in Place</h2>
                     <h2 className='Navipanel-h2'>관리자</h2>
                     <ul>
-                        {links.map((link, index) => (
+                        {visibleLinks.map((link, index) => (
                             <li key={index} className={`cms-item ${isActive(link.basePaths) ? "cms-active" : ""}`}>
                                 <Link to={link.path}>{link.label}</Link>
                             </li>

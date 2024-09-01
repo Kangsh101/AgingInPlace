@@ -5,7 +5,7 @@ import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/AddQuestionCIST.css';
 
-const AddQuestionCIST = () => {
+const AddQuestionCIST = ({ userRole }) => {
   const [type, setType] = useState('');
   const [questionText, setQuestionText] = useState('');
   const [answerOptions, setAnswerOptions] = useState([]);
@@ -58,8 +58,8 @@ const AddQuestionCIST = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar />
-      <CmsNavipanel />
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>문제 추가</h2>

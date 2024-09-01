@@ -3,8 +3,9 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmscontents.css';
 import CmsSidebar from './CmsSidebar';
+import CmsNavipanel from './CmsNavipanel';
 
-const Cmscontents = () => {
+const Cmscontents = ({ userRole }) => {
   const [posts, setPosts] = useState([
     { id: 1, type: '콘텐츠',title: '우울', author: '관리자', date: '2024-01-01',description:'우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명 우울에대한 설명 콘텐츠 설명  ' },
     { id: 2, type: '콘텐츠2',title: '수면장애', author: '매니저', date: '2024-01-21' },
@@ -23,7 +24,8 @@ const Cmscontents = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar/>
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <h2>프로그램 콘텐츠 관리</h2>

@@ -6,8 +6,9 @@ import '../css/PatientDetail.css';
 import '../css/PatientDiagnosisList.css';
 import CmsSidebar from './CmsSidebar';
 import axios from 'axios';
+import CmsNavipanel from './CmsNavipanel';
 
-const PatientDiagnosisList = () => {
+const PatientDiagnosisList = ({ userRole }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
@@ -85,7 +86,8 @@ const PatientDiagnosisList = () => {
 
   return (
     <div className="cms-container">
-      <CmsSidebar />
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole}  />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'>
