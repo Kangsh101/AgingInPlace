@@ -22,10 +22,20 @@ const Cms = ({ userRole }) => {
     }
   }, [userRole, navigate]);
 
+  useEffect(() => {
+    fetchNotices();
+  }, []);
+  
   const fetchNotices = () => {
     fetch('/api/notices')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch notices: ' + res.statusText);
+        }
+        return res.json();
+      })
       .then(data => {
+        console.log('Fetched notices:', data);  // 디버깅: 데이터를 콘솔에 출력
         const postsWithNumbers = data.reverse().map((post, index) => ({
           ...post,
           number: index + 1,
@@ -35,7 +45,7 @@ const Cms = ({ userRole }) => {
       })
       .catch(err => console.error('Failed to fetch notices:', err));
   };
-
+  
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleDelete = (id, index) => {
