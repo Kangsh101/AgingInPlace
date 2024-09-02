@@ -7,6 +7,7 @@ import '../css/PatientDiagnosisList.css';
 import CmsSidebar from './CmsSidebar';
 import axios from 'axios';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound'; 
 
 const PatientDiagnosisList = ({ userRole }) => {
   const { id } = useParams();
@@ -14,6 +15,12 @@ const PatientDiagnosisList = ({ userRole }) => {
   const [patient, setPatient] = useState(null);
   const [diagnoses, setDiagnoses] = useState([]);
   const [medications, setMedications] = useState([]);
+
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     axios.get(`/api/patient/${id}`)
@@ -78,7 +85,6 @@ const PatientDiagnosisList = ({ userRole }) => {
       }
     }
   };
-  
 
   const handleCancel = () => {
     navigate(-1);
@@ -87,7 +93,7 @@ const PatientDiagnosisList = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'>

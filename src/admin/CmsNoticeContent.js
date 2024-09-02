@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import '../css/qnacontent.css';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound'; 
 
 const CmsNoticeContent = ({ userRole }) => {
   const { id } = useParams(); 
@@ -11,6 +12,12 @@ const CmsNoticeContent = ({ userRole }) => {
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (userRole !== 'admin') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch(`/api/notices/${id}`)

@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound';
 
 const CmsAdddiagnosis = ({ userRole }) => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch('/api/cmsusersAdd')
@@ -26,7 +34,7 @@ const CmsAdddiagnosis = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'>

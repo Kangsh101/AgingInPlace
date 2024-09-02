@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
-// import '../admin_css/EditQuestionCIST.css';
+import NotFound from '../component/NotFound'; 
 
 const EditQuestionCIST = ({ userRole }) => {
   const { id } = useParams();
@@ -13,6 +13,12 @@ const EditQuestionCIST = ({ userRole }) => {
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [currentOption, setCurrentOption] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch(`/api/cist_questions/${id}`)
@@ -64,7 +70,7 @@ const EditQuestionCIST = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>문제 수정</h2>

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound'; // NotFound 컴포넌트 경로는 필요에 따라 조정
 
 const Cmsfaq = ({ userRole }) => {
   const [posts, setPosts] = useState([]);
@@ -18,6 +19,14 @@ const Cmsfaq = ({ userRole }) => {
       setSelectedPostIndex(index);
     }
   };
+
+  // 권한 확인 로직 추가
+  useEffect(() => {
+    if (userRole !== 'admin') {
+      // admin이 아닌 경우 접근 제한
+      navigate('/notfound'); // 또는 메인 페이지로 리디렉션
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch('/api/faq')
@@ -71,7 +80,7 @@ const Cmsfaq = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>FAQ</h2>

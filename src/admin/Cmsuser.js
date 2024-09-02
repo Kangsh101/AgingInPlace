@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; 
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound';
 
 const Cmsuser = ({ userRole }) => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userRole !== 'admin') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch('/api/cmsusers')
@@ -66,7 +74,7 @@ const Cmsuser = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'> 
@@ -151,7 +159,6 @@ const Cmsuser = ({ userRole }) => {
                           <FaTimesCircle /> 비활성화
                         </button>
                       </div>
-
                       </td>
                     </tr>
                   )}

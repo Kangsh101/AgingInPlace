@@ -1,15 +1,22 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../css/Qnaup.css'; 
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound';
 
 const FaqUp = ({userRole}) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
   const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (userRole !== 'admin') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);

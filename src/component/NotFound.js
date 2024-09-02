@@ -1,5 +1,3 @@
-// NotFound.js
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/NotFound.css';
@@ -8,7 +6,7 @@ const NotFound = () => {
     const navigate = useNavigate();
 
     const handleGoBack = () => {
-        navigate('/'); // 메인 페이지로 이동
+        navigate('/'); 
     };
 
     return (

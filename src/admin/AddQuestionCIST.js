@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/AddQuestionCIST.css';
+import NotFound from '../component/NotFound'; // NotFound 컴포넌트를 사용하여 접근 제한 처리
 
 const AddQuestionCIST = ({ userRole }) => {
   const [type, setType] = useState('');
   const [questionText, setQuestionText] = useState('');
   const [answerOptions, setAnswerOptions] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState('');
-  const navigate = useNavigate();
   const [currentOption, setCurrentOption] = useState('');
+  const navigate = useNavigate();
+
+  // 권한 확인 로직 추가
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+      // admin이나 doctor가 아닌 경우 접근 제한
+      navigate('/notfound'); // 또는 메인 페이지로 리디렉션
+    }
+  }, [userRole, navigate]);
 
   const handleAddOption = () => {
     if (currentOption.trim()) {
@@ -59,7 +68,7 @@ const AddQuestionCIST = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>문제 추가</h2>
@@ -124,8 +133,8 @@ const AddQuestionCIST = ({ userRole }) => {
             />
           </div>
           <div className="Cms-form-buttons">
-            <button className="button"  id='CIST-canclebtt' onClick={() => navigate('/cmscist')}>취소</button>
-            <button className="button primary"  onClick={handleAddQuestion}>등록</button>
+            <button className="button" id='CIST-canclebtt' onClick={() => navigate('/cmscist')}>취소</button>
+            <button className="button primary" onClick={handleAddQuestion}>등록</button>
           </div>
         </div>
       </div>

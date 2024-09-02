@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../css/FaqUp.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound';
 
 const CmsFaqEdit = ({ userRole }) => {
   const { id } = useParams();
@@ -12,6 +13,12 @@ const CmsFaqEdit = ({ userRole }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (userRole !== 'admin') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch(`/api/faq/${id}`)

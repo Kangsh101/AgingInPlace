@@ -4,12 +4,19 @@ import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/CmsCIST.css';
+import NotFound from '../component/NotFound';
 
 const CmsCIST = ({ userRole }) => {
   const [questions, setQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(10);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetchQuestions();
@@ -33,7 +40,7 @@ const CmsCIST = ({ userRole }) => {
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <header className='major' id='major-rest'>
           <h2>인지선별검사 관리</h2>
@@ -56,7 +63,7 @@ const CmsCIST = ({ userRole }) => {
             <tbody>
               {currentQuestions.map((question, index) => (
                 <tr key={question.id} onClick={() => navigate(`/question_detail/${question.id}`)}>
-                  <td>{index + 1}</td>
+                  <td>{indexOfFirstQuestion + index + 1}</td>
                   <td>{question.type}</td>
                   <td>{question.question_text}</td>
                 </tr>

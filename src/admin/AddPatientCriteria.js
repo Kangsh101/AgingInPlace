@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import '../css/AddPatientCriteria.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound'; 
 
 const AddPatientCriteria = ({ userRole }) => {
   const { id } = useParams();
@@ -13,6 +14,14 @@ const AddPatientCriteria = ({ userRole }) => {
   const [exerciseAmount, setExerciseAmount] = useState('');
   const [patient, setPatient] = useState(null);
   const [savedCriteria, setSavedCriteria] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userRole !== 'admin' && userRole !== 'doctor') {
+   
+      navigate('/notfound'); 
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     fetch(`/api/patient/${id}`)
@@ -69,7 +78,7 @@ const AddPatientCriteria = ({ userRole }) => {
   return (
     <div className='cms-container'>
       <CmsSidebar userRole={userRole} />
-      <CmsNavipanel userRole={userRole}  />
+      <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
         <div className="cms-AddPatient-content">
           <div className="Cmss-header">

@@ -118,7 +118,7 @@ const handleLogin = (loginStatus, role) => {
           <Route path="/patientchart" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><PatientChart/><Footer /></>} />
           <Route path="*" element={<><Navpanel isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /><NotFound/><Footer /></>} />
 
-          {/* 관리자 */}
+          {/* 관리자 (admin)*/}
           <Route path="/cms" element={<><CmsNavipanel/><Cms userRole={userRole} /></>} />
 
           <Route path="/cmsuser" element={<><CmsNavipanel/><Cmsuser userRole={userRole} /></>} />
@@ -130,7 +130,7 @@ const handleLogin = (loginStatus, role) => {
           <Route path="/cmsfaq" element={<><CmsNavipanel/><Cmsfaq userRole={userRole}/></>} />
           <Route path="/noticeupdate" element={<><CmsNavipanel/><NoticeUpdate userRole={userRole} /></>} />
          
-          {/* 의사 */}
+          {/* 관리자 의사 (admin,doctor)*/}
           <Route path='/question_detail/:id' element={<><CmsNavipanel/><QuestionDetailCIST userRole={userRole}/></>}/>
           <Route path='/addquestioncist/:id' element={<><CmsNavipanel/><EditQuestionCIST userRole={userRole}/></>}/>
           <Route path='/addquestioncist' element={<><CmsNavipanel/><AddQuestionCIST userRole={userRole}/></>}/>

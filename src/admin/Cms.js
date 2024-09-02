@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
+import NotFound from '../component/NotFound'; // 이미 존재하는 NotFound 컴포넌트
 
 const Cms = ({ userRole }) => {
-  const [isAdmin, setIsAdmin] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
@@ -14,17 +14,23 @@ const Cms = ({ userRole }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
+  const [isAuthorized, setIsAuthorized] = useState(false); 
+
   useEffect(() => {
     if (userRole === 'admin') {
-      navigate('/Cms'); 
+      setIsAuthorized(true); 
     } else if (userRole === 'doctor') {
-      navigate('/CmsAdddiagnosis');
+      navigate('/CmsAdddiagnosis'); 
+    } else {
+      setIsAuthorized(false); 
     }
   }, [userRole, navigate]);
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    if (isAuthorized) {
+      fetchNotices();
+    }
+  }, [isAuthorized]);
   
   const fetchNotices = () => {
     fetch('/api/notices')
@@ -35,7 +41,7 @@ const Cms = ({ userRole }) => {
         return res.json();
       })
       .then(data => {
-        console.log('Fetched notices:', data);  // 디버깅: 데이터를 콘솔에 출력
+        console.log('Fetched notices:', data);  
         const postsWithNumbers = data.reverse().map((post, index) => ({
           ...post,
           number: index + 1,
@@ -99,68 +105,72 @@ const Cms = ({ userRole }) => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+  // 권한이 없으면 NotFound 컴포넌트를 반환
+  if (!isAuthorized) {
+    return <NotFound />;
+  }
+
   return (
-<div className="cms-container">
-  <CmsSidebar userRole={userRole} />
-  <CmsNavipanel userRole={userRole}  />
+    <div className="cms-container">
+      <CmsSidebar userRole={userRole} />
+      <CmsNavipanel userRole={userRole} />
 
-  <div className="cms-main-content">
-    <header className='major'>
-      <h2>공지사항</h2>
-    </header>
-    <div className="Cmss-header">
-      <div className='Cmss-chch'>
-        <Link to="/Cms"><button className='button' id='cms-nodicego'>공지사항 게시판</button></Link>
-        <Link to="/Cmsfaq"><button className='button' id='Notice-nofaq'>FAQ 게시판</button></Link>
-      </div>
-      <div className="Cmss-options">
-        <select className="Cmss-select" onChange={handleSearchTypeChange}>
-          <option value="title">제목</option>
-          <option value="author">작성자</option>
-          <option value="title_author">제목 + 작성자</option>
-        </select>
-        <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" onChange={handleSearchKeywordChange} />
-        <button className="button primary" onClick={handleSearch}>검색</button>
-      </div>
-      <div className='Cms-noticefaqbtt'>
-        <Link to="/noticeup">
-          <button className="button1" id='saddasdasd'>공지사항 등록</button>
-        </Link>
-      </div>
-    </div>
-    <div className="Cmss-content">
-      <table>
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>등록일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPosts.map((post, index) => (
-            <React.Fragment key={post.post_id}>
-              <tr className='skskskssksk' onClick={() => navigate(`/cmsnoticecontent/${post.post_id}`)}>
-                <td>{post.number}</td>
-                <td>{post.title}</td>
-                <td>{post.user_name}</td>
-                <td>{post.created_at}</td>
+      <div className="cms-main-content">
+        <header className='major'>
+          <h2>공지사항</h2>
+        </header>
+        <div className="Cmss-header">
+          <div className='Cmss-chch'>
+            <Link to="/Cms"><button className='button' id='cms-nodicego'>공지사항 게시판</button></Link>
+            <Link to="/Cmsfaq"><button className='button' id='Notice-nofaq'>FAQ 게시판</button></Link>
+          </div>
+          <div className="Cmss-options">
+            <select className="Cmss-select" onChange={handleSearchTypeChange}>
+              <option value="title">제목</option>
+              <option value="author">작성자</option>
+              <option value="title_author">제목 + 작성자</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력하세요" className="Cmss-search" onChange={handleSearchKeywordChange} />
+            <button className="button primary" onClick={handleSearch}>검색</button>
+          </div>
+          <div className='Cms-noticefaqbtt'>
+            <Link to="/noticeup">
+              <button className="button1" id='saddasdasd'>공지사항 등록</button>
+            </Link>
+          </div>
+        </div>
+        <div className="Cmss-content">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
               </tr>
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-      <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={posts.length}
-        paginate={paginate}
-        currentPage={currentPage}
-      />
+            </thead>
+            <tbody>
+              {currentPosts.map((post, index) => (
+                <React.Fragment key={post.post_id}>
+                  <tr className='skskskssksk' onClick={() => navigate(`/cmsnoticecontent/${post.post_id}`)}>
+                    <td>{post.number}</td>
+                    <td>{post.title}</td>
+                    <td>{post.user_name}</td>
+                    <td>{post.created_at}</td>
+                  </tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={posts.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
   );
 };
 
