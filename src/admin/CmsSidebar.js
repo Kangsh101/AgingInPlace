@@ -8,19 +8,18 @@ const CmsSidebar = ({ userRole }) => {
   const allLinks = [
     { path: "/Cms", label: "게시판 관리", basePaths: ["/Cms", "/Cmsfaq"], role: ["admin"] },
     { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"], role: ["admin"] },
-    { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail"], role: ["admin", "doctor"] },
-    { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria"], role: ["admin", "doctor"] },
-    { path: "/CmsCIST", label: "인지선별검사 관리", basePaths: ["/CmsCIST"], role: ["admin", "doctor"] }
+    { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail", "/patient"], role: ["admin", "doctor"] },
+    { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria","/addpatientcriteria"], role: ["admin", "doctor"] },
+    { path: "/CmsCIST", label: "인지선별검사 관리", basePaths: ["/CmsCIST","/addquestioncist"], role: ["admin", "doctor"] }
   ];
 
   const visibleLinks = allLinks.filter(link => link.role.includes(userRole));
 
   const isActive = (basePaths) => {
-    return basePaths.includes(location.pathname);
+    return basePaths.some(basePath => {
+      return location.pathname === basePath || location.pathname.startsWith(basePath + '/');
+    });
   };
-
-  console.log('Current userRole:', userRole);
-  console.log('Visible links:', visibleLinks);
 
   return (
     <div className="cms-sidebar">
