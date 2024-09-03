@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import '../css/Header.css';
 
-const Header = ({ isLoggedIn, setIsLoggedIn }) => {
+const Header = ({ isLoggedIn, setIsLoggedIn, setUserRole }) => {  // setUserRole 추가
   const navigate = useNavigate(); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleDropdownToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   const handleLogout = async () => {
     try {
       const response = await fetch('/api/logout', {
         method: 'POST',
       });
-  
+
       if (response.ok) {
-        setIsLoggedIn(false); 
-        localStorage.removeItem('isLoggedIn'); 
-        navigate('/main'); 
+        setIsLoggedIn(false);
+        setUserRole(null); // 이제 이 부분에서 오류가 발생하지 않음
+        sessionStorage.removeItem('isLoggedIn'); 
+        sessionStorage.removeItem('userRole'); 
+        navigate('/main');
       } else {
         throw new Error('로그아웃 실패');
       }
@@ -27,6 +30,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
       alert('로그아웃에 실패했습니다.');
     }
   };
+
   useEffect(() => {
     const handleMouseEnter = () => {
       setIsMenuOpen(true);
@@ -54,17 +58,15 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
     <div className="is-preload landing" id="page-wrapper">
       <header id="header">
         <h1 id="logo"><a href="/">Aging In Place</a></h1>
-
         <nav id="nav" className={isMenuOpen ? 'navPanel-visible' : ''}>
-
           <ul>
             {isLoggedIn && (
-                <>
-                  <li><a href="/patientChart">환자 데이터</a></li>
-                </>
-              )}
-              <li><a href="/contents">프로그램 콘텐츠</a></li>
-              <li>
+              <>
+                <li><a href="/patientChart">환자 데이터</a></li>
+              </>
+            )}
+            <li><a href="/contents">프로그램 콘텐츠</a></li>
+            <li>
               <Link to="#" onMouseEnter={handleDropdownToggle} onMouseLeave={handleDropdownToggle}>
                 커뮤니티
                 {isMenuOpen && (
@@ -78,14 +80,13 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
                     <li className='comusub'>
                       <Link to="/faqpage">FAQ</Link>
                     </li>
-
                   </ul>
                 )}
               </Link>
             </li>
             {!isLoggedIn && (
               <>
-                <li><a href="/signup" >회원가입</a></li>
+                <li><a href="/signup">회원가입</a></li>
                 <li><a href="login" id='font-bold' className="button primary">로그인</a></li>
               </>
             )}
@@ -95,7 +96,6 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
                 <li><button onClick={handleLogout} className="button primary">로그아웃</button></li>
               </>
             )}
-
           </ul>
         </nav>
       </header>
