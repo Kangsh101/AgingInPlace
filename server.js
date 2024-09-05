@@ -207,9 +207,9 @@ app.post('/api/login', (req, res) => {
 app.post('/api/android/login', (req, res) => {
   const { username, password } = req.body;
 
-  const query = `SELECT * FROM members WHERE username = ?`;
+  const query = 'SELECT * FROM members WHERE username = ?';
 
-  connection.query(query, [username, password], (err, result) => {
+  connection.query(query, [username], (err, results) => {
     if (err) {
       console.error('로그인 실패: ' + err.stack);
       res.status(500).send('로그인 실패');
@@ -295,9 +295,9 @@ app.post('/api/android/signup', (req, res) => {
       return;
     }
 
-  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
+  const insertGuardianQuery = 'INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)';
 
-  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+  connection.query(insertGuardianQuery, [username, hashedPassword, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
     if (err) {
       console.error('회원가입 실패: ' + err.stack);
       res.status(500).send('회원가입 실패');
