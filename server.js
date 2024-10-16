@@ -364,7 +364,7 @@ app.get('/api/android/cist_questions', (req, res) => {
 
   // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
   connection.query(
-    "SELECT type, question_text, answer_options, phoneNumber, birthdate, email FROM members WHERE id = ?;",
+    "SELECT type, question_text, answer_options, user_answer, correct_answer, title FROM CIST_Questions WHERE id = ?;",
     [userId], // userId 값을 플레이스홀더에 전달
     (err, rows, fields) => {
       if (err) {
@@ -380,16 +380,16 @@ app.get('/api/android/cist_questions', (req, res) => {
       }
 
       // 조회된 사용자 정보를 JSON 형식으로 응답
-      const user = rows[0];
-      const userInfo = {
-        gender: user.gender,
-        name: user.name,
-        role: user.role,
-        phoneNumber: user.phoneNumber,
-        birthdate: user.birthdate,
-        email: user.email
+      const questions = rows[0];
+      const cist_questions = {
+        question_text: questions.question_text,
+        answer_options: questions.answer_options,
+        correct_answer: questions.correct_answer,
+        title: questions.title,
+        type: questions.type,
+        user_answer: questions.user_answer,
       };
-      res.status(200).json(userInfo); // JSON 형식으로 사용자 정보 응답
+      res.status(200).json(cist_questions); // JSON 형식으로 사용자 정보 응답
     }
   );
 });
