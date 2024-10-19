@@ -13,11 +13,11 @@ const CmsNoticeContent = ({ userRole }) => {
   const [post, setPost] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    if (userRole !== 'admin') {
-      navigate('/notfound'); 
-    }
-  }, [userRole, navigate]);
+  // useEffect(() => {
+  //   if (userRole !== 'admin') {
+  //     navigate('/notfound'); 
+  //   }
+  // }, [userRole, navigate]);
 
   useEffect(() => {
     fetch(`/api/notices/${id}`)

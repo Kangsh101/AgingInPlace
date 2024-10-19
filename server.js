@@ -510,6 +510,7 @@ app.post('/findUser', (req, res) => {
   });
 });
 
+
 app.post('/findUserPhone', (req, res) => {
   const { name, phoneNumber } = req.body;
   connection.query('SELECT username FROM members WHERE name = ? AND phoneNumber = ?', [name, phoneNumber], (error, results, fields) => {
@@ -526,6 +527,47 @@ app.post('/findUserPhone', (req, res) => {
   });
 });
 
+
+// 특정 title에 해당하는 모든 문제를 가져오는 API
+app.get('/api/cist_questions_by_title/:title', (req, res) => {
+  const { title } = req.params;
+  const query = 'SELECT * FROM CIST_Questions WHERE title = ?';
+
+  connection.query(query, [title], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch questions:', err.stack);
+      res.status(500).send('Failed to fetch questions');
+      return;
+    }
+    res.json(results);
+  });
+});
+app.post('/api/cist_questions', upload.single('image'), (req, res) => {
+  const { type, title, question_text, correct_answer } = req.body;
+  let imageUrl = '';
+
+  if (req.file) {
+    imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  }
+
+  const query = `
+    INSERT INTO CIST_Questions (type, title, question_text, image_url, correct_answer) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    query,
+    [type, title, question_text, imageUrl, correct_answer],
+    (err, result) => {
+      if (err) {
+        console.error('CIST 질문 저장 실패:', err.stack);
+        res.status(500).send('CIST 질문 저장 실패');
+        return;
+      }
+      res.status(200).send('CIST 질문 저장 성공');
+    }
+  );
+});
 // 비번
 
 app.post('/findUser1', (req, res) => {
