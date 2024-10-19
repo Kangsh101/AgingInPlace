@@ -207,30 +207,80 @@ app.post('/api/login', (req, res) => {
 app.post('/api/android/login', (req, res) => {
   const { username, password } = req.body;
 
-  const query = `SELECT * FROM members WHERE username = ? AND password = ?`;
+  const query = 'SELECT * FROM members WHERE username = ?';
 
-  connection.query(query, [username, password], (err, result) => {
+  connection.query(query, [username], (err, results) => {
     if (err) {
       console.error('로그인 실패: ' + err.stack);
       res.status(500).send('로그인 실패');
       return;
     }
-    if (result.length === 0) {
-      res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
-      return;
+
+    const user = results[0];
+
+
+    if (!user.password.startsWith('$2b$')) {
+
+      if (user.password === password) {
+
+        bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+          if (err) {
+            console.error('비밀번호 해싱 실패: ' + err.stack);
+            res.status(500).send('로그인 실패');
+            return;
+          }
+
+          const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
+          connection.query(updateQuery, [hashedPassword, user.id], (err) => {
+            if (err) {
+              console.error('비밀번호 업데이트 실패: ' + err.stack);
+              res.status(500).send('로그인 실패');
+              return;
+            }
+
+            req.session.userId = user.id;
+            req.session.userRole = user.role;
+
+            console.log('세션에 저장된 기본키:', req.session.userId);
+            console.log('세션에 저장된 역할:', req.session.userRole);
+
+            res.status(200).json(user);
+          });
+        });
+      } else {
+
+        res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+    } else {
+
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          console.error('비밀번호 비교 실패: ' + err.stack);
+          res.status(500).send('로그인 실패');
+          return;
+        }
+
+        if (!isMatch) {
+
+          res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
+          return;
+        }
+
+        if (user.is_active !== 1) {
+
+          res.status(401).send('비활성화된 계정입니다');
+          return;
+        }
+
+        req.session.userId = user.id;
+        req.session.userRole = user.role;
+
+        console.log('세션에 저장된 기본키:', req.session.userId);
+        console.log('세션에 저장된 역할:', req.session.userRole);
+
+        res.status(200).json(user);
+      });
     }
-    const user = result[0];
-    if (user.is_active !== 1) {
-      res.status(401).send('비활성화된 계정입니다');
-      return;
-    }
-
-    const userId = user.id;
-
-    res.cookie('userId', userId, { httpOnly: true }); 
-
-    console.log('사용자 인증 및 식별자 생성:', userId);
-    res.status(200).json({ userId });
   });
 });
 
@@ -238,20 +288,37 @@ app.post('/api/android/login', (req, res) => {
 app.post('/api/android/signup', (req, res) => {
   const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
-  const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)`;
+  bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+    if (err) {
+      console.error('비밀번호 해싱 실패: ' + err.stack);
+      res.status(500).send('회원가입 실패');
+      return;
+    }
 
-  connection.query(insertGuardianQuery, [username, password, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+  const insertGuardianQuery = 'INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1 ,?)';
+
+  connection.query(insertGuardianQuery, [username, hashedPassword, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
     if (err) {
       console.error('회원가입 실패: ' + err.stack);
       res.status(500).send('회원가입 실패');
       return;
     }
-    
-    // 회원가입이 성공적으로 완료되었음을 클라이언트에게 알림
-    console.log('회원가입 성공');
-     res.status(200).json({ message: '회원가입 성공' });
+    const guardianId = result.insertId;
+
+    const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+    connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error('보호자 ID 업데이트 실패:', updateErr);
+        res.status(500).send('보호자 정보 업데이트 실패');
+        return;
+      }
+      console.log('보호자 정보 업데이트 성공');
+      res.status(200).send('회원가입 성공');
+    });
   });
 });
+});
+
 
 // 안드로이드 사용자 정보 가져오기
 app.get('/api/android/userinfo', (req, res) => {
@@ -292,39 +359,16 @@ app.get('/api/android/userinfo', (req, res) => {
 
 //CIST question 가져오기 모바일
 app.get('/api/android/cist_questions', (req, res) => {
-  // 쿠키에서 사용자 ID를 추출합니다.
-  const userId = req.cookies.userId;
+  const query = 'SELECT * FROM CIST_Questions';
 
-  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
-  connection.query(
-    "SELECT type, question_text, answer_options, phoneNumber, birthdate, email FROM members WHERE id = ?;",
-    [userId], // userId 값을 플레이스홀더에 전달
-    (err, rows, fields) => {
-      if (err) {
-        console.error('회원 정보 조회 실패: ' + err.stack);
-        res.status(500).json({ error: '회원 정보 조회 실패' }); // JSON 형식으로 오류 응답
-        return;
-      }
-
-      if (rows.length === 0) {
-        console.error('사용자 정보가 없습니다.');
-        res.status(404).json({ error: '사용자 정보가 없습니다.' }); // JSON 형식으로 오류 응답
-        return;
-      }
-
-      // 조회된 사용자 정보를 JSON 형식으로 응답
-      const user = rows[0];
-      const userInfo = {
-        gender: user.gender,
-        name: user.name,
-        role: user.role,
-        phoneNumber: user.phoneNumber,
-        birthdate: user.birthdate,
-        email: user.email
-      };
-      res.status(200).json(userInfo); // JSON 형식으로 사용자 정보 응답
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to fetch questions: ' + err.stack);
+      res.status(500).send('Failed to fetch questions');
+      return;
     }
-  );
+    res.json(results);
+  });
 });
 
 
