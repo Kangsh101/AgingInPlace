@@ -4,65 +4,45 @@ import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/AddQuestionCIST.css';
-import NotFound from '../component/NotFound'; // NotFound 컴포넌트를 사용하여 접근 제한 처리
 
 const AddQuestionCIST = ({ userRole }) => {
   const [type, setType] = useState('');
+  const [title, setTitle] = useState('');
   const [questionText, setQuestionText] = useState('');
-  const [answerOptions, setAnswerOptions] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState('');
-  const [currentOption, setCurrentOption] = useState('');
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
-  // 권한 확인 로직 추가
   useEffect(() => {
     if (userRole !== 'admin' && userRole !== 'doctor') {
-      // admin이나 doctor가 아닌 경우 접근 제한
-      navigate('/notfound'); // 또는 메인 페이지로 리디렉션
+      navigate('/notfound');
     }
   }, [userRole, navigate]);
 
-  const handleAddOption = () => {
-    if (currentOption.trim()) {
-      setAnswerOptions([...answerOptions, currentOption]);
-      setCurrentOption('');
-    }
-  };
-
-  const handleDeleteOption = (index) => {
-    const newOptions = answerOptions.filter((_, i) => i !== index);
-    setAnswerOptions(newOptions);
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   const handleAddQuestion = () => {
-    let question_text = questionText;
-    let correct_answer = correctAnswer;
-
-    if (type === '지남력') {
-      question_text = '오늘 날짜를 말씀해주세요. 오늘은 몇 년도, 몇 월, 며칠, 무슨 요일인가요?';
-      correct_answer = ''; 
+    const formData = new FormData();
+    formData.append('type', type);
+    formData.append('title', title);
+    formData.append('question_text', questionText);
+    formData.append('correct_answer', correctAnswer);
+    if (image) {
+      formData.append('image', image);
     }
-
-    const newQuestion = {
-      type,
-      question_text,
-      answer_options: answerOptions,
-      correct_answer
-    };
 
     fetch('/api/cist_questions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newQuestion)
+      body: formData,
     })
-    .then(response => {
-      if (response.ok) {
-        navigate('/cmscist');
-      }
-    })
-    .catch(error => console.error('Error adding question:', error));
+      .then((response) => {
+        if (response.ok) {
+          navigate('/cmscist');
+        }
+      })
+      .catch((error) => console.error('Error adding question:', error));
   };
 
   return (
@@ -70,16 +50,13 @@ const AddQuestionCIST = ({ userRole }) => {
       <CmsSidebar userRole={userRole} />
       <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
-        <header className='major' id='major-rest'>
+        <header className="major" id="major-rest">
           <h2>문제 추가</h2>
         </header>
         <div className="Cms-form centered-form">
           <div className="Cms-form-group">
             <label>문제 유형:</label>
-            <select 
-              value={type} 
-              onChange={(e) => setType(e.target.value)} 
-            >
+            <select value={type} onChange={(e) => setType(e.target.value)}>
               <option value="">유형 선택</option>
               <option value="지남력">지남력</option>
               <option value="기억력">기억력</option>
@@ -89,52 +66,45 @@ const AddQuestionCIST = ({ userRole }) => {
               <option value="언어 기능">언어 기능</option>
             </select>
           </div>
+
+          <div className="Cms-form-group">
+            <label>제목:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
           <div className="Cms-form-group">
             <label>문제 내용:</label>
-            <textarea 
-              value={questionText} 
-              onChange={(e) => setQuestionText(e.target.value)} 
-              disabled={type === '지남력'}
+            <textarea
+              value={questionText}
+              onChange={(e) => setQuestionText(e.target.value)}
             />
           </div>
+
           <div className="Cms-form-group">
-            <label>정답 선택지:</label>
-            <div className="option-input">
-              <input 
-                type="text" 
-                value={currentOption} 
-                onChange={(e) => setCurrentOption(e.target.value)} 
-                disabled={type === '지남력'}
-              />
-              <button onClick={handleAddOption} disabled={type === '지남력'}>추가</button>
-            </div>
-            <ul>
-              {answerOptions.map((option, index) => (
-                <li key={index}>
-                  {index + 1}. {option}
-                  <button 
-                    className="delete-button" 
-                    onClick={() => handleDeleteOption(index)}
-                    disabled={type === '지남력'}
-                  >
-                    삭제
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <label>이미지:</label>
+            <input type="file" onChange={handleImageChange} />
           </div>
+
           <div className="Cms-form-group">
             <label>정답:</label>
-            <input 
-              type="text" 
-              value={correctAnswer} 
-              onChange={(e) => setCorrectAnswer(e.target.value)} 
-              disabled={type === '지남력'}
+            <input
+              type="text"
+              value={correctAnswer}
+              onChange={(e) => setCorrectAnswer(e.target.value)}
             />
           </div>
+
           <div className="Cms-form-buttons">
-            <button className="button" id='CIST-canclebtt' onClick={() => navigate('/cmscist')}>취소</button>
-            <button className="button primary" onClick={handleAddQuestion}>등록</button>
+            <button className="button" onClick={() => navigate('/cmscist')}>
+              취소
+            </button>
+            <button className="button primary" onClick={handleAddQuestion}>
+              등록
+            </button>
           </div>
         </div>
       </div>

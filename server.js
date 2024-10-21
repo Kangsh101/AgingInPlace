@@ -359,39 +359,16 @@ app.get('/api/android/userinfo', (req, res) => {
 
 //CIST question 가져오기 모바일
 app.get('/api/android/cist_questions', (req, res) => {
-  // 쿠키에서 사용자 ID를 추출합니다.
-  const userId = req.cookies.userId;
+  const query = 'SELECT * FROM CIST_Questions';
 
-  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
-  connection.query(
-    "SELECT type, question_text, answer_options, user_answer, correct_answer, title FROM CIST_Questions WHERE id = ?;",
-    [userId], // userId 값을 플레이스홀더에 전달
-    (err, rows, fields) => {
-      if (err) {
-        console.error('회원 정보 조회 실패: ' + err.stack);
-        res.status(500).json({ error: '회원 정보 조회 실패' }); // JSON 형식으로 오류 응답
-        return;
-      }
-
-      if (rows.length === 0) {
-        console.error('사용자 정보가 없습니다.');
-        res.status(404).json({ error: '사용자 정보가 없습니다.' }); // JSON 형식으로 오류 응답
-        return;
-      }
-
-      // 조회된 사용자 정보를 JSON 형식으로 응답
-      const questions = rows[0];
-      const cist_questions = {
-        question_text: questions.question_text,
-        answer_options: questions.answer_options,
-        correct_answer: questions.correct_answer,
-        title: questions.title,
-        type: questions.type,
-        user_answer: questions.user_answer,
-      };
-      res.status(200).json(cist_questions); // JSON 형식으로 사용자 정보 응답
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to fetch questions: ' + err.stack);
+      res.status(500).send('Failed to fetch questions');
+      return;
     }
-  );
+    res.json(results);
+  });
 });
 
 //CIST response 저장하기 모바일
@@ -615,6 +592,7 @@ app.post('/findUser', (req, res) => {
   });
 });
 
+
 app.post('/findUserPhone', (req, res) => {
   const { name, phoneNumber } = req.body;
   connection.query('SELECT username FROM members WHERE name = ? AND phoneNumber = ?', [name, phoneNumber], (error, results, fields) => {
@@ -631,6 +609,47 @@ app.post('/findUserPhone', (req, res) => {
   });
 });
 
+
+// 특정 title에 해당하는 모든 문제를 가져오는 API
+app.get('/api/cist_questions_by_title/:title', (req, res) => {
+  const { title } = req.params;
+  const query = 'SELECT * FROM CIST_Questions WHERE title = ?';
+
+  connection.query(query, [title], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch questions:', err.stack);
+      res.status(500).send('Failed to fetch questions');
+      return;
+    }
+    res.json(results);
+  });
+});
+app.post('/api/cist_questions', upload.single('image'), (req, res) => {
+  const { type, title, question_text, correct_answer } = req.body;
+  let imageUrl = '';
+
+  if (req.file) {
+    imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  }
+
+  const query = `
+    INSERT INTO CIST_Questions (type, title, question_text, image_url, correct_answer) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    query,
+    [type, title, question_text, imageUrl, correct_answer],
+    (err, result) => {
+      if (err) {
+        console.error('CIST 질문 저장 실패:', err.stack);
+        res.status(500).send('CIST 질문 저장 실패');
+        return;
+      }
+      res.status(200).send('CIST 질문 저장 성공');
+    }
+  );
+});
 // 비번
 
 app.post('/findUser1', (req, res) => {

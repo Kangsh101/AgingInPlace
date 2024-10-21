@@ -4,17 +4,17 @@ import '../css/Cms.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/CmsCIST.css';
-import NotFound from '../component/NotFound';
 
 const CmsCIST = ({ userRole }) => {
   const [questions, setQuestions] = useState([]);
+  const [groupedQuestions, setGroupedQuestions] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userRole !== 'admin' && userRole !== 'doctor') {
-      navigate('/notfound'); 
+      navigate('/notfound');
     }
   }, [userRole, navigate]);
 
@@ -24,25 +24,37 @@ const CmsCIST = ({ userRole }) => {
 
   const fetchQuestions = () => {
     fetch('/api/cist_questions')
-      .then(res => res.json())
-      .then(data => {
-        setQuestions(data);
-      })
-      .catch(err => console.error('Failed to fetch questions:', err));
+      .then((res) => res.json())
+      .then((data) => groupQuestionsByTitle(data))
+      .catch((err) => console.error('Failed to fetch questions:', err));
   };
 
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const groupQuestionsByTitle = (data) => {
+    const grouped = data.reduce((acc, question) => {
+      if (!acc[question.title]) {
+        acc[question.title] = [];
+      }
+      acc[question.title].push(question);
+      return acc;
+    }, {});
+    setGroupedQuestions(grouped);
+  };
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
+  const currentTitles = Object.keys(groupedQuestions).slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion
+  );
 
   return (
     <div className="cms-container">
       <CmsSidebar userRole={userRole} />
       <CmsNavipanel userRole={userRole} />
       <div className="cms-main-content">
-        <header className='major' id='major-rest'>
+        <header className="major" id="major-rest">
           <h2>인지선별검사 관리</h2>
         </header>
 
@@ -61,18 +73,26 @@ const CmsCIST = ({ userRole }) => {
               </tr>
             </thead>
             <tbody>
-              {currentQuestions.map((question, index) => (
-                <tr key={question.id} onClick={() => navigate(`/question_detail/${question.id}`)}>
-                  <td>{indexOfFirstQuestion + index + 1}</td>
-                  <td>{question.type}</td>
-                  <td>{question.question_text}</td>
-                </tr>
-              ))}
+              {currentTitles.map((title, index) => {
+                const questionGroup = groupedQuestions[title];
+                return (
+                  <tr
+                    key={index}
+                    onClick={() =>
+                      navigate(`/question_detail/${encodeURIComponent(title)}`)
+                    }
+                  >
+                    <td>{indexOfFirstQuestion + index + 1}</td>
+                    <td>{questionGroup[0].type}</td>
+                    <td>{title}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           <Pagination
             postsPerPage={questionsPerPage}
-            totalPosts={questions.length}
+            totalPosts={Object.keys(groupedQuestions).length}
             paginate={paginate}
             currentPage={currentPage}
           />
@@ -91,7 +111,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
 
   return (
     <div className="pagination">
-      {pageNumbers.map(number => (
+      {pageNumbers.map((number) => (
         <button
           key={number}
           onClick={() => paginate(number)}
