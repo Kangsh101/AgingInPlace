@@ -394,6 +394,44 @@ app.get('/api/android/cist_questions', (req, res) => {
   );
 });
 
+//CIST response 저장하기 모바일
+app.post('/api/android/cist_responses', (req, res) => {
+  // 쿠키에서 사용자 ID를 추출합니다.
+  const userId = req.cookies.userId;
+  const { response, question_id } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "사용자 ID가 없습니다." });
+  }
+
+  // 사용자 ID를 사용하여 members 테이블에서 test_id를 가져옵니다.
+  const getTestIdQuery = 'SELECT test_id FROM members WHERE id = ?';
+
+  connection.query(getTestIdQuery, [userId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "데이터베이스 오류입니다.", error: err });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
+    }
+
+    const test_id = results[0].test_id;
+
+    // CIST_Responses 테이블에 응답을 저장하는 쿼리
+    const insertResponseQuery = 'INSERT INTO CIST_Responses (test_id, question_id, response) VALUES (?, ?, ?)';
+
+    connection.query(insertResponseQuery, [test_id, question_id, response], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "서버 응답 저장 중 오류가 발생했습니다.", error: err });
+      }
+
+      return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+    });
+  });
+});
+
+
 
 // 사용자 정보 업데이트
 app.post('/api/updateuserinfo', (req, res) => {
