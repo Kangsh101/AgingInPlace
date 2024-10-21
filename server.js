@@ -382,7 +382,7 @@ app.post('/api/android/cist_responses', (req, res) => {
   }
 
   // 사용자 ID를 사용하여 members 테이블에서 test_id를 가져옵니다.
-  const getTestIdQuery = 'SELECT test_id FROM members WHERE id = ?';
+  const getTestIdQuery = 'SELECT id FROM members WHERE id = ?';
 
   connection.query(getTestIdQuery, [userId], (err, results) => {
     if (err) {
