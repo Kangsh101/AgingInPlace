@@ -313,7 +313,7 @@ app.post('/api/android/signup', (req, res) => {
         return;
       }
       console.log('보호자 정보 업데이트 성공');
-      res.status(200).send('회원가입 성공');
+      res.status(200).json({ message: '회원가입 성공' });
     });
   });
 });
