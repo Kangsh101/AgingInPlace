@@ -8,11 +8,11 @@ const PatientChart = () => {
   const [patientData, setPatientData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const medicationData = [
-    { medication_name: '약물 A', taken: true },
-    { medication_name: '약물 B', taken: false },
+  // const medicationData = [
+  //   { medication_name: '약물 A', taken: true },
+  //   { medication_name: '약물 B', taken: false },
 
-  ];
+  // ];
 
   const sleepStandard = 35449.5;
   const activityStandard = 155.3;
@@ -165,7 +165,7 @@ const PatientChart = () => {
                 <ReactApexChart options={activityOptions} series={activitySeries} type="radialBar" height={350} />
               </div>
             </div>
-            <div className="chart-row">
+            {/* <div className="chart-row">
               {medicationData.map((med) => (
                 <div key={med.medication_name} className="chart-item">
                   <ReactApexChart 
@@ -176,7 +176,7 @@ const PatientChart = () => {
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

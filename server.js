@@ -12,13 +12,22 @@ const qs = require('qs');
 const path = require('path');
 const app = express();
 
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads/')
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+//   }
+// });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, path.join(__dirname, 'public', 'images'));
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-  }
+    const filename = `${Date.now()}${path.extname(file.originalname)}`;
+    cb(null, filename);
+  },
 });
 const upload = multer({ 
   storage: storage,
@@ -35,8 +44,8 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
@@ -588,10 +597,10 @@ app.get('/api/cist_questions_by_title/:title', (req, res) => {
 });
 app.post('/api/cist_questions', upload.single('image'), (req, res) => {
   const { type, title, question_text, correct_answer } = req.body;
-  let imageUrl = '';
+  let imageFilename = '';
 
   if (req.file) {
-    imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    imageFilename = req.file.filename; // 파일명만 저장
   }
 
   const query = `
@@ -601,7 +610,7 @@ app.post('/api/cist_questions', upload.single('image'), (req, res) => {
 
   connection.query(
     query,
-    [type, title, question_text, imageUrl, correct_answer],
+    [type, title, question_text, imageFilename, correct_answer],
     (err, result) => {
       if (err) {
         console.error('CIST 질문 저장 실패:', err.stack);
