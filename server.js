@@ -82,10 +82,9 @@ app.use(express.static(path.join(__dirname, 'build')));
 
   app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
-      return res.status(400).json({ error: '파일이 업로드되지 않았습니다.' });
+      return res.status(400).json({ message: '이미지 업로드 실패' });
     }
-  
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const imageUrl = `/images/${req.file.filename}`; // 저장된 이미지의 경로 반환
     res.status(200).json({ imageUrl });
   });
   

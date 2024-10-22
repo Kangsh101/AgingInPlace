@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import '../css/Qnaup.css'; 
+import '../css/Qnaup.css';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Quill from 'quill';
 
-// Custom font sizes
 const Size = Quill.import('attributors/style/size');
 Size.whitelist = ['8px', '10px', '12px', '14px', '16px', '18px', '20px'];
 Quill.register(Size, true);
@@ -13,42 +12,35 @@ Quill.register(Size, true);
 const QnAUp = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [userId, setUserId] = useState('');
   const navigate = useNavigate();
   const quillRef = useRef(null); 
-  const [image, setImage] = useState(null);
-
-  useEffect(() => {
-    const storedUserId = sessionStorage.getItem('userId');
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
-  }, []);
 
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
     input.click();
-  
+
     input.onchange = async () => {
       const file = input.files[0];
       if (file) {
         const formData = new FormData();
         formData.append('image', file);
-  
+
         try {
           const response = await fetch('/api/upload', {
             method: 'POST',
             body: formData,
           });
+
           if (!response.ok) {
             throw new Error('서버에서 이미지를 처리할 수 없습니다.');
           }
-  
-          const data = await response.json();
-          const range = quillRef.current.getEditor().getSelection(true);
-          quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
+
+          const { imageUrl } = await response.json();
+          const editor = quillRef.current.getEditor();
+          const range = editor.getSelection(true);
+          editor.insertEmbed(range.index, 'image', `http://localhost:5000${imageUrl}`);
         } catch (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         }
@@ -79,37 +71,20 @@ const QnAUp = () => {
     'list', 'bullet', 'indent', 'align', 'link', 'image'
   ];
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const handleContentChange = (content) => {
-    setContent(content);
-  };
-
   const handleSave = async () => {
     if (!title.trim() || !content.trim()) {
       alert('제목과 내용을 모두 작성해주세요.');
       return;
     }
-  
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('userId', userId);
-    if (image) {
-      formData.append('image', image); 
-    }
-  
+
     try {
       const response = await fetch('/api/qna/posts', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content }),
       });
-  
+
       if (response.ok) {
-        const data = await response.json();
-        console.log('글이 성공적으로 저장되었습니다.');
         alert('글이 성공적으로 저장되었습니다.');
         navigate('/qnapage');
       } else {
@@ -119,10 +94,8 @@ const QnAUp = () => {
       console.error('글 저장 중 오류 발생:', error);
     }
   };
-  
-  const handleCancel = () => {
-    navigate(-1);
-  };
+
+  const handleCancel = () => navigate(-1);
 
   return (
     <article id="main">
@@ -133,7 +106,7 @@ const QnAUp = () => {
             <input
               type="text"
               value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="제목"
               className="title-input"
               id='QnA-titlecss'
@@ -142,7 +115,7 @@ const QnAUp = () => {
               id='QnAup-content'
               ref={quillRef}
               value={content}
-              onChange={handleContentChange}
+              onChange={setContent}
               placeholder="내용을 입력하세요."
               modules={modules}
               formats={formats}
@@ -154,7 +127,7 @@ const QnAUp = () => {
           </div>
         </div>
       </div>
-   </article>
+    </article>
   );
 };
 
