@@ -1900,17 +1900,31 @@ app.get('/api/cist_questions', (req, res) => {
 // 질문 삭제
 app.delete('/api/cist_questions/:id', (req, res) => {
   const questionId = req.params.id;
-  const query = 'DELETE FROM CIST_Questions WHERE id = ?';
 
-  connection.query(query, [questionId], (err, results) => {
+  // 먼저 응답을 삭제합니다.
+  const deleteResponsesQuery = 'DELETE FROM CIST_Responses WHERE question_id = ?';
+  
+  connection.query(deleteResponsesQuery, [questionId], (err) => {
     if (err) {
-      console.error('Failed to delete question: ' + err.stack);
-      res.status(500).send('Failed to delete question');
+      console.error('Failed to delete responses: ' + err.stack);
+      res.status(500).send('Failed to delete responses');
       return;
     }
-    res.status(200).send('Question deleted successfully');
+
+    // 응답 삭제 후 질문을 삭제합니다.
+    const query = 'DELETE FROM CIST_Questions WHERE id = ?';
+    
+    connection.query(query, [questionId], (err, results) => {
+      if (err) {
+        console.error('Failed to delete question: ' + err.stack);
+        res.status(500).send('Failed to delete question');
+        return;
+      }
+      res.status(200).send('Question deleted successfully');
+    });
   });
 });
+
 // 수정을 위한 특정 질문 가져오기
 app.get('/api/cist_questions/:id', (req, res) => {
   const questionId = req.params.id;
