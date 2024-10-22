@@ -373,26 +373,42 @@ app.get('/api/android/cist_questions', (req, res) => {
 
 //CIST response 저장하기 모바일
 app.post('/api/android/cist_responses', (req, res) => {
-  // 쿠키에서 사용자 ID를 추출합니다.
-  const userId = req.cookies.userId;
-  const { response, question_id } = req.body;
+  const { userId, responses, questionId } = req.body;
 
   if (!userId) {
-      return res.status(400).json({ message: "사용자 ID가 없습니다." });
+    return res.status(400).json({ message: "사용자 ID가 없습니다." });
   }
 
-  // CIST_Responses 테이블에 응답을 저장하는 쿼리
-  const insertResponseQuery = 'INSERT INTO CIST_Responses (test_id, question_id, response) VALUES (?, ?, ?)';
+  // 기존 응답이 있는지 확인하는 쿼리
+  const checkResponseQuery = 'SELECT * FROM CIST_Responses WHERE user_id = ? AND question_id = ?';
+  
+  connection.query(checkResponseQuery, [userId, questionId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "서버 응답 확인 중 오류가 발생했습니다.", error: err });
+    }
 
-  // userId를 test_id로 사용하여 응답 저장
-  connection.query(insertResponseQuery, [userId, question_id, response], (err, result) => {
-      if (err) {
+    if (results.length > 0) {
+      // 기존 응답이 있는 경우 UPDATE 쿼리
+      const updateResponseQuery = 'UPDATE CIST_Responses SET response = ? WHERE user_id = ? AND question_id = ?';
+      connection.query(updateResponseQuery, [responses, userId, questionId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "서버 응답 수정 중 오류가 발생했습니다.", error: err });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 수정되었습니다." });
+      });
+    } else {
+      // 기존 응답이 없는 경우 INSERT 쿼리
+      const insertResponseQuery = 'INSERT INTO CIST_Responses (user_id, question_id, response) VALUES (?, ?, ?)';
+      connection.query(insertResponseQuery, [userId, questionId, responses], (err, result) => {
+        if (err) {
           return res.status(500).json({ message: "서버 응답 저장 중 오류가 발생했습니다.", error: err });
-      }
-
-      return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+      });
+    }
   });
 });
+
 
 
 
