@@ -322,7 +322,7 @@ app.post('/api/android/signup', (req, res) => {
         return;
       }
       console.log('보호자 정보 업데이트 성공');
-      res.status(200).send('회원가입 성공');
+      res.status(200).json({ message: '회원가입 성공' });
     });
   });
 });
@@ -379,6 +379,46 @@ app.get('/api/android/cist_questions', (req, res) => {
     res.json(results);
   });
 });
+
+//CIST response 저장하기 모바일
+app.post('/api/android/cist_responses', (req, res) => {
+  const { userId, responses, questionId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "사용자 ID가 없습니다." });
+  }
+
+  // 기존 응답이 있는지 확인하는 쿼리
+  const checkResponseQuery = 'SELECT * FROM CIST_Responses WHERE user_id = ? AND question_id = ?';
+  
+  connection.query(checkResponseQuery, [userId, questionId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "서버 응답 확인 중 오류가 발생했습니다.", error: err });
+    }
+
+    if (results.length > 0) {
+      // 기존 응답이 있는 경우 UPDATE 쿼리
+      const updateResponseQuery = 'UPDATE CIST_Responses SET response = ? WHERE user_id = ? AND question_id = ?';
+      connection.query(updateResponseQuery, [responses, userId, questionId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "서버 응답 수정 중 오류가 발생했습니다.", error: err });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 수정되었습니다." });
+      });
+    } else {
+      // 기존 응답이 없는 경우 INSERT 쿼리
+      const insertResponseQuery = 'INSERT INTO CIST_Responses (user_id, question_id, response) VALUES (?, ?, ?)';
+      connection.query(insertResponseQuery, [userId, questionId, responses], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "서버 응답 저장 중 오류가 발생했습니다.", error: err });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+      });
+    }
+  });
+});
+
+
 
 
 // 사용자 정보 업데이트
@@ -1869,17 +1909,31 @@ app.get('/api/cist_questions', (req, res) => {
 // 질문 삭제
 app.delete('/api/cist_questions/:id', (req, res) => {
   const questionId = req.params.id;
-  const query = 'DELETE FROM CIST_Questions WHERE id = ?';
 
-  connection.query(query, [questionId], (err, results) => {
+  // 먼저 응답을 삭제합니다.
+  const deleteResponsesQuery = 'DELETE FROM CIST_Responses WHERE question_id = ?';
+  
+  connection.query(deleteResponsesQuery, [questionId], (err) => {
     if (err) {
-      console.error('Failed to delete question: ' + err.stack);
-      res.status(500).send('Failed to delete question');
+      console.error('Failed to delete responses: ' + err.stack);
+      res.status(500).send('Failed to delete responses');
       return;
     }
-    res.status(200).send('Question deleted successfully');
+
+    // 응답 삭제 후 질문을 삭제합니다.
+    const query = 'DELETE FROM CIST_Questions WHERE id = ?';
+    
+    connection.query(query, [questionId], (err, results) => {
+      if (err) {
+        console.error('Failed to delete question: ' + err.stack);
+        res.status(500).send('Failed to delete question');
+        return;
+      }
+      res.status(200).send('Question deleted successfully');
+    });
   });
 });
+
 // 수정을 위한 특정 질문 가져오기
 app.get('/api/cist_questions/:id', (req, res) => {
   const questionId = req.params.id;
