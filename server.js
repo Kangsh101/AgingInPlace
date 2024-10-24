@@ -70,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'build')));
       return res.status(400).json({ error: '파일이 업로드되지 않았습니다.' });
     }
   
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     res.status(200).json({ imageUrl });
   });
   
@@ -699,7 +699,7 @@ app.post('/api/qna/posts', upload.single('image'), async (req, res) => {
 
     let imageUrl = '';
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     }
 
     const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
