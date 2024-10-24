@@ -631,8 +631,10 @@ app.post('/api/cist_questions', upload.single('image'), (req, res) => {
   const { type, title, question_text, correct_answer } = req.body;
   let imageUrl = '';
 
+  // 이미지 URL 생성
   if (req.file) {
-    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    const host = process.env.NODE_ENV === 'production' ? 'www.aginginplaces.net' : req.get('host');
+    imageUrl = `${req.protocol}://${host}/images/${req.file.filename}`;
   }
 
   const query = `
@@ -653,6 +655,7 @@ app.post('/api/cist_questions', upload.single('image'), (req, res) => {
     }
   );
 });
+
 // 비번
 
 app.post('/findUser1', (req, res) => {
