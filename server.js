@@ -85,7 +85,9 @@ app.use(express.static(path.join(__dirname, 'build')));
     if (!req.file) {
       return res.status(400).json({ message: '이미지 업로드 실패' });
     }
-    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // 저장된 이미지의 경로 반환
+    //const imageUrl = `/images/${req.file.filename}`; 
+    const imageUrl = `${window.location.origin}/images/${req.file.filename}`;
+
     res.status(200).json({ imageUrl });
   });
   
