@@ -5,11 +5,6 @@ import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import '../admin_css/CmsCIST.css';
 
-// 이미지 경로 생성 함수: 서버와 일치하도록 조정
-const getImageUrl = (filename) => {
-  return `http://localhost:5000/images/${filename}`; // 서버의 /uploads 경로와 맞춤
-};
-
 const QuestionDetailCIST = ({ userRole }) => {
   const { id } = useParams(); // URL 파라미터에서 id를 받아옴
   const [questions, setQuestions] = useState([]); // 여러 개의 문제를 저장
@@ -43,7 +38,6 @@ const QuestionDetailCIST = ({ userRole }) => {
       .catch((error) => console.error('Error deleting question:', error));
   };
 
-  // 데이터 로딩 중 표시
   if (questions.length === 0) {
     return <div>Loading...</div>;
   }
@@ -61,28 +55,15 @@ const QuestionDetailCIST = ({ userRole }) => {
           <h3>유형: {questions[0].type}</h3>
           <h4>문제: {questions[0].title}</h4>
 
-          {/* 여러 문제를 반복하여 표시 */}
           {questions.map((question) => (
             <div key={question.id} className="question-item">
-              <p className="questions-cistc">{question.question_text}</p>
-
-              {/* 이미지가 있을 경우만 표시 */}
-              {question.image_url && (
-                <div className="question-image">
-                  <img
-                    src={getImageUrl(question.image_url)} // 파일명만으로 URL 생성
-                    alt="문제 이미지"
-                    onError={(e) => {
-                      e.target.onerror = null; // 무한 반복 방지
-                      e.target.src = "/path/to/placeholder-image.png"; // 대체 이미지
-                    }}
-                  />
-                </div>
-              )}
+              <div
+                className="questions-cistc"
+                dangerouslySetInnerHTML={{ __html: question.question_text }}
+              />
 
               <p>정답: {question.correct_answer}</p>
 
-              {/* 수정 및 삭제 버튼 */}
               <div className="QuestionDetail-buttons">
                 <button
                   className="button"

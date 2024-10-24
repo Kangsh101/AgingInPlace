@@ -40,7 +40,7 @@ const QnAUp = () => {
           const { imageUrl } = await response.json();
           const editor = quillRef.current.getEditor();
           const range = editor.getSelection(true);
-          editor.insertEmbed(range.index, 'image', `http://localhost:5000${imageUrl}`);
+          editor.insertEmbed(range.index, 'image', `${imageUrl}`);
         } catch (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         }
