@@ -13,20 +13,15 @@ const path = require('path');
 const app = express();
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/images')
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // 파일을 저장할 폴더
   },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // 고유한 파일 이름 생성
   }
 });
-const upload = multer({ 
-  storage: storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, 
-    fieldSize: 10 * 1024 * 1024, 
-  }
-});
+
+const upload = multer({ storage: storage });
 
 
 const kangsh = 'USE aginginplace';
@@ -35,9 +30,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(session({
@@ -627,34 +620,7 @@ app.get('/api/cist_questions_by_title/:title', (req, res) => {
     res.json(results);
   });
 });
-app.post('/api/cist_questions', upload.single('image'), (req, res) => {
-  const { type, title, question_text, correct_answer } = req.body;
-  let imageUrl = '';
 
-  // 이미지 URL 생성
-  if (req.file) {
-    const host = process.env.NODE_ENV === 'production' ? 'www.aginginplaces.net' : req.get('host');
-    imageUrl = `${req.protocol}://${host}/images/${req.file.filename}`;
-  }
-
-  const query = `
-    INSERT INTO CIST_Questions (type, title, question_text, image_url, correct_answer) 
-    VALUES (?, ?, ?, ?, ?)
-  `;
-
-  connection.query(
-    query,
-    [type, title, question_text, imageUrl, correct_answer],
-    (err, result) => {
-      if (err) {
-        console.error('CIST 질문 저장 실패:', err.stack);
-        res.status(500).send('CIST 질문 저장 실패');
-        return;
-      }
-      res.status(200).send('CIST 질문 저장 성공');
-    }
-  );
-});
 
 // 비번
 
@@ -1863,19 +1829,32 @@ app.get('/api/getPatientInfo', (req, res) => {
 });
 
 // 인지선별검사 CIST
-app.post('/api/cist_questions', (req, res) => {
-  const { type, question_text, answer_options, correct_answer } = req.body;
+app.post('/api/cist_questions', upload.single('image'), (req, res) => {
+  const { type, title, question_text, correct_answer } = req.body;
+  let imageUrl = '';
 
-  const query = `INSERT INTO CIST_Questions (type, question_text, answer_options, correct_answer) VALUES (?, ?, ?, ?)`;
+  // 이미지 URL 생성
+  if (req.file) {
+    const host = process.env.NODE_ENV === 'production' ? 'www.aginginplaces.net' : req.get('host');
+    imageUrl = `${req.protocol}://${host}/images/${req.file.filename}`;
+  }
 
-  connection.query(query, [type, question_text, JSON.stringify(answer_options), correct_answer], (err, result) => {
-    if (err) {
-      console.error('CIST 질문 저장 실패: ' + err.stack);
-      res.status(500).send('CIST 질문 저장 실패');
-      return;
+  const query = `
+    INSERT INTO CIST_Questions (type, title, question_text, image_url, correct_answer) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    query,
+    [type, title, question_text, imageUrl, correct_answer],
+    (err, result) => {
+      if (err) {
+        console.error('CIST 질문 저장 실패:', err.stack);
+        return res.status(500).json({ message: 'CIST 질문 저장 실패' });
+      }
+      res.status(200).json({ message: 'CIST 질문 저장 성공' });
     }
-    res.status(200).send('CIST 질문 저장 성공');
-  });
+  );
 });
 
 //현재 날짜를 가져옴.

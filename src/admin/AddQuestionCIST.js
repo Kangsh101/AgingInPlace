@@ -11,6 +11,7 @@ const AddQuestionCIST = ({ userRole }) => {
   const [questionText, setQuestionText] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(''); // imageUrl 상태 추가
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,10 +21,21 @@ const AddQuestionCIST = ({ userRole }) => {
   }, [userRole, navigate]);
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImage(file);
+    } else {
+      alert('이미지 파일을 선택해 주세요.');
+    }
   };
 
   const handleAddQuestion = () => {
+    // 필드 유효성 검사
+    if (!type || !title || !questionText || !correctAnswer) {
+      alert('모든 필드를 채워주세요.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('type', type);
     formData.append('title', title);
@@ -39,10 +51,28 @@ const AddQuestionCIST = ({ userRole }) => {
     })
       .then((response) => {
         if (response.ok) {
-          navigate('/cmscist');
+          return response.json(); // JSON 응답을 반환
+        } else {
+          // 응답이 JSON인 경우만 처리
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return response.json().then((data) => {
+              throw new Error(data.message || '문제가 발생했습니다.');
+            });
+          } else {
+            throw new Error('서버에서 응답을 받지 못했습니다. 다시 시도해 주세요.');
+          }
         }
       })
-      .catch((error) => console.error('Error adding question:', error));
+      .then((data) => {
+        setImageUrl(data.imageUrl); // 서버에서 반환된 이미지 URL을 상태로 저장
+        console.log('이미지 URL:', data.imageUrl); // 저장된 이미지 URL 출력
+        navigate('/cmscist');
+      })
+      .catch((error) => {
+        console.error('Error adding question:', error);
+        alert(error.message);
+      });
   };
 
   return (
@@ -86,7 +116,7 @@ const AddQuestionCIST = ({ userRole }) => {
 
           <div className="Cms-form-group">
             <label>이미지:</label>
-            <input type="file" onChange={handleImageChange} />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
 
           <div className="Cms-form-group">

@@ -7,7 +7,8 @@ import '../admin_css/CmsCIST.css';
 
 // 이미지 경로 생성 함수: 서버와 일치하도록 조정
 const getImageUrl = (filename) => {
-  return `http://localhost:5000/images/${filename}`; // 서버의 /uploads 경로와 맞춤
+  const host = window.location.host; // 현재 호스트 정보 가져오기
+  return `${filename}`; // 현재 호스트에 맞춰 URL 생성
 };
 
 const QuestionDetailCIST = ({ userRole }) => {
@@ -72,11 +73,13 @@ const QuestionDetailCIST = ({ userRole }) => {
                   <img
                     src={getImageUrl(question.image_url)} // 파일명만으로 URL 생성
                     alt="문제 이미지"
+                    onLoad={() => console.log('이미지 로드 성공:', getImageUrl(question.image_url))}
                     onError={(e) => {
                       e.target.onerror = null; // 무한 반복 방지
                       e.target.src = "/path/to/placeholder-image.png"; // 대체 이미지
                     }}
                   />
+                  {console.log('이미지 URL:', getImageUrl(question.image_url))} {/* URL 로그 */}
                 </div>
               )}
 
