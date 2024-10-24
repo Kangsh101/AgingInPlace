@@ -37,6 +37,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+
 
 app.use(session({
   secret: 'your-secret-key',
@@ -46,7 +48,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://www.aginginplaces.net/',
+  origin: 'http://www.aginginplaces.net',
   methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200, 
