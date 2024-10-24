@@ -14,14 +14,14 @@ const app = express();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // 파일을 저장할 폴더
+    cb(null, 'uploads'); // 이미지가 저장될 경로
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // 고유한 파일 이름 생성
+    cb(null, Date.now() + path.extname(file.originalname)); // 파일 이름 설정
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 
 const kangsh = 'USE aginginplace';
@@ -1831,13 +1831,8 @@ app.get('/api/getPatientInfo', (req, res) => {
 // 인지선별검사 CIST
 app.post('/api/cist_questions', upload.single('image'), (req, res) => {
   const { type, title, question_text, correct_answer } = req.body;
-  let imageUrl = '';
-
-  // 이미지 URL 생성
-  if (req.file) {
-    const host = process.env.NODE_ENV === 'production' ? 'www.aginginplaces.net' : req.get('host');
-    imageUrl = `${req.protocol}://${host}/images/${req.file.filename}`;
-  }
+  const host = process.env.NODE_ENV === 'production' ? 'www.aginginplaces.net' : req.get('host');
+  const imageUrl = req.file ? `http://${host}/images/${req.file.filename}` : null;
 
   const query = `
     INSERT INTO CIST_Questions (type, title, question_text, image_url, correct_answer) 
