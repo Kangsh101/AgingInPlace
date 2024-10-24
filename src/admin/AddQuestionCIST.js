@@ -44,9 +44,11 @@ const AddQuestionCIST = ({ userRole }) => {
           }
 
           const { imageUrl } = await response.json();
+          console.log(imageUrl);
           const editor = quillRef.current.getEditor();
           const range = editor.getSelection(true);
           editor.insertEmbed(range.index, 'image', imageUrl);
+          editor.setSelection(range.index + 1);
         } catch (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         }

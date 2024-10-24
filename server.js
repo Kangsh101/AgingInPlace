@@ -55,7 +55,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://www.aginginplaces.net/',
+  origin: 'http://www.aginginplaces.net',
   methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200, 
@@ -85,7 +85,7 @@ app.use(express.static(path.join(__dirname, 'build')));
     if (!req.file) {
       return res.status(400).json({ message: '이미지 업로드 실패' });
     }
-    const imageUrl = `/images/${req.file.filename}`; // 저장된 이미지의 경로 반환
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // 저장된 이미지의 경로 반환
     res.status(200).json({ imageUrl });
   });
   

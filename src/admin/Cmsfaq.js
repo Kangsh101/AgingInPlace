@@ -127,8 +127,8 @@ const Cmsfaq = ({ userRole }) => {
                     <tr className='sang-trtag'>
                       <td colSpan="4">
                         <div className="selected-post">
-                          <p className='sang-title wrap-text'><span className='cms-QA'>Q</span><span dangerouslySetInnerHTML={{ __html: post.title }}></span></p>
-                          <p className='sang-description wrap-text'><span className='cms-QA'>A</span><span dangerouslySetInnerHTML={{ __html: post.content }}></span></p>
+                          <p className='sang-title wrap-text'><span className='cms-QA'>Q. </span><span dangerouslySetInnerHTML={{ __html: post.title }}></span></p>
+                          <p className='sang-description wrap-text'><span className='cms-QA'>A.</span><span dangerouslySetInnerHTML={{ __html: post.content }}></span></p>
                           <div className='sang-bttcon'>
                             <button className='button primary' id='cms-correction' onClick={() => navigate(`/faqedit/${post.post_id}`)}>게시글 수정</button>
                             <button className='button' onClick={() => handleDelete(post.post_id, indexOfFirstPost + index)}>게시글 삭제</button>
