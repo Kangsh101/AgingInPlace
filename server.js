@@ -12,22 +12,13 @@ const qs = require('qs');
 const path = require('path');
 const app = express();
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads/')
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-//   }
-// });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'public', 'images'));
+    cb(null, 'public/images')
   },
   filename: function (req, file, cb) {
-    const filename = `${Date.now()}${path.extname(file.originalname)}`;
-    cb(null, filename);
-  },
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
 });
 const upload = multer({ 
   storage: storage,
@@ -44,8 +35,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
@@ -62,7 +54,6 @@ app.use(cors({
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-
   const connection = require('./src/db');
 
 
@@ -70,7 +61,6 @@ app.use(express.static(path.join(__dirname, 'build')));
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
   });
-
 
   connection.connect((err) => {
     if (err) {
@@ -82,61 +72,16 @@ app.use(express.static(path.join(__dirname, 'build')));
 
   app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
-      return res.status(400).json({ message: '이미지 업로드 실패' });
+      return res.status(400).json({ error: '파일이 업로드되지 않았습니다.' });
     }
-    const imageUrl = `/images/${req.file.filename}`; // 저장된 이미지의 경로 반환
+  
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     res.status(200).json({ imageUrl });
   });
   
-const generateTemporaryPassword = (length = 8) => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
-};
-
-
   const bcrypt = require('bcrypt');
   const saltRounds = 10; 
 
-  app.post('/api/findUserPassword', (req, res) => {
-    const { name, email } = req.body;
-  
-    const query = 'SELECT id FROM members WHERE name = ? AND email = ?';
-    connection.query(query, [name, email], (err, results) => {
-      if (err) {
-        console.error('DB 조회 실패:', err);
-        return res.status(500).json({ message: '서버 오류' });
-      }
-      if (results.length === 0) {
-        return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
-      }
-  
-      const userId = results[0].id;
-      const temporaryPassword = generateTemporaryPassword();
-  
-      // 임시 비밀번호를 해시화하여 DB에 저장
-      bcrypt.hash(temporaryPassword, saltRounds, (err, hashedPassword) => {
-        if (err) {
-          console.error('비밀번호 해싱 실패:', err);
-          return res.status(500).json({ message: '비밀번호 업데이트 실패' });
-        }
-  
-        const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
-        connection.query(updateQuery, [hashedPassword, userId], (err) => {
-          if (err) {
-            console.error('DB 업데이트 실패:', err);
-            return res.status(500).json({ message: '비밀번호 업데이트 실패' });
-          }
-  
-          // 임시 비밀번호를 사용자에게 전달
-          res.status(200).json({ message: '임시 비밀번호가 발급되었습니다.', temporaryPassword });
-        });
-      });
-    });
-  });
   app.post('/api/signup', (req, res) => {
     const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
@@ -597,48 +542,34 @@ app.post('/api/changepassword', (req, res) => {
   const userId = req.session.userId;
   const { currentPassword, newPassword } = req.body;
 
-  const query = 'SELECT password FROM members WHERE id = ?';
-
-  connection.query(query, [userId], (err, results) => {
-    if (err) {
-      console.error('DB 조회 실패:', err);
-      return res.status(500).json({ message: '서버 오류' });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
-    }
-
-    const hashedPassword = results[0].password;
-
-    bcrypt.compare(currentPassword, hashedPassword, (err, isMatch) => {
-      if (err) {
-        console.error('비밀번호 비교 실패:', err);
-        return res.status(500).json({ message: '서버 오류' });
-      }
-
-      if (!isMatch) {
-        return res.status(401).json({ message: '현재 비밀번호가 일치하지 않습니다.' });
-      }
-
-      bcrypt.hash(newPassword, 10, (err, hashedNewPassword) => {
-        if (err) {
-          console.error('비밀번호 해싱 실패:', err);
-          return res.status(500).json({ message: '서버 오류' });
-        }
-
-        const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
-        connection.query(updateQuery, [hashedNewPassword, userId], (updateErr) => {
-          if (updateErr) {
-            console.error('비밀번호 업데이트 실패:', updateErr);
-            return res.status(500).json({ message: '비밀번호 변경 실패' });
+  connection.query(
+      "SELECT * FROM members WHERE id = ? AND password = ?",
+      [userId, currentPassword],
+      (err, result) => {
+          if (err) {
+              console.error('비밀번호 변경 실패: ' + err.stack);
+              res.status(500).send('비밀번호 변경 실패');
+              return;
+          }
+          if (result.length === 0) {
+              res.status(401).send('현재 비밀번호가 올바르지 않습니다.');
+              return;
           }
 
-          res.status(200).json({ message: '비밀번호가 성공적으로 변경되었습니다.' });
-        });
-      });
-    });
-  });
+          connection.query(
+              "UPDATE members SET password = ? WHERE id = ?",
+              [newPassword, userId],
+              (updateErr, updateResult) => {
+                  if (updateErr) {
+                      console.error('비밀번호 업데이트 실패: ' + updateErr.stack);
+                      res.status(500).send('비밀번호 업데이트 실패');
+                      return;
+                  }
+                  res.status(200).send('비밀번호가 성공적으로 변경되었습니다.');
+              }
+          );
+      }
+  );
 });
 
 
@@ -696,10 +627,10 @@ app.get('/api/cist_questions_by_title/:title', (req, res) => {
 });
 app.post('/api/cist_questions', upload.single('image'), (req, res) => {
   const { type, title, question_text, correct_answer } = req.body;
-  let imageFilename = '';
+  let imageUrl = '';
 
   if (req.file) {
-    imageFilename = req.file.filename; // 파일명만 저장
+    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   }
 
   const query = `
@@ -709,7 +640,7 @@ app.post('/api/cist_questions', upload.single('image'), (req, res) => {
 
   connection.query(
     query,
-    [type, title, question_text, imageFilename, correct_answer],
+    [type, title, question_text, imageUrl, correct_answer],
     (err, result) => {
       if (err) {
         console.error('CIST 질문 저장 실패:', err.stack);
