@@ -10,7 +10,9 @@ const QuestionDetailCIST = ({ userRole }) => {
   const [questions, setQuestions] = useState([]); // 여러 개의 문제를 저장
   const navigate = useNavigate();
   const [userRole2, setUserRole] = useState(null);
-  
+  const decodedId = decodeURIComponent(id);
+
+
   // 권한 검사 후 잘못된 접근 시 리디렉션
   useEffect(() => {
     fetch('/api/user/role', {
@@ -36,13 +38,18 @@ const QuestionDetailCIST = ({ userRole }) => {
       });
   }, [navigate]);
 
-  // 문제 데이터를 API에서 가져오기
   useEffect(() => {
-    fetch(`/api/cist_questions_by_title/${id}`)
-      .then((res) => res.json())
+    fetch(`/api/cist_questions_by_title/${decodedId}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('데이터를 불러오는 데 실패했습니다.');
+        }
+        return res.json();
+      })
       .then((data) => setQuestions(data))
       .catch((err) => console.error('Failed to fetch questions:', err));
-  }, [id]);
+  }, [decodedId]);
+
 
   // 문제 삭제 처리
   const handleDelete = (questionId) => {

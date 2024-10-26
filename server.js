@@ -683,12 +683,12 @@ app.post('/findUserPhone', (req, res) => {
 });
 
 
+
 // 특정 title에 해당하는 모든 문제를 가져오는 API
 app.get('/api/cist_questions_by_title/:title', (req, res) => {
   const { title } = req.params;
-  const query = 'SELECT * FROM CIST_Questions WHERE title = ?';
-
-  connection.query(query, [title], (err, results) => {
+  const query = 'SELECT * FROM CIST_Questions WHERE title LIKE ?';
+  connection.query(query, [`%${title}%`], (err, results) => {
     if (err) {
       console.error('Failed to fetch questions:', err.stack);
       res.status(500).send('Failed to fetch questions');
@@ -696,6 +696,7 @@ app.get('/api/cist_questions_by_title/:title', (req, res) => {
     }
     res.json(results);
   });
+  
 });
 
 app.post('/api/cist_questions', upload.single('image'), (req, res) => {
@@ -817,7 +818,7 @@ app.post('/api/qna/posts', upload.single('image'), async (req, res) => {
 
     // let imageUrl = '';
     // if (req.file) {
-    //   imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    //   imageUrl = `${req.protocol}://${req.get('hostss')}/uploads/${req.file.filename}`;
     // }
 
     const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
