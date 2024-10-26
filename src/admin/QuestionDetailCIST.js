@@ -9,13 +9,32 @@ const QuestionDetailCIST = ({ userRole }) => {
   const { id } = useParams(); // URL 파라미터에서 id를 받아옴
   const [questions, setQuestions] = useState([]); // 여러 개의 문제를 저장
   const navigate = useNavigate();
-
+  const [userRole2, setUserRole] = useState(null);
+  
   // 권한 검사 후 잘못된 접근 시 리디렉션
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'doctor') {
-      navigate('/notfound');
-    }
-  }, [userRole, navigate]);
+    fetch('/api/user/role', {
+      method: 'GET',
+      credentials: 'include' // 세션 정보 포함
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('권한이 없습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.role === 'admin' || data.role === 'doctor') {
+          setUserRole(data.role); // 권한이 admin 또는 doctor일 경우
+        } else {
+          navigate('/notfound'); // 권한이 없을 경우 접근 제한
+        }
+      })
+      .catch((error) => {
+        console.error('API 호출 오류:', error);
+        navigate('/notfound'); // 오류 시 접근 제한
+      });
+  }, [navigate]);
 
   // 문제 데이터를 API에서 가져오기
   useEffect(() => {

@@ -22,11 +22,27 @@ const Cmsfaq = ({ userRole }) => {
 
   // 권한 확인 로직 추가
   useEffect(() => {
-    if (userRole !== 'admin') {
-      // admin이 아닌 경우 접근 제한
-      navigate('/notfound'); // 또는 메인 페이지로 리디렉션
-    }
-  }, [userRole, navigate]);
+    fetch('/api/user/role', {
+      method: 'GET',
+      credentials: 'include' // 쿠키 및 세션 정보 포함
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('권한이 없습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.role !== 'admin') {
+          navigate('/notfound'); // 관리자만 접근 가능
+        }
+      })
+      .catch((error) => {
+        console.error('API 호출 오류:', error);
+        navigate('/notfound');
+      });
+  }, [navigate]);
+
 
   useEffect(() => {
     fetch('/api/faq')

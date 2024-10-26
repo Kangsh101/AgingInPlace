@@ -761,7 +761,29 @@ app.get('/api/checklogin', (req, res) => {
     res.status(200).json({ isLoggedIn: false });
   }
 });
+//유저 정보 확인
+app.get('/api/user/role', (req, res) => {
+  const userId = req.session.userId; // 세션에서 사용자 ID 가져오기
 
+  if (!userId) {
+    return res.status(401).json({ message: '로그인되지 않았습니다.' });
+  }
+
+  const query = 'SELECT role FROM members WHERE id = ?';
+  connection.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('쿼리 실행 중 오류 발생:', err);
+      return res.status(500).json({ message: '서버 오류' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+
+    const userRole = results[0].role;
+    res.json({ role: userRole });
+  });
+});
 
 // QnA 게시판 등록 api
 app.post('/api/qna/posts', upload.single('image'), async (req, res) => {  

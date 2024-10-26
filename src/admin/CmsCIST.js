@@ -11,12 +11,31 @@ const CmsCIST = ({ userRole }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(10);
   const navigate = useNavigate();
-
+  const [userRole2, setUserRole] = useState(null);
+  
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'doctor') {
-      navigate('/notfound');
-    }
-  }, [userRole, navigate]);
+    fetch('/api/user/role', {
+      method: 'GET',
+      credentials: 'include' // 세션 정보 포함
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('권한이 없습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.role === 'admin' || data.role === 'doctor') {
+          setUserRole(data.role); // 권한이 admin 또는 doctor일 경우
+        } else {
+          navigate('/notfound'); // 권한이 없을 경우 접근 제한
+        }
+      })
+      .catch((error) => {
+        console.error('API 호출 오류:', error);
+        navigate('/notfound'); // 오류 시 접근 제한
+      });
+  }, [navigate]);
 
   useEffect(() => {
     fetchQuestions();

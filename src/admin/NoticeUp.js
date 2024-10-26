@@ -13,10 +13,26 @@ const NoticeUp = ({userRole}) => {
   const quillRef = useRef(null);
 
   useEffect(() => {
-    if (userRole !== 'admin') {
-      navigate('/notfound');
-    }
-  }, [userRole, navigate]);
+    fetch('/api/user/role', {
+      method: 'GET',
+      credentials: 'include' // 쿠키 및 세션 정보 포함
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('권한이 없습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.role !== 'admin') {
+          navigate('/notfound'); // 관리자만 접근 가능
+        }
+      })
+      .catch((error) => {
+        console.error('API 호출 오류:', error);
+        navigate('/notfound');
+      });
+  }, [navigate]);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
