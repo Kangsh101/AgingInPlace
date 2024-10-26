@@ -793,10 +793,10 @@ app.post('/api/qna/posts', upload.single('image'), async (req, res) => {
       return res.status(403).json({ error: '이 게시판에 글을 쓸 권한이 없습니다.' });
     }
 
-    let imageUrl = '';
-    if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    }
+    // let imageUrl = '';
+    // if (req.file) {
+    //   imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // }
 
     const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
     connection.query(query, [board_master_id, title, content, userId], (err, result) => {

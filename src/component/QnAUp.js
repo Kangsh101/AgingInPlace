@@ -15,6 +15,10 @@ const QnAUp = () => {
   const navigate = useNavigate();
   const quillRef = useRef(null); 
 
+  const handleContentChange = (content) => {
+    setContent(content);
+  };
+
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -32,15 +36,14 @@ const QnAUp = () => {
             method: 'POST',
             body: formData,
           });
+          const data = await response.json();
 
-          if (!response.ok) {
+          if (response.ok) {
+            const range = quillRef.current.getEditor().getSelection(true);
+            quillRef.current.getEditor().insertEmbed(range.index, 'image', data.imageUrl);
+          } else {
             throw new Error('서버에서 이미지를 처리할 수 없습니다.');
           }
-
-          const { imageUrl } = await response.json();
-          const editor = quillRef.current.getEditor();
-          const range = editor.getSelection(true);
-          editor.insertEmbed(range.index, 'image', `${imageUrl}`);
         } catch (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         }
@@ -115,7 +118,7 @@ const QnAUp = () => {
               id='QnAup-content'
               ref={quillRef}
               value={content}
-              onChange={setContent}
+              onChange={handleContentChange}
               placeholder="내용을 입력하세요."
               modules={modules}
               formats={formats}
