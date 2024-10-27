@@ -48,6 +48,8 @@ import NotFound from './component/NotFound';
 import FooPrivacyPolicy from './component/FooPrivacyPolicy';
 import FooNoEmailCollection from './component/FooNoEmailCollection';
 import FooTerms from './component/FooTerms';
+import CmsQuestionList from './admin/CmsQuestionList';
+import CmsUserQuestions from './admin/CmsUserQuestions';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -139,7 +141,9 @@ const handleLogin = (loginStatus, role) => {
           <Route path="/addpatientcriteria/:id" element={<><CmsNavipanel/><AddPatientCriteria userRole={userRole} /></>} />
           <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList userRole={userRole} /></>} />
           <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail userRole={userRole}/></>} />
-          
+          <Route path="/CmsQuestionList" element={<><CmsNavipanel/><CmsQuestionList userRole={userRole}/></>} />
+          <Route path="/CmsUserQuestions/:userId" element={<><CmsNavipanel/><CmsUserQuestions userRole={userRole}/></>} />
+
         </Routes>
       </div>
     </BrowserRouter>

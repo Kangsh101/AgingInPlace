@@ -786,7 +786,6 @@ app.get('/api/user/role', (req, res) => {
   });
 });
 
-// QnA 게시판 등록 api
 app.post('/api/qna/posts', upload.single('image'), async (req, res) => {  
   const { title, content } = req.body;
   const userId = req.session.userId; 
@@ -816,10 +815,10 @@ app.post('/api/qna/posts', upload.single('image'), async (req, res) => {
       return res.status(403).json({ error: '이 게시판에 글을 쓸 권한이 없습니다.' });
     }
 
-    // let imageUrl = '';
-    // if (req.file) {
-    //   imageUrl = `${req.protocol}://${req.get('hostss')}/uploads/${req.file.filename}`;
-    // }
+    let imageUrl = '';
+    if (req.file) {
+      imageUrl = `/images/${req.file.filename}`; 
+    }
 
     const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
     connection.query(query, [board_master_id, title, content, userId], (err, result) => {
@@ -835,6 +834,8 @@ app.post('/api/qna/posts', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: '서버 내부 오류' });
   }
 });
+
+
 function queryAsync(query, params) {
   return new Promise((resolve, reject) => {
     connection.query(query, params, (error, results) => {
@@ -2107,6 +2108,93 @@ app.get('/api/patient-data', (req, res) => {
     }
     console.log('Fetched patient data:', results); // 데이터 확인용
     res.json(results);
+  });
+});
+
+//인지선별 검사 정답 가져오는 API
+app.get('/api/cist_users', (req, res) => {
+  const query = `
+    SELECT 
+      m.id AS user_id, 
+      m.name AS user_name, 
+      m.role 
+    FROM 
+      CIST_Responses cr
+    JOIN 
+      members m ON cr.user_id = m.id
+    GROUP BY 
+      m.id, m.name, m.role
+  `;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('유저 목록 조회 실패:', err);
+      res.status(500).json({ error: '유저 목록 조회 실패' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+
+// 유저 정답 상세
+// 특정 유저의 문제와 정답 가져오기 API
+app.get('/api/user/:userId/questions', (req, res) => {
+  const { userId } = req.params;
+  const query = `
+    SELECT 
+      cr.response AS user_answer,
+      cq.id AS question_id,
+      cq.question_text,
+      cq.correct_answer,
+      cq.type,
+      cq.title
+    FROM 
+      CIST_Responses cr
+    JOIN 
+      CIST_Questions cq ON cr.question_id = cq.id
+    WHERE 
+      cr.user_id = ?
+  `;
+
+  connection.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('유저의 문제와 정답 조회 실패:', err);
+      res.status(500).json({ error: '유저의 문제와 정답 조회 실패' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+// 이름
+app.get('/api/user/:userId/name', (req, res) => {
+  const { userId } = req.params;
+  const query = 'SELECT name FROM members WHERE id = ?';
+
+  connection.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('유저 이름 조회 실패:', err);
+      res.status(500).json({ error: '유저 이름 조회 실패' });
+    } else if (results.length === 0) {
+      res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
+    } else {
+      res.status(200).json(results[0]);
+    }
+  });
+});
+
+// DELETE 요청 처리 - 특정 유저의 모든 질문 삭제
+app.delete('/api/user/:userId/questions', (req, res) => {
+  const { userId } = req.params;
+  const query = 'DELETE FROM CIST_Responses WHERE user_id = ?';
+
+  connection.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('질문 삭제 중 오류:', err);
+      res.status(500).json({ error: '질문 삭제 중 오류가 발생했습니다.' });
+    } else {
+      res.status(200).json({ message: '모든 질문이 성공적으로 삭제되었습니다.' });
+    }
   });
 });
 

@@ -117,7 +117,7 @@ const NoticeUp = ({userRole}) => {
       <div className="qna-page">
       <CmsNavipanel userRole={userRole}  />
         <div id='QnA-Plus' className="qnaplus">
-          <h2>공지사항 작성TEST</h2>
+          <h2>공지사항 작성</h2>
           <div className="form-group">
             <input
               type="text"

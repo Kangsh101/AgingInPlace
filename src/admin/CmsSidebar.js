@@ -10,7 +10,8 @@ const CmsSidebar = ({ userRole }) => {
     { path: "/Cmsuser", label: "사용자 관리", basePaths: ["/Cmsuser"], role: ["admin"] },
     { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail", "/patient"], role: ["admin", "doctor"] },
     { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria","/addpatientcriteria"], role: ["admin", "doctor"] },
-    { path: "/CmsCIST", label: "인지선별검사 관리", basePaths: ["/CmsCIST","/addquestioncist"], role: ["admin", "doctor"] }
+    { path: "/CmsCIST", label: "인지선별검사 추가", basePaths: ["/CmsCIST","/addquestioncist","/QuestionDetailCIST","/question_detail"], role: ["admin", "doctor"] },
+    { path: "/CmsQuestionList", label: "인지선별검사 정답", basePaths: ["/CmsQuestionList","/CmsUserQuestions"], role: ["admin", "doctor"] }
   ];
 
   const visibleLinks = allLinks.filter(link => link.role.includes(userRole));
