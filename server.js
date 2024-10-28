@@ -512,37 +512,52 @@ app.post('/api/cist_responses', (req, res) => {
 
     // mmse_score 테이블 업데이트 함수
     const updateMMEScore = (userId, scoreAdjustment, res) => {
-      const checkMMEScoreQuery = 'SELECT * FROM mmse_score WHERE member_id = ?';
-      connection.query(checkMMEScoreQuery, [userId], (err, mmseResults) => {
+      // 사용자 이름을 조회하는 쿼리
+      const getUsernameQuery = 'SELECT username FROM members WHERE id = ?';
+      connection.query(getUsernameQuery, [userId], (err, userResults) => {
         if (err) {
-          return res.status(500).json({ message: "MMSE 점수 확인 중 오류가 발생했습니다.", error: err });
+          return res.status(500).json({ message: "사용자 이름 확인 중 오류가 발생했습니다.", error: err });
         }
 
-        if (mmseResults.length > 0) {
-          // 해당 사용자가 이미 존재하는 경우 mmse 점수 업데이트
-          const updateMMEScoreQuery = 'UPDATE mmse_score SET mmse = mmse + ? WHERE member_id = ?';
-          connection.query(updateMMEScoreQuery, [scoreAdjustment, userId], (err, result) => {
-            if (err) {
-              return res.status(500).json({ message: "MMSE 점수 수정 중 오류가 발생했습니다.", error: err });
-            }
-            return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
-          });
-        } else {
-          // 해당 사용자가 존재하지 않는 경우 mmse_score에 새로 추가
-          const insertMMEScoreQuery = 'INSERT INTO mmse_score (member_id, mmse) VALUES (?, ?)';
-          connection.query(insertMMEScoreQuery, [userId, scoreAdjustment], (err, result) => {
-            if (err) {
-              return res.status(500).json({ message: "MMSE 점수 저장 중 오류가 발생했습니다.", error: err });
-            }
-            return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
-          });
+        if (userResults.length === 0) {
+          return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }
+
+        const username = userResults[0].username; // 사용자 이름 가져오기
+
+        const checkMMEScoreQuery = 'SELECT * FROM mmse_score WHERE member_id = ?';
+        connection.query(checkMMEScoreQuery, [userId], (err, mmseResults) => {
+          if (err) {
+            return res.status(500).json({ message: "MMSE 점수 확인 중 오류가 발생했습니다.", error: err });
+          }
+
+          if (mmseResults.length > 0) {
+            // 해당 사용자가 이미 존재하는 경우 mmse 점수 업데이트
+            const updateMMEScoreQuery = 'UPDATE mmse_score SET mmse = mmse + ? WHERE member_id = ?';
+            connection.query(updateMMEScoreQuery, [scoreAdjustment, userId], (err, result) => {
+              if (err) {
+                return res.status(500).json({ message: "MMSE 점수 수정 중 오류가 발생했습니다.", error: err });
+              }
+              return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+            });
+          } else {
+            // 해당 사용자가 존재하지 않는 경우 mmse_score에 새로 추가
+            const insertMMEScoreQuery = 'INSERT INTO mmse_score (member_id, mmse, username) VALUES (?, ?, ?)';
+            connection.query(insertMMEScoreQuery, [userId, scoreAdjustment, username], (err, result) => {
+              if (err) {
+                return res.status(500).json({ message: "MMSE 점수 저장 중 오류가 발생했습니다.", error: err });
+              }
+              return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+            });
+          }
+        });
       });
     };
 
     handleCISTResponse();
   });
 });
+
 
 
 
