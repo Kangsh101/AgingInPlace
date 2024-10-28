@@ -170,7 +170,7 @@ const CmsUserQuestions = ({ userRole }) => {
                                   defaultValue=""
                                 >
                                   <option value="" disabled>점수 선택</option>
-                                  {[1, 2, 3, 4, 5].map(score => (
+                                  {[0, 1, 2, 3, 4, 5].map(score => (
                                     <option key={score} value={score}>{score}</option>
                                   ))}
                                 </select>
