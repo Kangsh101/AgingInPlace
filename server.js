@@ -466,7 +466,43 @@ app.post('/api/android/cist_responses', (req, res) => {
   });
 });
 
+//CIST score 저장하기 
+app.post('/api/cist_responses', (req, res) => {
+  const { userId, score, questionId } = req.body;
 
+  if (!userId) {
+    return res.status(400).json({ message: "사용자 ID가 없습니다." });
+  }
+
+  // 기존 응답이 있는지 확인하는 쿼리
+  const checkResponseQuery = 'SELECT * FROM CIST_Responses WHERE user_id = ? AND question_id = ?';
+  
+  connection.query(checkResponseQuery, [userId, questionId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "서버 응답 확인 중 오류가 발생했습니다.", error: err });
+    }
+
+    if (results.length > 0) {
+      // 기존 응답이 있는 경우 UPDATE 쿼리
+      const updateResponseQuery = 'UPDATE CIST_Responses SET score = ? WHERE user_id = ? AND question_id = ?';
+      connection.query(updateResponseQuery, [score, userId, questionId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "서버 응답 수정 중 오류가 발생했습니다.", error: err });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 수정되었습니다." });
+      });
+    } else {
+      // 기존 응답이 없는 경우 INSERT 쿼리
+      const insertResponseQuery = 'INSERT INTO CIST_Responses (user_id, question_id, score) VALUES (?, ?, ?)';
+      connection.query(insertResponseQuery, [userId, questionId, score], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "서버 응답 저장 중 오류가 발생했습니다.", error: err });
+        }
+        return res.status(200).json({ message: "서버 응답이 성공적으로 저장되었습니다." });
+      });
+    }
+  });
+});
 
 
 // 사용자 정보 업데이트

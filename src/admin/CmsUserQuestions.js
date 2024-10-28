@@ -2,23 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
-import '../css/AddPatientCriteria.css'; // 동일한 CSS 사용
+import '../css/AddPatientCriteria.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 import NotFound from '../component/NotFound';
 
 const CmsUserQuestions = ({ userRole }) => {
-  const { userId } = useParams(); // URL에서 userId 가져오기
+  const { userId } = useParams();
   const [questions, setQuestions] = useState([]);
-  const [userName, setUserName] = useState(''); // 유저 이름 상태값 추가
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
-  const questionsPerPage = 7; // 페이지 당 문제 수
-  const navigate = useNavigate(); // 오류 시 사용될 네비게이트
+  const [userName, setUserName] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 7;
+  const navigate = useNavigate();
+  const [scores, setScores] = useState({});
+  const [expandedQuestionId, setExpandedQuestionId] = useState(null);
 
-  // 유저의 문제와 정답 및 이름 가져오기
   useEffect(() => {
     fetchUserQuestions();
-    fetchUserName(); // 유저 이름 가져오기 호출
+    fetchUserName();
   }, []);
 
   const fetchUserQuestions = () => {
@@ -32,7 +33,7 @@ const CmsUserQuestions = ({ userRole }) => {
       .then((data) => setQuestions(data))
       .catch((error) => {
         console.error('유저의 문제와 정답을 불러오는 중 오류:', error);
-        navigate('/notfound'); // 오류 시 NotFound 페이지로 이동
+        navigate('/notfound');
       });
   };
 
@@ -44,14 +45,13 @@ const CmsUserQuestions = ({ userRole }) => {
         }
         return response.json();
       })
-      .then((data) => setUserName(data.name)) // 이름 설정
+      .then((data) => setUserName(data.name))
       .catch((error) => {
         console.error('유저 이름을 불러오는 중 오류:', error);
-        navigate('/notfound'); // 오류 시 NotFound 페이지로 이동
+        navigate('/notfound');
       });
   };
 
-  // 삭제 버튼 클릭 시 호출되는 함수
   const handleDeleteAllQuestions = () => {
     if (window.confirm('정말 모든 질문을 삭제하시겠습니까?')) {
       fetch(`/api/user/${userId}/questions`, {
@@ -62,25 +62,61 @@ const CmsUserQuestions = ({ userRole }) => {
             throw new Error('질문 삭제 중 오류 발생');
           }
           alert('모든 질문이 삭제되었습니다.');
-          setQuestions([]); // 목록 초기화
+          setQuestions([]);
         })
-        .catch((error) =>
-          console.error('질문 삭제 중 오류:', error)
-        );
+        .catch((error) => console.error('질문 삭제 중 오류:', error));
     }
   };
 
-  // 페이지 변경 함수
+  const handleScoreSubmit = (questionId, score) => {
+    setScores((prevScores) => ({
+      ...prevScores,
+      [questionId]: score,
+    }));
+  };
+
+  const handleSaveScore = (questionId) => {
+    const score = scores[questionId];
+    if (score) {
+      fetch('/api/cist_responses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          questionId: questionId,
+          score: score,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('점수 저장 중 오류 발생');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert(data.message);
+        })
+        .catch((error) => {
+          console.error('점수 저장 중 오류:', error);
+        });
+    } else {
+      alert('점수를 선택해주세요.');
+    }
+  };
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // 현재 페이지의 문제 목록 계산
+  const toggleQuestionDetails = (questionId) => {
+    setExpandedQuestionId((prevId) => (prevId === questionId ? null : questionId));
+  };
+
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
   const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
-
-  // 총 페이지 수 계산
   const totalPages = Math.ceil(questions.length / questionsPerPage);
 
   return (
@@ -105,19 +141,45 @@ const CmsUserQuestions = ({ userRole }) => {
                       <th id='nowrap'>문제 유형</th>
                       <th id='nowrap'>제목</th>          
                       <th id='nowrap'>문제 내용</th>
-                      <th id='nowrap'>유저의 답</th>
-                      <th id='nowrap'>정답</th>
+                      <th id='nowrap'>상세보기</th>
                     </tr>
                   </thead>
                   <tbody>
                     {currentQuestions.map((question) => (
-                      <tr key={question.question_id}>
-                        <td>{question.type}</td>
-                        <td>{question.title}</td>     
-                        <td>{question.question_text}</td>
-                        <td>{question.user_answer}</td>
-                        <td>{question.correct_answer || '없음'}</td>
-                      </tr>
+                      <React.Fragment key={question.question_id}>
+                        <tr>
+                          <td>{question.type}</td>
+                          <td>{question.title}</td>     
+                          <td>{question.question_text}</td>
+                          <td>
+                            <button onClick={() => toggleQuestionDetails(question.question_id)}>
+                              {expandedQuestionId === question.question_id ? '숨기기' : '상세보기'}
+                            </button>
+                          </td>
+                        </tr>
+                        {expandedQuestionId === question.question_id && (
+                          <tr>
+                            <td colSpan={3}>
+                              <div>
+                                <strong>유저의 답:</strong> {question.user_answer}<br />
+                                <strong>정답:</strong> {question.correct_answer || '없음'}<br />
+                                <strong>점수:</strong> {scores[question.question_id] || '미채점'}<br />
+                                <strong>채점하기:</strong>
+                                <select
+                                  onChange={(e) => handleScoreSubmit(question.question_id, e.target.value)}
+                                  defaultValue=""
+                                >
+                                  <option value="" disabled>점수 선택</option>
+                                  {[1, 2, 3, 4, 5].map(score => (
+                                    <option key={score} value={score}>{score}</option>
+                                  ))}
+                                </select>
+                                <button onClick={() => handleSaveScore(question.question_id)}>저장</button> {/* 저장 버튼 추가 */}
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
                     ))}
                   </tbody>
                 </table>
