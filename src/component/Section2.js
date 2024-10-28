@@ -15,7 +15,10 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const [isPatientExist, setIsPatientExist] = useState(null);
   const [showMarginBottom ,setShowMarginBottom] = useState(false);
   const [patientPhoneNumber, setPatientPhoneNumber] = useState('');
+  const [isPatient, setIsPatient] = useState(false);
 
+  const [patientHeight, setPatientHeight] = useState('');
+  const [patientWeight, setPatientWeight] = useState('');
 
   const isFormComplete = () => {
     return (
@@ -80,9 +83,6 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
       }
     }
   };
-  
-  
-  
 
   useEffect(() => {
     if (nextSession) {
@@ -115,9 +115,20 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
   const handleRoleChange = (e) => {
     const selectedRole = e.target.value;
     setRole(selectedRole);
+    setIsPatient(selectedRole === '환자'); // 환자 선택 시 처리
     setIsGuardian(selectedRole === '보호자');
     handleInputChange({ target: { name: 'role', value: selectedRole } });
   };
+  const handlePatientHeightChange = (e) => {
+    setPatientHeight(e.target.value);
+    handleInputChange({ target: { name: 'height', value: e.target.value } });
+  };
+
+  const handlePatientWeightChange = (e) => {
+    setPatientWeight(e.target.value);
+    handleInputChange({ target: { name: 'weight', value: e.target.value } });
+  };
+
 
   const handleGuardianNameChange = (e) => {
     const { value } = e.target;
@@ -207,6 +218,12 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
             <option value='일반인'>일반인</option>
           </select>
           <div>
+          {isPatient && (
+            <>
+               <input type="text" name="height" id='height-css' value={patientHeight} onChange={handlePatientHeightChange}  placeholder="키 (cm)" />
+               <input type="text" name="weight" id='weight-css' value={patientWeight} onChange={handlePatientWeightChange}  placeholder="몸무게 (kg)" />
+            </>
+            )}
             {isGuardian && (
               <>
                 <input type='text' id='guardianName' name='guardianName' value={guardianName} onChange={handleGuardianNameChange} placeholder='환자 이름' className='Section2-field' />

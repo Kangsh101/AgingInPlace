@@ -7,7 +7,8 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
     const [patientId, setPatientId] = useState(null);
     const [userId, setUserId] = useState(null);
     const [diseases, setDiseases] = useState(['']);
-    const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '' }]);
+    const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '', alarmTime: { hour: '', minute: '', second: '' } }]);
+
 
     useEffect(() => {
         axios.get('/api/getUserId')
@@ -51,9 +52,17 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
     };
 
     const handleAddMedication = () => {
-        setMedications([...medications, { name: '', dosage: '', frequency: '' }]);
+        setMedications([...medications, { name: '', dosage: '', frequency: '', alarmTime: { hour: '', minute: '', second: '' } }]);
     };
-
+    const handleAlarmTimeChange = (index, field, value) => {
+        const updated = medications.map((med, idx) => {
+            if (idx === index) {
+                return { ...med, alarmTime: { ...med.alarmTime, [field]: value } };
+            }
+            return med;
+        });
+        setMedications(updated);
+    };
     const handleMedicationChange = (index, field, value) => {
         const updated = medications.map((med, idx) => {
             if (idx === index) {
@@ -93,10 +102,8 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
             });
 
             await axios.post('/api/addMedications', {
-                patientId,
-                medications,
-                enteredBy: userId // 현재 사용자 ID
-            });
+                 patientId, medications, enteredBy: userId 
+                });
 
             alert('정보가 성공적으로 저장되었습니다.');
             onCancel(); // 추가 후 취소(이전 페이지로 이동)
@@ -123,7 +130,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                                 <input type="text" id='disease-input' value={disease} onChange={(e) => handleDiseaseChange(index, e.target.value)} placeholder="질환명 입력" />
                             </div>
                         ))}
-                        <button className='button' id='disease-btt' onClick={handleAddDisease}>질환 추가</button>
+                        {/* <button className='button' id='disease-btt' onClick={handleAddDisease}>질환 추가</button> */}
                     </div>
 
                     <div className='Drug-name'>
@@ -135,9 +142,17 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                                     <input type="text" id='Drug-width' className='dosage' value={med.dosage} onChange={(e) => handleMedicationChange(index, 'dosage', e.target.value)} placeholder="용량" />
                                     <input type="text" id='Drug-width' className='frequency' value={med.frequency} onChange={(e) => handleMedicationChange(index, 'frequency', e.target.value)} placeholder="복용 횟수" />
                                 </div>
+                                <div className="alarm-time-container">
+                                <label>알람 시간</label>
+                                <div className="alarm-time-inputs">
+                                    <input type="number" placeholder="시" min="0" max="23" onChange={(e) => handleAlarmTimeChange(index, 'hour', e.target.value)} /> :  
+                                    <input type="number" placeholder="분" min="0" max="59" onChange={(e) => handleAlarmTimeChange(index, 'minute', e.target.value)} /> :  
+                                    <input type="number" placeholder="초" min="0" max="59" onChange={(e) => handleAlarmTimeChange(index, 'second', e.target.value)} /> 
+                                </div>
+                            </div>
                             </div>
                         ))}
-                        <button className='button' onClick={handleAddMedication}>약물 추가</button>
+                        {/* </div>button className='button' onClick={handleAddMedication}>약물 추가</button> */}
                     </div>
                     <button className='button primary' id='Medication-btt' onClick={handleSubmit}>추가</button>
                     <div>

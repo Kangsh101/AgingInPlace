@@ -372,3 +372,10 @@
   #Section2Btt{
     font-weight: bold;
   }
+#height-css{
+  width: 10em;
+  margin-right: 10px;
+}
+#weight-css{
+  width: 10em;
+}

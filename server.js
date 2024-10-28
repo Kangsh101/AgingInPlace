@@ -6,7 +6,7 @@ const cors = require('cors');
 const multer = require('multer');
 const axios = require('axios');
 const bodyParser = require('body-parser');
-const qs = require('qs'); 
+const qs = require('qs');
 
 
 const path = require('path');
@@ -29,11 +29,11 @@ const storage = multer.diskStorage({
     cb(null, filename);
   },
 });
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, 
-    fieldSize: 10 * 1024 * 1024, 
+    fileSize: 10 * 1024 * 1024,
+    fieldSize: 10 * 1024 * 1024,
   }
 });
 
@@ -52,14 +52,14 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } 
+  cookie: { secure: false }
 }));
 
 app.use(cors({
   origin: 'http://www.aginginplaces.net',
   methods: ['GET', 'POST'],
   credentials: true,
-  optionsSuccessStatus: 200, 
+  optionsSuccessStatus: 200,
 }));
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -86,11 +86,11 @@ app.use(express.static(path.join(__dirname, 'build')));
     if (!req.file) {
       return res.status(400).json({ message: '이미지 업로드 실패' });
     }
-    const imageUrl = `/images/${req.file.filename}`; 
+    const imageUrl = `/images/${req.file.filename}`;
 
     res.status(200).json({ imageUrl });
   });
-  
+ 
 const generateTemporaryPassword = (length = 8) => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
   let password = '';
@@ -102,11 +102,11 @@ const generateTemporaryPassword = (length = 8) => {
 
 
   const bcrypt = require('bcrypt');
-  const saltRounds = 10; 
+  const saltRounds = 10;
 
   app.post('/api/findUserPassword', (req, res) => {
     const { name, email } = req.body;
-  
+ 
     const query = 'SELECT id FROM members WHERE name = ? AND email = ?';
     connection.query(query, [name, email], (err, results) => {
       if (err) {
@@ -116,63 +116,81 @@ const generateTemporaryPassword = (length = 8) => {
       if (results.length === 0) {
         return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
       }
-  
+ 
       const userId = results[0].id;
       const temporaryPassword = generateTemporaryPassword();
-  
+ 
       // 임시 비밀번호를 해시화하여 DB에 저장
       bcrypt.hash(temporaryPassword, saltRounds, (err, hashedPassword) => {
         if (err) {
           console.error('비밀번호 해싱 실패:', err);
           return res.status(500).json({ message: '비밀번호 업데이트 실패' });
         }
-  
+ 
         const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
         connection.query(updateQuery, [hashedPassword, userId], (err) => {
           if (err) {
             console.error('DB 업데이트 실패:', err);
             return res.status(500).json({ message: '비밀번호 업데이트 실패' });
           }
-  
+ 
           // 임시 비밀번호를 사용자에게 전달
           res.status(200).json({ message: '임시 비밀번호가 발급되었습니다.', temporaryPassword });
         });
       });
     });
   });
-  app.post('/api/signup', (req, res) => {
-    const { username, password, email, name, birthdate, gender, phoneNumber, role, patientId } = req.body;
 
-    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
-      if (err) {
-        console.error('비밀번호 해싱 실패: ' + err.stack);
-        res.status(500).send('회원가입 실패');
-        return;
-      }
-  
-      const insertGuardianQuery = `INSERT INTO members (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`;
+app.post('/api/signup', (req, res) => {
+  const {
+    username, password, email, name, birthdate, gender, phoneNumber,
+    role, patientId, height, weight
+  } = req.body;
 
-      connection.query(insertGuardianQuery, [username, hashedPassword, email, name, birthdate, gender, phoneNumber, role, patientId], (err, result) => {
+  bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+    if (err) {
+      console.error('비밀번호 해싱 실패: ' + err.stack);
+      res.status(500).send('회원가입 실패');
+      return;
+    }
+
+    const insertUserQuery = `
+      INSERT INTO members
+      (username, password, email, name, birthdate, gender, phoneNumber, role, is_active, patientId, height_cm, weight_kg)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+    `;
+
+    connection.query(
+      insertUserQuery,
+      [username, hashedPassword, email, name, birthdate, gender, phoneNumber, role, patientId, height, weight],
+      (err, result) => {
         if (err) {
           console.error('회원가입 실패: ' + err.stack);
           res.status(500).send('회원가입 실패');
           return;
         }
+
         const guardianId = result.insertId;
 
-        const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
-        connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
-          if (updateErr) {
-            console.error('보호자 ID 업데이트 실패:', updateErr);
-            res.status(500).send('보호자 정보 업데이트 실패');
-            return;
-          }
-          console.log('보호자 정보 업데이트 성공');
+        if (role === '보호자' && patientId) {
+          const updatePatientQuery = `UPDATE members SET guardianId = ? WHERE id = ?`;
+          connection.query(updatePatientQuery, [guardianId, patientId], (updateErr, updateResult) => {
+            if (updateErr) {
+              console.error('보호자 ID 업데이트 실패:', updateErr);
+              res.status(500).send('보호자 정보 업데이트 실패');
+              return;
+            }
+            console.log('보호자 정보 업데이트 성공');
+            res.status(200).send('회원가입 성공');
+          });
+        } else {
           res.status(200).send('회원가입 성공');
-        });
-      });
-    });
+        }
+      }
+    );
   });
+});
+
 
 //로그인
 app.post('/api/login', (req, res) => {
@@ -185,7 +203,7 @@ app.post('/api/login', (req, res) => {
       res.status(500).send('로그인 실패');
       return;
     }
-    
+   
     if (results.length === 0) {
 
       res.status(401).send('아이디 또는 비밀번호가 올바르지 않습니다.');
@@ -438,7 +456,7 @@ app.post('/api/android/cist_responses', (req, res) => {
 
   // 기존 응답이 있는지 확인하는 쿼리
   const checkResponseQuery = 'SELECT * FROM CIST_Responses WHERE user_id = ? AND question_id = ?';
-  
+ 
   connection.query(checkResponseQuery, [userId, questionId], (err, results) => {
     if (err) {
       return res.status(500).json({ message: "서버 응답 확인 중 오류가 발생했습니다.", error: err });
@@ -466,7 +484,7 @@ app.post('/api/android/cist_responses', (req, res) => {
   });
 });
 
-//CIST score 저장하기 
+//CIST score 저장하기
 app.post('/api/cist_responses', (req, res) => {
   const { userId, score, questionId } = req.body;
 
@@ -476,7 +494,7 @@ app.post('/api/cist_responses', (req, res) => {
 
   // 기존 응답이 있는지 확인하는 쿼리
   const checkResponseQuery = 'SELECT * FROM CIST_Responses WHERE user_id = ? AND question_id = ?';
-  
+ 
   connection.query(checkResponseQuery, [userId, questionId], (err, results) => {
     if (err) {
       return res.status(500).json({ message: "서버 응답 확인 중 오류가 발생했습니다.", error: err });
@@ -583,32 +601,41 @@ app.post('/api/updateuserinfo', (req, res) => {
 });
 
 
+app.post('/api/updateuserinfo2', (req, res) => {
+  const userId = req.session.userId;
+  const { name, gender, phoneNumber, role, email, height, weight } = req.body;
 
-// 내정보 유저정보 가져오기
-// app.get('/api/userinfo', (req, res) => {
-//   const userId = req.session.userId; 
+  if (!userId) {
+    return res.status(401).send('로그인이 필요합니다.');
+  }
 
-//  console.log('현재 로그인된 사용자의 세션 ID:', userId);
-//   connection.query(
-//     "SELECT gender, name, role, phoneNumber, birthdate ,email FROM members WHERE id = ?;",
-//     [userId], 
-//     (err, rows, fields) => {
-//       if (err) {
-//         console.error('회원 정보 조회 실패: ' + err.stack);
-//         res.status(500).send('회원 정보 조회 실패');
-//         return;
-//       }
-//       res.send(rows);
-//     }
-//   );
-// });
+  const query = `
+    UPDATE members
+    SET name = ?, gender = ?, phoneNumber = ?, role = ?, email = ?, height_cm = ?, weight_kg = ?
+    WHERE id = ?
+  `;
+
+  connection.query(
+    query,
+    [name, gender, phoneNumber, role, email, height, weight, userId],
+    (err, result) => {
+      if (err) {
+        console.error('사용자 정보 업데이트 실패:', err);
+        return res.status(500).send('사용자 정보 업데이트 실패');
+      }
+      console.log('사용자 정보가 성공적으로 업데이트되었습니다.');
+      res.status(200).send('사용자 정보가 성공적으로 업데이트되었습니다.');
+    }
+  );
+});
+
 app.get('/api/userinfo', (req, res) => {
   const userId = req.session.userId;
 
   console.log('현재 로그인된 사용자의 세션 ID:', userId);
   connection.query(
     "SELECT gender, name, role, phoneNumber, birthdate, email FROM members WHERE id = ?;",
-    [userId], 
+    [userId],
     (err, rows, fields) => {
       if (err) {
         console.error('회원 정보 조회 실패: ' + err.stack);
@@ -624,6 +651,34 @@ app.get('/api/userinfo', (req, res) => {
   );
 });
 
+app.get('/api/userinfo2', (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).send('로그인이 필요합니다.');
+  }
+
+  console.log('현재 로그인된 사용자의 세션 ID:', userId);
+
+  const query = `
+    SELECT name, gender, role, phoneNumber, email, height_cm, weight_kg
+    FROM members
+    WHERE id = ?
+  `;
+
+  connection.query(query, [userId], (err, rows) => {
+    if (err) {
+      console.error('회원 정보 조회 실패:', err);
+      return res.status(500).send('회원 정보 조회 실패');
+    }
+
+    if (rows.length > 0) {
+      res.send(rows[0]); // 첫 번째 행 반환
+    } else {
+      res.status(404).send('사용자를 찾을 수 없습니다.');
+    }
+  });
+});
 // 관리자 페이지에 사용자 정보 가져오기
 app.get('/api/cmsusers', (req, res) => {
   connection.query(
@@ -655,6 +710,7 @@ app.get('/api/cmsusersAdd', (req, res) => {
     res.json(rows);
   });
 });
+
 // CMS 수면/운동량 유저정보 가져오기 API
 app.get('/api/PatientCriteriaAdd', (req, res) => {
   const query = `
@@ -789,14 +845,14 @@ app.get('/api/cist_questions_by_title/:title', (req, res) => {
     }
     res.json(results);
   });
-  
+ 
 });
 
 app.post('/api/cist_questions', upload.single('image'), (req, res) => {
   const { type, title, question_text, correct_answer } = req.body;
 
   const query = `
-    INSERT INTO CIST_Questions (type, title, question_text, correct_answer) 
+    INSERT INTO CIST_Questions (type, title, question_text, correct_answer)
     VALUES (?, ?, ?, ?)
   `;
 
@@ -832,7 +888,7 @@ app.post('/findUser1', (req, res) => {
 });
 
 app.post('/findUserPhone2', (req, res) => {
-  
+ 
   const { name, phoneNumber } = req.body;
   connection.query('SELECT password FROM members WHERE name = ? AND phoneNumber = ?', [name, phoneNumber], (error, results, fields) => {
     if (error) {
@@ -881,36 +937,36 @@ app.get('/api/user/role', (req, res) => {
 
 app.post('/api/qna/posts', upload.single('image'), async (req, res) => {  
   const { title, content } = req.body;
-  const userId = req.session.userId; 
-  const board_master_id = 1; 
+  const userId = req.session.userId;
+  const board_master_id = 1;
 
   if (!userId) {
     return res.status(401).json({ error: '로그인 상태가 필요합니다.' });
   }
-  
+ 
   try {
     const userQuery = 'SELECT role FROM members WHERE id = ?';
-    const userResult = await queryAsync(userQuery, [userId]); 
+    const userResult = await queryAsync(userQuery, [userId]);
     if (userResult.length === 0) {
       return res.status(404).json({ error: '사용자 정보를 찾을 수 없습니다.' });
     }
     const userRole = userResult[0].role;
 
     const boardQuery = 'SELECT write_type FROM board_master WHERE id = ?';
-    const boardResult = await queryAsync(boardQuery, [board_master_id]); 
+    const boardResult = await queryAsync(boardQuery, [board_master_id]);
     if (boardResult.length === 0) {
       return res.status(404).json({ error: '게시판 정보를 찾을 수 없습니다.' });
     }
     const boardWriteType = boardResult[0].write_type;
 
-    const allowedRoles = boardWriteType.split(',').map(role => role.trim()); 
+    const allowedRoles = boardWriteType.split(',').map(role => role.trim());
     if (!allowedRoles.includes(userRole)) {
       return res.status(403).json({ error: '이 게시판에 글을 쓸 권한이 없습니다.' });
     }
 
     let imageUrl = '';
     if (req.file) {
-      imageUrl = `/images/${req.file.filename}`; 
+      imageUrl = `/images/${req.file.filename}`;
     }
 
     const query = `INSERT INTO board_posts (board_master_id, title, content, user_id) VALUES (?, ?, ?, ?)`;
@@ -941,7 +997,7 @@ function queryAsync(query, params) {
 // QnA 게시판 검색(답글도) API
 app.get('/api/qnaposts', (req, res) => {
   const query = `
-    SELECT bp.*, m.name as user_name 
+    SELECT bp.*, m.name as user_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
     WHERE bp.board_master_id = 1
@@ -954,7 +1010,7 @@ app.get('/api/qnaposts', (req, res) => {
       res.status(500).json({ error: 'QNA 게시글 조회 중 오류 발생' });
       return;
     }
-    
+   
     // Fetching answers for each post
     const postIds = results.map(post => post.post_id);
     if (postIds.length === 0) {
@@ -994,19 +1050,19 @@ app.post('/api/search-posts', (req, res) => {
   let query = "";
 
   if (searchType === "title") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 1 AND bp.title LIKE ?`;
   } else if (searchType === "author") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 1 AND m.name LIKE ?`;
   } else if (searchType === "title_author") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 1 AND (bp.title LIKE ? OR m.name LIKE ?)`;
   } else {
     res.status(400).json({ error: '유효하지 않은 검색 조건입니다.' });
@@ -1028,11 +1084,11 @@ app.post('/api/search-posts', (req, res) => {
 });
 
 
-//QnA 상세 페이지 
+//QnA 상세 페이지
 app.get('/api/qnaposts/:postId', (req, res) => {
   const postId = req.params.postId;
   const query = `
-    SELECT bp.*, m.name as user_name 
+    SELECT bp.*, m.name as user_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
     WHERE bp.post_id = ?
@@ -1121,7 +1177,7 @@ app.get('/api/qna/comments/:postId', (req, res) => {
   const postId = req.params.postId;
 
   const query = `
-    SELECT bc.*, m.name as user_name 
+    SELECT bc.*, m.name as user_name
     FROM board_comment bc
     JOIN members m ON bc.user_id = m.id
     WHERE bc.post_id = ?
@@ -1285,7 +1341,7 @@ app.get('/api/qna/answers/:answerId', (req, res) => {
   const { answerId } = req.params;
 
   const query = `
-    SELECT ba.*, m.name as user_name 
+    SELECT ba.*, m.name as user_name
     FROM board_answers ba
     JOIN members m ON ba.user_id = m.id
     WHERE ba.answer_id = ?
@@ -1305,25 +1361,25 @@ app.get('/api/qna/answers/:answerId', (req, res) => {
   });
 });
 
-//공지사항 검색 
+//공지사항 검색
 app.post('/api/notice/search', (req, res) => {
   const { searchType, searchKeyword } = req.body;
   let query = "";
 
   if (searchType === "title") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 2 AND bp.title LIKE ?`;
   } else if (searchType === "author") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 2 AND m.name LIKE ?`;
   } else if (searchType === "title_author") {
-    query = `SELECT bp.*, m.name as user_name 
-             FROM board_posts bp 
-             JOIN members m ON bp.user_id = m.id 
+    query = `SELECT bp.*, m.name as user_name
+             FROM board_posts bp
+             JOIN members m ON bp.user_id = m.id
              WHERE bp.board_master_id = 2 AND (bp.title LIKE ? OR m.name LIKE ?)`;
   } else {
     res.status(400).json({ error: '유효하지 않은 검색 조건입니다.' });
@@ -1367,7 +1423,7 @@ app.post('/api/addNotice', (req, res) => {
 // 공지사항 목록
 app.get('/api/notices', (req, res) => {
   const query = `
-    SELECT bp.*, m.name as user_name, bm.board_name 
+    SELECT bp.*, m.name as user_name, bm.board_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
     JOIN board_master bm ON bp.board_master_id = bm.id
@@ -1388,7 +1444,7 @@ app.get('/api/notices', (req, res) => {
 app.get('/api/notices/:postId', (req, res) => {
   const postId = req.params.postId;
   const query = `
-    SELECT bp.*, m.name as user_name, bm.board_name 
+    SELECT bp.*, m.name as user_name, bm.board_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
     JOIN board_master bm ON bp.board_master_id = bm.id
@@ -1469,10 +1525,10 @@ app.post('/api/addFaq', (req, res) => {
 // FAQ 조회
 app.get('/api/faq', (req, res) => {
   const query = `
-    SELECT bp.*, m.name as user_name 
+    SELECT bp.*, m.name as user_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
-    WHERE bp.board_master_id = 3 
+    WHERE bp.board_master_id = 3
     ORDER BY bp.created_at DESC
   `;
 
@@ -1505,7 +1561,7 @@ app.delete('/api/faq/:id', (req, res) => {
 app.get('/api/faq/:id', (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT bp.*, m.name as user_name 
+    SELECT bp.*, m.name as user_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
     WHERE bp.post_id = ?
@@ -1547,10 +1603,10 @@ app.put('/api/faq/:id', (req, res) => {
 // FAQ 조회
 app.get('/api/faq', (req, res) => {
   const query = `
-    SELECT bp.*, m.name as user_name 
+    SELECT bp.*, m.name as user_name
     FROM board_posts bp
     JOIN members m ON bp.user_id = m.id
-    WHERE bp.board_master_id = 3 
+    WHERE bp.board_master_id = 3
     ORDER BY bp.created_at DESC
   `;
 
@@ -1637,7 +1693,7 @@ app.put('/api/activateUser/:userId', (req, res) => {
       console.error('활성화 오류:', err);
       res.status(500).send('서버 오류');
     } else {
-      res.sendStatus(200); 
+      res.sendStatus(200);
     }
   });
 });
@@ -1656,7 +1712,7 @@ app.post('/api/patientcriteria', (req, res) => {
     if (results.length > 0) {
       // 기존 데이터가 있는 경우 업데이트
       const updateQuery = `
-        UPDATE cms_patientdata 
+        UPDATE cms_patientdata
         SET sleep_startTime = ?, sleep_endTime = ?, exercise_amount = ?, added_date = ?
         WHERE patient_id = ?`;
       connection.query(updateQuery, [sleep_startTime, sleep_endTime, exercise_amount, added_date, patient_id], (err, result) => {
@@ -1670,7 +1726,7 @@ app.post('/api/patientcriteria', (req, res) => {
     } else {
       // 기존 데이터가 없는 경우 삽입
       const insertQuery = `
-        INSERT INTO cms_patientdata (patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date) 
+        INSERT INTO cms_patientdata (patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date)
         VALUES (?, ?, ?, ?, ?)`;
       connection.query(insertQuery, [patient_id, sleep_startTime, sleep_endTime, exercise_amount, added_date], (err, result) => {
         if (err) {
@@ -1688,8 +1744,8 @@ app.get('/api/patientcriteria/:id', (req, res) => {
   const patient_id = req.params.id;
 
   const query = `
-    SELECT sleep_startTime, sleep_endTime, exercise_amount 
-    FROM cms_patientdata 
+    SELECT sleep_startTime, sleep_endTime, exercise_amount
+    FROM cms_patientdata
     WHERE patient_id = ?`;
   connection.query(query, [patient_id], (err, results) => {
     if (err) {
@@ -1728,16 +1784,30 @@ app.post('/api/addDiagnosis', (req, res) => {
 app.post('/api/addMedications', (req, res) => {
   const { patientId, medications, enteredBy } = req.body;
 
-  const query = 'INSERT INTO medications (patient_id, medication, dosage, frequency, start_date, end_date, entered_by) VALUES ?';
-  const values = medications.map(medication => [patientId, medication.name, medication.dosage, medication.frequency, new Date(), null, enteredBy]);
+  const query = `
+    INSERT INTO medications
+    (patient_id, medication, dosage, frequency, alarm_time, start_date, end_date, entered_by)
+    VALUES ?
+  `;
+
+  const values = medications.map(medication => [
+      patientId,
+      medication.name,
+      medication.dosage,
+      medication.frequency,
+      `${medication.alarmTime.hour}:${medication.alarmTime.minute}:${medication.alarmTime.second}`,
+      new Date(),
+      null,
+      enteredBy
+  ]);
 
   connection.query(query, [values], (error, results) => {
-    if (error) {
-      console.error('Error adding medications:', error);
-      res.status(500).json({ message: 'Error adding medications', error });
-      return;
-    }
-    res.status(200).json({ message: 'Medications added successfully' });
+      if (error) {
+          console.error('Error adding medications:', error);
+          res.status(500).json({ message: 'Error adding medications', error });
+          return;
+      }
+      res.status(200).json({ message: 'Medications added successfully' });
   });
 });
 
@@ -1764,7 +1834,7 @@ app.get('/api/getUserDetails', (req, res) => {
   });
 });
 
-// 진단명 목록 보여주기 엔드포인트 
+// 진단명 목록 보여주기 엔드포인트
 app.get('/api/getPatientDetails', (req, res) => {
   const userId = req.session.userId;
 
@@ -1837,8 +1907,20 @@ app.post('/api/addDiagnosisByAdmin', (req, res) => {
 app.post('/api/addMedicationsByAdmin', (req, res) => {
   const { patientId, medications, enteredBy } = req.body;
 
-  const query = 'INSERT INTO medications (patient_id, medication, dosage, frequency, start_date, end_date, entered_by) VALUES ?';
-  const values = medications.map(medication => [patientId, medication.name, medication.dosage, medication.frequency, new Date(), null, enteredBy]);
+  const query = `
+    INSERT INTO medications
+    (patient_id, medication, dosage, frequency, alarm_time, entered_by)
+    VALUES ?
+  `;
+
+  const values = medications.map(med => [
+    patientId,
+    med.name,
+    med.dosage,
+    med.frequency,
+    med.alarmTime,
+    enteredBy
+  ]);
 
   connection.query(query, [values], (error, results) => {
     if (error) {
@@ -1891,7 +1973,7 @@ app.get('/api/currentUser', (req, res) => {
 
 // guardianId로 환자 이름 가져오기
 app.get('/api/getPatientName', (req, res) => {
-  const guardianId = req.session.userId; 
+  const guardianId = req.session.userId;
 
   const query = `SELECT name FROM members WHERE id = (SELECT patientId FROM members WHERE id = ?)`;
   connection.query(query, [guardianId], (err, result) => {
@@ -2022,11 +2104,11 @@ app.get('/api/getUserId', (req, res) => {
 app.get('/api/getPatientInfo', (req, res) => {
   const guardianId = req.session.userId;
 
-  const query = `SELECT p.id AS patientId, p.name AS patientName 
-                 FROM members p 
+  const query = `SELECT p.id AS patientId, p.name AS patientName
+                 FROM members p
                  WHERE p.id = (
-                   SELECT g.patientId 
-                   FROM members g 
+                   SELECT g.patientId
+                   FROM members g
                    WHERE g.id = ?
                  )`;
   connection.query(query, [guardianId], (err, result) => {
@@ -2086,7 +2168,7 @@ app.delete('/api/cist_questions/:id', (req, res) => {
 
   // 먼저 응답을 삭제합니다.
   const deleteResponsesQuery = 'DELETE FROM CIST_Responses WHERE question_id = ?';
-  
+ 
   connection.query(deleteResponsesQuery, [questionId], (err) => {
     if (err) {
       console.error('Failed to delete responses: ' + err.stack);
@@ -2096,7 +2178,7 @@ app.delete('/api/cist_questions/:id', (req, res) => {
 
     // 응답 삭제 후 질문을 삭제합니다.
     const query = 'DELETE FROM CIST_Questions WHERE id = ?';
-    
+   
     connection.query(query, [questionId], (err, results) => {
       if (err) {
         console.error('Failed to delete question: ' + err.stack);
@@ -2207,15 +2289,15 @@ app.get('/api/patient-data', (req, res) => {
 //인지선별 검사 정답 가져오는 API
 app.get('/api/cist_users', (req, res) => {
   const query = `
-    SELECT 
-      m.id AS user_id, 
-      m.name AS user_name, 
-      m.role 
-    FROM 
+    SELECT
+      m.id AS user_id,
+      m.name AS user_name,
+      m.role
+    FROM
       CIST_Responses cr
-    JOIN 
+    JOIN
       members m ON cr.user_id = m.id
-    GROUP BY 
+    GROUP BY
       m.id, m.name, m.role
   `;
 
@@ -2235,18 +2317,18 @@ app.get('/api/cist_users', (req, res) => {
 app.get('/api/user/:userId/questions', (req, res) => {
   const { userId } = req.params;
   const query = `
-    SELECT 
+    SELECT
       cr.response AS user_answer,
       cq.id AS question_id,
       cq.question_text,
       cq.correct_answer,
       cq.type,
       cq.title
-    FROM 
+    FROM
       CIST_Responses cr
-    JOIN 
+    JOIN
       CIST_Questions cq ON cr.question_id = cq.id
-    WHERE 
+    WHERE
       cr.user_id = ?
   `;
 
@@ -2310,7 +2392,7 @@ app.post('/chart/calories', async (req, res) => {
 });
 
 app.post('/chart/steps', async (req, res) => {
-  const username = 'Lee'; 
+  const username = 'Lee';
 
   try {
     const response = await axios.post('http://43.200.2.115:8080/chart/steps', qs.stringify({ username }), {
@@ -2326,7 +2408,7 @@ app.post('/chart/steps', async (req, res) => {
 });
 
 app.post('/chart/sleep_duration', async (req, res) => {
-  const username = 'ChartTest2'; 
+  const username = 'ChartTest2';
 
   try {
     const response = await axios.post('http://43.200.2.115:8080/chart/duration', qs.stringify({ username }), {
@@ -2342,7 +2424,7 @@ app.post('/chart/sleep_duration', async (req, res) => {
 });
 
 app.post('/chart/rem', async (req, res) => {
-  const username = 'ChartTest2'; 
+  const username = 'ChartTest2';
 
   try {
     const response = await axios.post('http://43.200.2.115:8080//chart/rem', qs.stringify({ username }), {
