@@ -62,7 +62,7 @@
   color: white;
   font-weight: 500;
 }
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 944px) {
   body.navPanel-visible #navPanel {
     transform: translateX(0);
   }
@@ -111,7 +111,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 944px) {
   .cms-sidebar {
     display: none;
   }

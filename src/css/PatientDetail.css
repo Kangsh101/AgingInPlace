@@ -143,6 +143,15 @@
         max-width: none;
     }
 }
+
+@media (max-width: 540px) {
+    #Patient-input{
+        width: 90%;
+    }
+    #medica-css{
+        width: 90%;
+    }
+}
 /* 약물 정보 컨테이너 */
 .Cms-medication-container {
     display: flex;

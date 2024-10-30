@@ -107,6 +107,7 @@ const PatientDetail = ({ userRole }) => {
             {diagnoses.map((diagnosis, index) => (
               <div key={diagnosis.id} className="diagnosis-item">
                 <input
+                  id="Patient-input"
                   type="text"
                   value={diagnosis.name}
                   placeholder="질환명 입력"
@@ -129,6 +130,7 @@ const PatientDetail = ({ userRole }) => {
             {medications.map((medication, index) => (
               <div key={medication.id} className="medication-item">
                 <input
+                  id='medica-css'
                   type="text"
                   value={medication.name}
                   placeholder="약명"
@@ -141,6 +143,7 @@ const PatientDetail = ({ userRole }) => {
                   }
                 />
                 <input
+                 id='medica-css'
                   type="text"
                   value={medication.dosage}
                   placeholder="용량"
@@ -153,6 +156,7 @@ const PatientDetail = ({ userRole }) => {
                   }
                 />
                 <input
+                 id='medica-css'
                   type="text"
                   value={medication.frequency}
                   placeholder="복용 횟수"
