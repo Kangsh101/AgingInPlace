@@ -12,96 +12,69 @@ const AddQuestionCIST = ({ userRole }) => {
   const [title, setTitle] = useState('');
   const [questionText, setQuestionText] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
   const navigate = useNavigate();
   const quillRef = useRef(null);
 
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'doctor') {
+    if (userRole !== 'admin' && userRole !== 'doctor') { 
       navigate('/notfound');
     }
   }, [userRole, navigate]);
 
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (file) {
-        const formData = new FormData();
-        formData.append('image', file);
-
-        try {
-          const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error('이미지 업로드 실패');
-          }
-
-          const { imageUrl } = await response.json();
-          console.log(imageUrl);
-          const editor = quillRef.current.getEditor();
-          const range = editor.getSelection(true);
-          editor.insertEmbed(range.index, 'image', imageUrl);
-          editor.setSelection(range.index + 1);
-        } catch (error) {
-          console.error('이미지 업로드 중 오류 발생:', error);
-        }
-      }
-    };
-  }, []);
-
-  const modules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['link', 'image'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImage(file);
+    } else {
+      alert('이미지 파일을 선택해 주세요.');
+    }
   };
 
-  const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'link', 'image',
-  ];
-
-  const handleAddQuestion = async () => {
+  const handleAddQuestion = () => {
+    // 필드 유효성 검사
     if (!type || !title || !questionText || !correctAnswer) {
-      alert('모든 필드를 입력해주세요.');
+      alert('모든 필드를 채워주세요.');
       return;
     }
-
-    try {
-      const response = await fetch('/api/cist_questions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type,
-          title,
-          question_text: questionText,
-          correct_answer: correctAnswer,
-        }),
-      });
-
-      if (response.ok) {
-        navigate('/cmscist');
-      } else {
-        throw new Error('질문 저장 실패');
-      }
-    } catch (error) {
-      console.error('질문 저장 중 오류 발생:', error);
+    const formData = new FormData();
+    formData.append('type', type);
+    formData.append('title', title);
+    formData.append('question_text', questionText);
+    formData.append('correct_answer', correctAnswer);
+    if (image) {
+      formData.append('image', image);
     }
+
+    fetch('/api/cist_questions', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // JSON 응답을 반환
+        } else {
+          // 응답이 JSON인 경우만 처리
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return response.json().then((data) => {
+              throw new Error(data.message || '문제가 발생했습니다.');
+            });
+          } else {
+            throw new Error('서버에서 응답을 받지 못했습니다. 다시 시도해 주세요.');
+          }
+        }
+      })
+      .then((data) => {
+        setImageUrl(data.imageUrl); // 서버에서 반환된 이미지 URL을 상태로 저장
+        console.log('이미지 URL:', data.imageUrl); // 저장된 이미지 URL 출력
+        navigate('/cmscist');
+      })
+      .catch((error) => {
+        console.error('Error adding question:', error);
+        alert(error.message);
+      });
   };
 
   return (
@@ -137,15 +110,15 @@ const AddQuestionCIST = ({ userRole }) => {
 
           <div className="Cms-form-group">
             <label>문제 내용:</label>
-            <ReactQuill
-              id='QnAup-content'
-              ref={quillRef}
+            <textarea
               value={questionText}
-              onChange={setQuestionText}
-              modules={modules}
-              formats={formats}
-              placeholder="내용을 입력하세요."
+              onChange={(e) => setQuestionText(e.target.value)}
             />
+          </div>
+
+          <div className="Cms-form-group">
+            <label>이미지:</label>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
 
           <div className="Cms-form-group">
