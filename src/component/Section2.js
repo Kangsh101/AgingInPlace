@@ -34,6 +34,49 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
 
   const handleNextClick = () => {
     if (isFormComplete()) {
+      const usernameRegex = /^[a-z0-9_-]{5,20}$/; 
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
+      const nameRegex = /^[a-zA-Z가-힣\s]{2,50}$/; // 이름: 영문, 한글, 공백만 허용 (2~50자)
+
+      if (!nameRegex.test(userData.name)) {
+        alert('이름에는 숫자가 포함될 수 없습니다. 올바른 이름을 입력하세요.');
+        return;
+      }
+
+      if (!usernameRegex.test(userData.username)) {
+        alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.');
+        return;
+      }
+
+      if (!passwordRegex.test(userData.password)) {
+        alert('비밀번호는 8~16자의 영문과 숫자를 각각 최소 1개 이상 포함해야 합니다.');
+        return;
+      }
+
+      if (userData.password !== userData.confirmPassword) {
+        alert('비밀번호와 비밀번호 확인이 틀립니다. 다시 확인해주세요.');
+        return;
+      }
+  
+      if (isPatient) {
+        if (!patientHeight || !patientWeight) {
+          alert('키와 몸무게를 모두 입력해주세요.');
+          return;
+        }
+  
+        const heightValue = parseFloat(patientHeight);
+        const weightValue = parseFloat(patientWeight);
+  
+        if (isNaN(heightValue) || heightValue < 100 || heightValue > 250) {
+          alert('키는 100 ~ 250 사이의 숫자만 입력할 수 있으며, 소수점 첫째 자리까지 입력 가능합니다.');
+          return;
+        }
+  
+        if (isNaN(weightValue) || weightValue < 10 || weightValue > 200) {
+          alert('몸무게는 10 ~ 200 사이의 숫자만 입력할 수 있으며, 소수점 첫째 자리까지 입력 가능합니다.');
+          return;
+        }
+      }
       if (!emailId || !emailDomain || (showCustomDomain && !customDomain)) {
         alert('이메일을 입력하거나 옵션을 선택하세요.');
         return;
@@ -155,7 +198,7 @@ const Section2 = ({ userData, handleInputChange, handleNext }) => {
     })
     .catch(error => {
       console.error('오류:', error);
-      alert('확인 과정에서 오류가 발생했습니다.');
+      alert('일치하는 환자가 없습니다.');
     });
   };
   
