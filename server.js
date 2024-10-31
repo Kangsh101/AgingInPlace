@@ -397,7 +397,7 @@ app.get('/api/android/cist_score', (req, res) => {
 
   // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
   connection.query(
-    "SELECT mmse FROM cist_patientdata WHERE member_id = ?;",
+    "SELECT mmse FROM cms_patientdata WHERE member_id = ?;",
     [userId], // userId 값을 플레이스홀더에 전달
     (err, rows, fields) => {
       if (err) {
