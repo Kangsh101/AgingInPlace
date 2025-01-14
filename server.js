@@ -390,6 +390,39 @@ app.post('/api/android/signup', (req, res) => {
 });
 });
 
+//cist 점수 android
+app.get('/api/android/cist_score', (req, res) => {
+  // 쿠키에서 사용자 ID를 추출합니다.
+  const userId = req.cookies.userId;
+
+  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보를 가져옵니다.
+  connection.query(
+    "SELECT mmse FROM mmse_score WHERE member_id = ?;",
+    [userId], // userId 값을 플레이스홀더에 전달
+    (err, rows, fields) => {
+      if (err) {
+        console.error('회원 정보 조회 실패: ' + err.stack);
+        res.status(500).json({ error: '회원 정보 조회 실패' }); // JSON 형식으로 오류 응답
+        return;
+      }
+
+      if (rows.length === 0) {
+        console.error('사용자 정보가 없습니다.');
+        res.status(404).json({ error: '사용자 정보가 없습니다.' }); // JSON 형식으로 오류 응답
+        return;
+      }
+
+      // 조회된 사용자 정보를 JSON 형식으로 응답
+      const cist_patientdata = rows[0];
+      const cistPatientScore = {
+        mmse : cist_patientdata.mmse,
+      };
+      res.status(200).json(cistPatientScore); // JSON 형식으로 사용자 정보 응답
+    }
+  );
+});
+
+
 
 // 안드로이드 사용자 정보 가져오기
 app.get('/api/android/userinfo', (req, res) => {
@@ -427,6 +460,7 @@ app.get('/api/android/userinfo', (req, res) => {
     }
   );
 });
+
 
 //CIST question 가져오기 모바일
 app.get('/api/android/cist_questions', (req, res) => {
