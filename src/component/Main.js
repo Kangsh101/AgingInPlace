@@ -201,7 +201,7 @@ const Main = () => {
                 <div className="dementia-info-container">
                   {selectedSection === 'whatIsDementia' && (
                   <section className="section">
-                    <img src="/images/cat1.jpg" alt="치매란?" className="centered-image" />
+                    {/* <img src="/images/cat1.jpg" alt="치매란?" className="centered-image" /> */}
                     <h2 className="section-title">치매란?</h2>
                       <p className="section-content">
                       <span className='Main-liFont'>치매(Dementia)</span>는 뇌 기능의 저하로 인해 기억력, 사고력, 언어 능력, 판단력 등의 인지 기능이 점진적으로 악화되는 질환입니다. <br></br>이는 단일 질환이 아니라 여러 가지 원인에 의해 발생하는 다양한 증상의 집합체를 의미합니다. <br></br>치매의 주요 원인으로는 알츠하이머병, 혈관성 치매, 루이소체 치매, 전두측두엽 치매 등이 있습니다.
@@ -300,7 +300,7 @@ const Main = () => {
         </article>
       </section>
       {/* section1 */}
-      <section id="one2" className="spotlight style1 bottom">
+      {/* <section id="one2" className="spotlight style1 bottom">
         <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
         <AnimatedContent2 ref={section1Ref} className={animationAdded1 ? 'animation' : ''}>
           
@@ -325,12 +325,12 @@ const Main = () => {
           </div>
         </div>
         </AnimatedContent2>
-        {/* <a href="#two" className="goto-next scrolly">Next</a> */}
-      </section>
-      
+       
+      </section> */}
+       {/* <a href="#two" className="goto-next scrolly">Next</a> */}
       {/* section2 */}
       
-      <section id="one" className="spotlight2 style1 bottom">
+      {/* <section id="one" className="spotlight2 style1 bottom">
         <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
         <AnimatedContent3 ref={section2Ref} className={animationAdded2 ? 'animation' : ''}>
           
@@ -358,8 +358,9 @@ const Main = () => {
         </div>
         
         </AnimatedContent3>
+      
+      </section> */}
         {/* <a href="#two" className="goto-next scrolly">Next</a> */}
-      </section>
       {/* section2 */}
        {/* <section id="two" className="spotlight style2 right">
         <span className="image fit main"><img src="/images/cat03.jpg"/></span>

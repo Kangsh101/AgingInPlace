@@ -104,6 +104,38 @@
   border-radius: 3px;
   font-weight: bold;
 }
+.content-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.video-description-wrapper {
+  flex: 0 1 300px; /* 최소 300px, 필요 시 늘어남 */
+  max-width: 300px; /* 최대 너비 제한 */
+}
+
+.video-box iframe {
+  width: 100%; /* 부모 요소에 맞춤 */
+  height: 180px; /* 비율에 맞춘 높이 */
+}
+
+.video-description-wrapper.single-video .video-box iframe {
+  width: 80%; /* 단일 동영상일 경우 크기 축소 */
+  height: 200px;
+}
+.category-filter {
+  margin-bottom: 20px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+.description-css{
+  font-weight: 500;
+}
+
+
 
 @media screen and (max-width: 730px) {
   .content-title {
