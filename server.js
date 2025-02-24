@@ -1847,56 +1847,139 @@ app.get('/api/getUserDetails', (req, res) => {
 });
 
 // 진단명 목록 보여주기 엔드포인트
+// 기존 /api/getPatientDetails 엔드포인트에서
 app.get('/api/getPatientDetails', (req, res) => {
   const userId = req.session.userId;
 
   connection.query('SELECT role, patientId FROM members WHERE id = ?', [userId], (err, userResults) => {
       if (err) {
           console.error('사용자 정보 조회 실패:', err);
-          res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
-      } else if (userResults.length === 0) {
-          res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
-      } else {
-          const userRole = userResults[0].role;
-          const patientId = userRole === '보호자' ? userResults[0].patientId : userId;
+          return res.status(500).json({ message: '사용자 정보 조회 실패', error: err });
+      } 
+      if (userResults.length === 0) {
+          return res.status(404).json({ message: '사용자 정보를 찾을 수 없습니다.' });
+      }
 
-          // 환자 정보 가져오기
-          connection.query('SELECT name AS patientName FROM members WHERE id = ?', [patientId], (err, patientResults) => {
-              if (err || patientResults.length === 0) {
-                  console.error('환자 이름 조회 실패:', err);
-                  res.status(500).json({ message: '환자 이름 조회 실패', error: err });
-              } else {
-                  const patientName = patientResults[0].patientName;
+      const userRole = userResults[0].role;
+      const patientId = (userRole === '보호자') ? userResults[0].patientId : userId;
 
-                  // 진단명 가져오기
-                  connection.query('SELECT id, diagnosis AS name FROM diagnoses WHERE patient_id = ?', [patientId], (err, diagnosesResults) => {
-                      if (err) {
-                          console.error('진단명 조회 실패:', err);
-                          res.status(500).json({ message: '진단명 조회 실패', error: err });
+      // 환자 이름 가져오기
+      connection.query('SELECT name AS patientName FROM members WHERE id = ?', [patientId], (err, patientResults) => {
+          if (err || patientResults.length === 0) {
+              console.error('환자 이름 조회 실패:', err);
+              return res.status(500).json({ message: '환자 이름 조회 실패', error: err });
+          }
+
+          const patientName = patientResults[0].patientName;
+
+          // 진단명 가져오기
+          connection.query('SELECT id, diagnosis AS name FROM diagnoses WHERE patient_id = ?', [patientId], (err, diagnosesResults) => {
+              if (err) {
+                  console.error('진단명 조회 실패:', err);
+                  return res.status(500).json({ message: '진단명 조회 실패', error: err });
+              }
+
+              // 약물(여기에 alarm_time 포함) 가져오기
+              connection.query('SELECT id, medication, dosage, frequency, alarm_time FROM medications WHERE patient_id = ?', [patientId], (err, medicationsResults) => {
+                  if (err) {
+                      console.error('약물 조회 실패:', err);
+                      return res.status(500).json({ message: '약물 조회 실패', error: err });
+                  }
+
+                  // alarm_time이 JSON 형태로 저장되어 있으니 파싱
+                  medicationsResults.forEach(med => {
+                      if (med.alarm_time) {
+                          try {
+                              med.alarm_time = JSON.parse(med.alarm_time);
+                          } catch (e) {
+                              // 파싱 오류 시 빈 배열로 처리
+                              med.alarm_time = [];
+                          }
                       } else {
-                          // 약물 가져오기
-                          connection.query('SELECT id, medication, dosage, frequency FROM medications WHERE patient_id = ?', [patientId], (err, medicationsResults) => {
-                              if (err) {
-                                  console.error('약물 조회 실패:', err);
-                                  res.status(500).json({ message: '약물 조회 실패', error: err });
-                              } else {
-                                  const patientDetails = {
-                                      patientName: patientName,
-                                      diagnoses: diagnosesResults,
-                                      medications: medicationsResults
-                                  };
-
-                                  res.status(200).json(patientDetails);
-                              }
-                          });
+                          med.alarm_time = [];
                       }
                   });
-              }
+
+                  const patientDetails = {
+                      patientName: patientName,
+                      diagnoses: diagnosesResults,
+                      medications: medicationsResults
+                  };
+
+                  res.status(200).json(patientDetails);
+              });
           });
-      }
+      });
   });
 });
+// 예: server.js 또는 routes/medication.js 등
+app.put('/api/updateMedication', async (req, res) => {
+  try {
+    const { medicationId, medication, dosage, frequency, alarm_time } = req.body;
 
+    // alarm_time을 DB에 문자열(JSON)로 저장하는 예시 (MySQL 가정)
+    // alarm_time: ["15:00","20:00"] 형태라면 JSON.stringify(alarm_time)는 '["15:00","20:00"]'
+    const alarmTimeString = JSON.stringify(alarm_time);
+
+    // DB 업데이트 예시 (MySQL)
+    const sql = `
+      UPDATE medications
+      SET medication = ?, dosage = ?, frequency = ?, alarm_time = ?
+      WHERE id = ?
+    `;
+
+    await db.query(sql, [medication, dosage, frequency, alarmTimeString, medicationId]);
+
+    res.json({ success: true, message: '약물 정보가 성공적으로 수정되었습니다.' });
+  } catch (error) {
+    console.error('약물 수정 에러:', error);
+    res.status(500).json({ success: false, message: '약물 수정에 실패했습니다.' });
+  }
+});
+
+app.put('/api/updateDiagnosis', async (req, res) => {
+  try {
+    const { diagnosisId, name } = req.body;
+
+    // DB 업데이트 예시 (MySQL)
+    const sql = `
+      UPDATE diagnoses
+      SET name = ?
+      WHERE id = ?
+    `;
+    await db.query(sql, [name, diagnosisId]);
+
+    res.json({ success: true, message: '진단명이 성공적으로 수정되었습니다.' });
+  } catch (error) {
+    console.error('진단 수정 에러:', error);
+    res.status(500).json({ success: false, message: '진단 수정에 실패했습니다.' });
+  }
+});
+
+
+// server.js
+app.put('/api/medications2/:id', (req, res) => {
+  const medId = req.params.id;
+  const { medication, dosage, frequency, alarm_time } = req.body;
+  // alarm_time은 ["HH:MM:SS", "HH:MM:SS"] 형태의 배열
+  
+  const alarmTimeJson = JSON.stringify(alarm_time); // 문자열화
+  
+  const query = `
+    UPDATE medications
+    SET medication = ?, dosage = ?, frequency = ?, alarm_time = ?
+    WHERE id = ?
+  `;
+  const values = [medication, dosage, frequency, alarmTimeJson, medId];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error('약물 수정 실패:', error);
+      return res.status(500).json({ message: '약물 수정 실패', error });
+    }
+    return res.status(200).json({ message: '약물이 성공적으로 수정되었습니다.' });
+  });
+});
 
 // 진단명 추가 API
 app.post('/api/addDiagnosisByAdmin', (req, res) => {
@@ -1925,20 +2008,23 @@ app.post('/api/addMedicationsByAdmin', (req, res) => {
     VALUES ?
   `;
 
-  const values = medications.map(med => [
-    patientId,
-    med.name,
-    med.dosage,
-    med.frequency,
-    med.alarmTime,
-    enteredBy
-  ]);
+  const values = medications.map(med => {
+    const alarmTimesJson = JSON.stringify(med.alarmTimes);
+
+    return [
+      patientId,
+      med.name,
+      med.dosage,
+      med.frequency,
+      alarmTimesJson, 
+      enteredBy
+    ];
+  });
 
   connection.query(query, [values], (error, results) => {
     if (error) {
       console.error('Error adding medications:', error);
-      res.status(500).json({ message: 'Error adding medications', error });
-      return;
+      return res.status(500).json({ message: 'Error adding medications', error });
     }
     res.status(200).json({ message: 'Medications added successfully' });
   });
@@ -2013,20 +2099,84 @@ app.get('/api/patient/:id/diagnoses', (req, res) => {
   });
 });
 
+app.put('/api/medications/:id', (req, res) => {
+  const medId = req.params.id;
+  const { name, dosage, frequency, alarmTimes } = req.body;
+  // alarmTimes = ["08:00:00","13:00:00"] 처럼 문자열 배열
+
+  // DB에 JSON 형태로 저장
+  const alarm_time_json = JSON.stringify(alarmTimes);
+
+  const query = `
+    UPDATE medications
+    SET medication = ?, dosage = ?, frequency = ?, alarm_time = ?
+    WHERE id = ?
+  `;
+  const values = [name, dosage, frequency, alarm_time_json, medId];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error updating medication:', error);
+      return res.status(500).json({ message: 'Error updating medication', error });
+    }
+    return res.status(200).json({ message: 'Medication updated successfully' });
+  });
+});
+
+
 // 환자의 복용약물 목록 가져오기
+// 약물 목록 조회
 app.get('/api/patient/:id/medications', (req, res) => {
   const patientId = req.params.id;
 
-  const query = 'SELECT id, medication as name, dosage, frequency FROM medications WHERE patient_id = ?';
+  // alarm_time 컬럼까지 함께 SELECT
+  const query = `
+    SELECT 
+      id, 
+      medication AS name, 
+      dosage, 
+      frequency, 
+      alarm_time 
+    FROM medications 
+    WHERE patient_id = ?
+  `;
   connection.query(query, [patientId], (err, results) => {
     if (err) {
       console.error('Error fetching medications:', err);
-      res.status(500).send('Error fetching medications');
-      return;
+      return res.status(500).send('Error fetching medications');
     }
+    // 그대로 JSON 배열로 응답
     res.json(results);
   });
 });
+
+
+// 약물 수정 API 예시
+app.put('/api/medications/:id', (req, res) => {
+  const medId = req.params.id;
+  const { name, dosage, frequency, alarmTimes } = req.body; 
+  // alarmTimes는 ["08:00:00","13:00:00"] 처럼 문자열 배열이라 가정
+
+  // JSON으로 DB에 저장 (예: TEXT 컬럼)
+  const alarm_time_json = JSON.stringify(alarmTimes);
+
+  const query = `
+    UPDATE medications
+    SET medication = ?, dosage = ?, frequency = ?, alarm_time = ?
+    WHERE id = ?
+  `;
+  const values = [name, dosage, frequency, alarm_time_json, medId];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error updating medication:', error);
+      return res.status(500).json({ message: 'Error updating medication', error });
+    }
+    return res.status(200).json({ message: 'Medication updated successfully' });
+  });
+});
+
+
 // 진단명 삭제
 app.delete('/api/diagnoses/:id', (req, res) => {
   const diagnosisId = req.params.id;
