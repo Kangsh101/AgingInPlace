@@ -340,21 +340,21 @@ function DiagnosisList({ onAddClick }) {
                           placeholder="시"
                           value={alarm.hour}
                           onChange={(e) => handleAlarmChange(i, 'hour', e.target.value)}
-                          style={{ width: '50px' }}
+                          style={{ width: '70px',border:'solid 1px' }}
                         />
                         <input
                           type="number"
                           placeholder="분"
                           value={alarm.minute}
                           onChange={(e) => handleAlarmChange(i, 'minute', e.target.value)}
-                          style={{ width: '50px', marginLeft: '5px' }}
+                          style={{ width: '70px',border:'solid 1px', marginLeft: '5px' }}
                         />
                         <input
                           type="number"
                           placeholder="초"
                           value={alarm.second}
                           onChange={(e) => handleAlarmChange(i, 'second', e.target.value)}
-                          style={{ width: '50px', marginLeft: '5px' }}
+                          style={{ width: '70px',border:'solid 1px',marginLeft: '5px' }}
                         />
                       </div>
                     ))}

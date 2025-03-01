@@ -1928,7 +1928,7 @@ app.put('/api/updateMedication', async (req, res) => {
       WHERE id = ?
     `;
 
-    await db.query(sql, [medication, dosage, frequency, alarmTimeString, medicationId]);
+    await connection.query(sql, [medication, dosage, frequency, alarmTimeString, medicationId]);
 
     res.json({ success: true, message: '약물 정보가 성공적으로 수정되었습니다.' });
   } catch (error) {
@@ -1947,7 +1947,7 @@ app.put('/api/updateDiagnosis', async (req, res) => {
       SET name = ?
       WHERE id = ?
     `;
-    await db.query(sql, [name, diagnosisId]);
+    await connection.query(sql, [name, diagnosisId]);
 
     res.json({ success: true, message: '진단명이 성공적으로 수정되었습니다.' });
   } catch (error) {
