@@ -160,7 +160,7 @@ const Main = () => {
 
             <p>
               <a 
-                href="/대상자 교육자료_0113,2025.pdf" 
+                href="/AgingInPlacde.pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
