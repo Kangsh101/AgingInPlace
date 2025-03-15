@@ -158,6 +158,10 @@ const Main = () => {
             가정에서 더 건강한 삶을 위한 도구, 팁, 지원을 탐색해보세요.</p>
             <p>자신감과 편안함을 가지고 독립적으로 생활할 수 있도록 도와드립니다.</p>
 
+            <p>
+              <a href="/대상자 교육자료_0113,2025.pdf" target="_blank" rel="noopener noreferrer"> <h4 id="BaroGOGO">대상자 교육자료 바로가기 [Click]</h4></a>
+            </p>
+
             <footer>
               <ul className="buttons stacked">
                 <li>
@@ -299,125 +303,7 @@ const Main = () => {
           </div>
         </article>
       </section>
-      {/* section1 */}
-      {/* <section id="one2" className="spotlight style1 bottom">
-        <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
-        <AnimatedContent2 ref={section1Ref} className={animationAdded1 ? 'animation' : ''}>
-          
-        <div className="content" ref={content1Ref} style={{ display: 'none' }}>
-          <div className="container">
-            <div className="row">
-              <div className="col-4 col-12-medium">
-                <header>
-                  <h2>치매 콘텐츠 1</h2>
-                  <p>Nascetur eu nibh vestibulum amet gravida nascetur praesent</p>
-                </header>
-              </div>
-              <div className="col-4 col-12-medium">
-                <p>Feugiat accumsan lorem eu ac lorem amet sed accumsan donec.
-                  Blandit orci porttitor semper. Arcu phasellus tortor enim mi</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <p>Morbi enim nascetur et placerat lorem sed iaculis neque ante
-                  adipiscing adipiscing metus massa. Blandit orci porttitor semper.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        </AnimatedContent2>
-       
-      </section> */}
-       {/* <a href="#two" className="goto-next scrolly">Next</a> */}
-      {/* section2 */}
       
-      {/* <section id="one" className="spotlight2 style1 bottom">
-        <span className="image fit main"><img src="/public/images/cat03.jpg"></img></span>
-        <AnimatedContent3 ref={section2Ref} className={animationAdded2 ? 'animation' : ''}>
-          
-        <div className="content" ref={content2Ref} style={{ display: 'none' }}>
-
-          <div className="container">
-            <div className="row">
-              <div className="col-4 col-12-medium">
-                <header>
-                  <h2>치매 콘텐츠</h2>
-                  <p>eqweqeqeqweㄷㅂ짇ㅂㅈ딥</p>
-                </header>
-              </div>
-              <div className="col-4 col-12-medium">
-                <p>내용123</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <p>내용 3213123131
-                  dasdaadadadasda
-                  dadasd321ㅇㅁㄴㅇㅁㅇㅁㅇㅁㅇㅁㅇㅇdada<p>dadasdasd</p></p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        
-        </AnimatedContent3>
-      
-      </section> */}
-        {/* <a href="#two" className="goto-next scrolly">Next</a> */}
-      {/* section2 */}
-       {/* <section id="two" className="spotlight style2 right">
-        <span className="image fit main"><img src="/images/cat03.jpg"/></span>
-        <AnimatedContent3 ref={section2Ref} className={animationAdded2 ? 'animation' : ''}>
-        <div className="content" ref={content2Ref} style={{ display: 'none' }}>
-          <header>
-            <h2>Interdum </h2>
-            <p>Nunc commodo</p>
-          </header>
-          <p>Feugiat</p>
-          <ul className="actions">
-            <li><a href="#" className="button">Learn More</a></li>
-          </ul>
-        </div>
-        </AnimatedContent3>
-        <a href="#three" className="goto-next scrolly">Next</a>
-      </section> */}
- 
-
-      {/* section3 */}
-      {/* <section id="three" className="spotlight style3 left">
-        <span className="image fit main bottom"></span>
-        <div className="content">
-          <header>
-            <h2>Interdum felis blandit praesent sed augue</h2>
-            <p>Accumsan integer ultricies aliquam vel massa sapien phasellus</p>
-          </header>
-          <p>Feugep aliquet augue varius tempus lobortis porttitor lorem et accumsan consequat adipiscing lorem.</p>
-          <ul className="actions">
-            <li><a href="#" className="button">Learn More</a></li>
-          </ul>
-        </div>
-        <a href="#four" className="goto-next scrolly">Next</a>
-      </section> */}
-
-      {/* section4 */}
-      
-     
-
-      {/* Five */}
-      {/* <section id="five" className="wrapper style2 special fade">
-        <div className="container">
-          <header>
-            <h2>Magna faucibus lorem diam</h2>
-            <p>Ante metus praesent faucibus ante integer id accumsan eleifend</p>
-          </header>
-          <form method="post" action="#" className="cta">
-            <div className="row gtr-uniform gtr-50">
-              <div className="col-8 col-12-xsmall"><input type="email" name="email" id="email" placeholder="Your Email Address" /></div>
-              <div className="col-4 col-12-xsmall"><input type="submit" value="Get Started" className="fit primary" /></div>
-            </div>
-          </form>
-        </div>
-      </section> */}
-
-      {/* Footer */}
-
       <ScrollTopButton onClick={scrollToTop} visible={showScrollTop}>
         ↑
       </ScrollTopButton>
