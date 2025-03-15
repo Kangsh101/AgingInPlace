@@ -237,7 +237,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
       </div>
 
       {/* 질환 입력 섹션 */}
-      <div className='diagnosis-box' style={{ marginBottom: '20px' }}>
+      <div className='diagnosis-box' style={{ marginBottom: '20px', width: '400px'}}>
         <h4>진단받은 질환</h4>
         {diseases.map((disease, index) => (
           <div key={disease.id} style={{ marginBottom: '8px' }}>
@@ -246,7 +246,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
               placeholder="질환명 입력"
               value={disease.name}
               onChange={(e) => handleDiseaseChange(index, e.target.value)}
-              style={{ width: '200px' }}
+              style={{ width: '16em' }}
             />
             <button
               className='X-Button'
@@ -273,7 +273,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
       </div>
 
       {/* 약물 입력 섹션 */}
-      <div className='diagnosis-box'>
+      <div className='diagnosis-box' style={{width: '400px'}}>
         <h4>복용 중인 약물</h4>
         {medications.map((med, medIndex) => (
           <div
@@ -288,21 +288,21 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
               <label>약명: </label>
               <input
                 type="text"
-                style={{ width: '100px' }}
+                style={{ width: '16em' }}
                 value={med.name}
                 onChange={(e) => handleMedicationChange(medIndex, 'name', e.target.value)}
               />
               <label style={{ marginLeft: '10px' }}>용량: </label>
               <input
                 type="text"
-                style={{ width: '80px' }}
+                style={{ width: '16em' }}
                 value={med.dosage}
                 onChange={(e) => handleMedicationChange(medIndex, 'dosage', e.target.value)}
               />
               <label style={{ marginLeft: '10px' }}>횟수: </label>
               <input
                 type="text"
-                style={{ width: '50px' }}
+                style={{ width: '16em' }}
                 value={med.frequency}
                 onChange={(e) => handleMedicationChange(medIndex, 'frequency', e.target.value)}
               />
@@ -318,7 +318,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
             <div>
               <strong>알람 시간</strong>
               {med.alarmTimes.map((alarm, aIndex) => (
-                <div key={alarm.id} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                <div key={alarm.id} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' ,marginbottom:'5px'}}>
                   <input
                     type="number"
                     placeholder="시"
@@ -326,7 +326,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                     max="24"
                     value={alarm.hour}
                     onChange={(e) => handleAlarmTimeChange(medIndex, alarm.id, 'hour', e.target.value)}
-                    style={{ width: '50px' }}
+                    style={{ width: '70px', border: '1px solid' }}
                   /> : 
                   <input
                     type="number"
@@ -335,7 +335,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                     max="59"
                     value={alarm.minute}
                     onChange={(e) => handleAlarmTimeChange(medIndex, alarm.id, 'minute', e.target.value)}
-                    style={{ width: '50px', marginLeft: '5px' }}
+                    style={{width: '70px', border: '1px solid',marginLeft: '5px' }}
                   /> : 
                   <input
                     type="number"
@@ -344,7 +344,7 @@ function AddDiagnosis({ isGuardian = true, onCancel }) {
                     max="59"
                     value={alarm.second}
                     onChange={(e) => handleAlarmTimeChange(medIndex, alarm.id, 'second', e.target.value)}
-                    style={{ width: '50px', marginLeft: '5px' }}
+                    style={{ width: '70px', border: '1px solid',marginLeft: '5px' }}
                   />
                   <button
                     className='X-Button'

@@ -357,7 +357,8 @@ const PatientDiagnosisList = ({ userRole }) => {
                               style={{ 
                                 display: 'flex', 
                                 gap: '5px', 
-                                marginTop: '5px' 
+                                marginTop: '5px' ,
+                                marginBottom: '10px'
                               }}
                             >
                               <input
@@ -367,7 +368,7 @@ const PatientDiagnosisList = ({ userRole }) => {
                                 max="24"
                                 value={alarm.hour}
                                 onChange={(e) => handleChangeAlarm(idx, 'hour', e.target.value)}
-                                style={{ width: '50px' }}
+                                style={{ width: '70px', border: '1px solid' }}
                               />
                               :
                               <input
@@ -377,7 +378,7 @@ const PatientDiagnosisList = ({ userRole }) => {
                                 max="59"
                                 value={alarm.minute}
                                 onChange={(e) => handleChangeAlarm(idx, 'minute', e.target.value)}
-                                style={{ width: '50px' }}
+                                style={{ width: '70px', border: '1px solid'}}
                               />
                               :
                               <input
@@ -387,7 +388,7 @@ const PatientDiagnosisList = ({ userRole }) => {
                                 max="59"
                                 value={alarm.second}
                                 onChange={(e) => handleChangeAlarm(idx, 'second', e.target.value)}
-                                style={{ width: '50px' }}
+                                style={{ width: '70px',border: '1px solid'}}
                               />
                               <button
                                 className='X-Button'

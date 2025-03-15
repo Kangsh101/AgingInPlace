@@ -385,7 +385,7 @@ const PatientDetail = ({ userRole }) => {
                           onChange={(e) =>
                             handleAlarmTimeChange(medIndex, alarm.id, 'hour', e.target.value)
                           }
-                          style={{ width: '50px' }}
+                          style={{ width: '70px', border: '1px solid' }}
                         />
                         <span>:</span>
                         <input
@@ -397,7 +397,7 @@ const PatientDetail = ({ userRole }) => {
                           onChange={(e) =>
                             handleAlarmTimeChange(medIndex, alarm.id, 'minute', e.target.value)
                           }
-                          style={{ width: '50px', marginLeft: '5px' }}
+                          style={{ width: '70px', border: '1px solid', marginLeft: '5px' }}
                         />
                         <span>:</span>
                         <input
@@ -409,7 +409,7 @@ const PatientDetail = ({ userRole }) => {
                           onChange={(e) =>
                             handleAlarmTimeChange(medIndex, alarm.id, 'second', e.target.value)
                           }
-                          style={{ width: '50px', marginLeft: '5px' }}
+                          style={{ width: '70px', border: '1px solid', marginLeft: '5px' }}
                         />
                         <button
                           className="X-Button"
