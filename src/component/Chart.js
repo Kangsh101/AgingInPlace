@@ -24,7 +24,7 @@ const ChartComponent = () => {
 
   const fetchCalorieData = async () => {
     try {
-      const response = await axios.post('/chart/calories', { username: 'Lee' });
+      const response = await axios.post('/chart/calories2', { username: 'Lee' });
       const activityData = response.data;
 
       const chartData = {

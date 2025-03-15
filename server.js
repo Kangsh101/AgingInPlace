@@ -12,6 +12,11 @@ const qs = require('qs');
 const path = require('path');
 const app = express();
 
+
+const pdfRoutes = require('./routes_down/pdfRoutes');
+
+app.use('/api', pdfRoutes);
+
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     cb(null, 'uploads/')
@@ -136,6 +141,7 @@ const generateTemporaryPassword = (length = 8) => {
       });
     });
   });
+
 
 app.post('/api/signup', (req, res) => {
   const {
@@ -723,6 +729,22 @@ app.get('/api/cmsusers', (req, res) => {
     }
   );
 });
+
+// 관리자 페이지에 환자정보만 가져오기(Download)
+app.get('/api/cmsusers/0315', (req, res) => {
+  connection.query(
+    "SELECT id, username, email, name, birthdate, gender, phoneNumber, role, joinDate FROM members WHERE role = '환자'",
+    (err, rows, fields) => {
+      if (err) {
+        console.error('사용자 정보 조회 실패: ' + err.stack);
+        res.status(500).send('사용자 정보 조회 실패');
+        return;
+      }
+      res.json(rows);
+    }
+  );
+});
+
 // 진단명 추가 환자만 가져오는 api
 app.get('/api/cmsusersAdd', (req, res) => {
   const query = `
@@ -2544,6 +2566,21 @@ app.delete('/api/user/:userId/questions', (req, res) => {
   });
 });
 
+
+app.post('/chart/calories2', async (req, res) => {
+
+  try {
+    const response = await axios.post('http://3.39.236.95:8080/downloadCsv/activityUsername', qs.stringify({ username }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data from Java API server:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error fetching data from Java API server' });
+  }
+});
 
 
 app.post('/chart/calories', async (req, res) => {

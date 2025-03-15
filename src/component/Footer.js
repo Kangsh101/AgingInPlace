@@ -12,7 +12,6 @@ const Footer = ({ userRole }) => {
       <ul className="copyright">
         <li><Link to="/footerms">&copy; 이용약관</Link></li>
         <li><Link to="/fooprivacypolicy">개인정보처리방침</Link></li>
-        <li><Link to="/foonoemailcollection">이메일 무단 수집거부</Link></li>
         {(userRole === 'admin' || userRole === 'doctor') && (
           <li><Link to="/cms">관리자</Link></li>
         )}

@@ -159,7 +159,13 @@ const Main = () => {
             <p>자신감과 편안함을 가지고 독립적으로 생활할 수 있도록 도와드립니다.</p>
 
             <p>
-              <a href="/대상자 교육자료_0113,2025.pdf" target="_blank" rel="noopener noreferrer"> <h4 id="BaroGOGO">대상자 교육자료 바로가기 [Click]</h4></a>
+              <a 
+                href="/대상자 교육자료_0113,2025.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <h4 id="BaroGOGO">대상자 교육자료 바로가기 [Click]</h4>
+              </a>
             </p>
 
             <footer>
