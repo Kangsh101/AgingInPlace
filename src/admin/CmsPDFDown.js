@@ -5,16 +5,15 @@ import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
 import CmsNavipanel from './CmsNavipanel';
 
-function handleFormDownload(name) {
+function handleFormDownloadActivity(name) {
   const form = document.createElement('form');
   form.method = 'POST';
-
   form.action = 'http://3.39.236.95:8080/downloadCsv/activityUsername';
 
   const input = document.createElement('input');
   input.type = 'hidden';
-  input.name = 'name';
-  input.value = name;
+  input.name = 'username';  
+  input.value = name;       
   form.appendChild(input);
 
   document.body.appendChild(form);
@@ -22,16 +21,44 @@ function handleFormDownload(name) {
   document.body.removeChild(form);
 }
 
-function handleFormDownload2(name) {
+function handleFormDownloadSleep(name) {
   const form = document.createElement('form');
   form.method = 'POST';
-
   form.action = 'http://3.39.236.95:8080/downloadCsv/sleepUsername';
 
   const input = document.createElement('input');
   input.type = 'hidden';
-  input.name = 'name';
-  input.value = name;
+  input.name = 'username';  
+  input.value = name;     
+  form.appendChild(input);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
+
+function handleFormDownloadActivityAll() {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'http://3.39.236.95:8080/downloadCsv/activityAll';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+
+  form.appendChild(input);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
+
+function handleFormDownloadSleepAll() {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'http://3.39.236.95:8080/downloadCsv/sleepAll';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
   form.appendChild(input);
 
   document.body.appendChild(form);
@@ -96,7 +123,7 @@ const CmsPDFDown = ({ userRole }) => {
       <div className="cms-main-content">
         <div className="Cmss-header">
           <header className='major' id='major-rest'> 
-            <h2 className='aaaaaa'>사용자 관리</h2>
+            <h2 className='aaaaaa'>환자 정보 다운로드</h2>
           </header>
           <div className="Cmss-options">
             <select className="Cmss-select">
@@ -107,16 +134,33 @@ const CmsPDFDown = ({ userRole }) => {
             <button className="button primary">검색</button>
           </div>
         </div>
+        <button 
+            onClick={(e) => {
+                     e.stopPropagation(); 
+                          handleFormDownloadActivityAll();
+                        }}
+                      >
+                        전체 운동 데이터(Excel) 
+                      </button>
+                      
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          handleFormDownloadSleepAll();
+                        }}
+                      >
+                        전체 수면 데이터(Excel) 
+                      </button>
         <div className="Cmss-content">
           <table>
             <thead>
               <tr>
                 <th>No</th>
-                <th>아이디</th>
+                {/* <th>아이디</th> */}
                 <th>타입</th>
                 <th>성함</th>
-                <th>성별</th>
-                <th>가입일</th>
+                {/* <th>성별</th> */}
+                {/* <th>가입일</th> */}
                 <th>다운로드</th>
               </tr>
             </thead>
@@ -125,36 +169,36 @@ const CmsPDFDown = ({ userRole }) => {
                 <React.Fragment key={user.id}>
                   <tr onClick={() => handleUserClick(index)}>
                     <td>{indexOfFirstPost + index + 1}</td>
-                    <td>{user.username}</td>
+                    {/* <td>{user.username}</td> */}
                     <td>{user.role}</td>
                     <td>{user.name}</td>
-                    <td>{user.gender}</td>
-                    <td>{user.joinDate}</td>
+                    {/* <td>{user.gender}</td> */}
+                    {/* <td>{user.joinDate}</td> */}
                     <td>
                       <button 
                         onClick={() => window.location.href = `/api/download-pdf/${user.id}`}
                       >
-                        PDF 다운로드 
+                        환자 정보(PDF) 
                       </button>
 
                       <button 
                         onClick={(e) => {
                           e.stopPropagation(); 
-                          handleFormDownload(user.name);
+                          handleFormDownloadActivity(user.name);
                         }}
                       >
-                        PDF 다운로드(운동량) 
+                        운동 데이터(Excel) 
                       </button>
 
                       <button 
                         onClick={(e) => {
                           e.stopPropagation(); 
-                          handleFormDownload2(user.name);
+                          handleFormDownloadSleep(user.name);
                         }}
                       >
-                        PDF 다운로드(수면량) 
+                        수면 데이터(Excel) 
                       </button>
-
+                      
 
                     </td>
                   </tr>
