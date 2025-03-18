@@ -3,9 +3,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css/Cms.css';
 import '../css/Cmsuser.css';
 import CmsSidebar from './CmsSidebar';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; 
 import CmsNavipanel from './CmsNavipanel';
-import NotFound from '../component/NotFound';
+
+function handleFormDownload(name) {
+  const form = document.createElement('form');
+  form.method = 'POST';
+
+  form.action = 'http://3.39.236.95:8080/downloadCsv/activityUsername';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'name';
+  input.value = name;
+  form.appendChild(input);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
+
+function handleFormDownload2(name) {
+  const form = document.createElement('form');
+  form.method = 'POST';
+
+  form.action = 'http://3.39.236.95:8080/downloadCsv/sleepUsername';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'name';
+  input.value = name;
+  form.appendChild(input);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
 
 const CmsPDFDown = ({ userRole }) => {
   const [users, setUsers] = useState([]);
@@ -17,7 +49,7 @@ const CmsPDFDown = ({ userRole }) => {
   useEffect(() => {
     fetch('/api/user/role', {
       method: 'GET',
-      credentials: 'include' // 쿠키 및 세션 정보 포함
+      credentials: 'include'
     })
       .then((response) => {
         if (!response.ok) {
@@ -27,7 +59,7 @@ const CmsPDFDown = ({ userRole }) => {
       })
       .then((data) => {
         if (data.role !== 'admin') {
-          navigate('/notfound'); // 관리자만 접근 가능
+          navigate('/notfound');
         }
       })
       .catch((error) => {
@@ -35,7 +67,6 @@ const CmsPDFDown = ({ userRole }) => {
         navigate('/notfound');
       });
   }, [navigate]);
-
 
   useEffect(() => {
     fetch('/api/cmsusers/0315')
@@ -86,11 +117,12 @@ const CmsPDFDown = ({ userRole }) => {
                 <th>성함</th>
                 <th>성별</th>
                 <th>가입일</th>
+                <th>다운로드</th>
               </tr>
             </thead>
             <tbody>
               {currentPosts.map((user, index) => (
-                <React.Fragment key={index}>
+                <React.Fragment key={user.id}>
                   <tr onClick={() => handleUserClick(index)}>
                     <td>{indexOfFirstPost + index + 1}</td>
                     <td>{user.username}</td>
@@ -99,11 +131,32 @@ const CmsPDFDown = ({ userRole }) => {
                     <td>{user.gender}</td>
                     <td>{user.joinDate}</td>
                     <td>
-                    <button onClick={() => window.location.href = `/api/download-pdf/${user.id}`}>
-                       PDF 다운로드
-                    </button>
-                    </td>
+                      <button 
+                        onClick={() => window.location.href = `/api/download-pdf/${user.id}`}
+                      >
+                        PDF 다운로드 
+                      </button>
 
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          handleFormDownload(user.name);
+                        }}
+                      >
+                        PDF 다운로드(운동량) 
+                      </button>
+
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          handleFormDownload2(user.name);
+                        }}
+                      >
+                        PDF 다운로드(수면량) 
+                      </button>
+
+
+                    </td>
                   </tr>
                 </React.Fragment>
               ))}

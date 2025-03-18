@@ -67,17 +67,41 @@ router.get('/download-pdf/:id', (req, res) => {
           alarm_time: m.alarm_time || '[]',
         }));
 
-        // 운동량과 수면 데이터 
         const activityUrl = `http://3.39.236.95:8080/downloadCsv/activityUsername`;
         const sleepUrl = `http://3.39.236.95:8080/downloadCsv/sleepUsername`;
 
         Promise.all([
-          axios.post(activityUrl, { username: patient.name }),
-          axios.post(sleepUrl, { username: patient.name })
+          axios.post(
+            activityUrl,
+            new URLSearchParams({ name: patient.name }),
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+          ),
+          axios.post(
+            sleepUrl,
+            new URLSearchParams({ name: patient.name }),
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+          )
         ])
         .then(([activityResponse, sleepResponse]) => {
-          const activityData = activityResponse.data;
-          const sleepData = sleepResponse.data;
+          // 데이터 없을 때 예외처리
+          let activityData = activityResponse.data;
+          let sleepData = sleepResponse.data;
+
+          if (
+            !activityData ||
+            (Array.isArray(activityData) && activityData.length === 0) ||
+            (typeof activityData === 'string' && activityData.trim() === '')
+          ) {
+            activityData = "측정된 데이터가 없습니다.";
+          }
+
+          if (
+            !sleepData ||
+            (Array.isArray(sleepData) && sleepData.length === 0) ||
+            (typeof sleepData === 'string' && sleepData.trim() === '')
+          ) {
+            sleepData = "측정된 데이터가 없습니다.";
+          }
 
           res.setHeader('Content-Disposition', 'attachment; filename=patientInfo.pdf');
           res.setHeader('Content-Type', 'application/pdf');
@@ -88,18 +112,15 @@ router.get('/download-pdf/:id', (req, res) => {
           });
           doc.pipe(res);
 
-          //한글 폰트 등록
           doc.registerFont(
             'NanumGothicEco',
             path.join(__dirname, '../fonts/NanumGothicEco.otf')
           );
-          doc.font('NanumGothicEco'); 
+          doc.font('NanumGothicEco');
 
           doc.fontSize(20).text('Aging In Place', { align: 'center' });
           doc.moveDown(0.5);
-
           doc.moveDown(1);
-
           doc.fontSize(14).text('환자 정보');
           doc.moveDown(0.7);
           doc.fontSize(12).text(`이름 : ${patient.name}`);
@@ -110,15 +131,13 @@ router.get('/download-pdf/:id', (req, res) => {
           doc.text('-------------------------------------------------------------------------');
           doc.moveDown(1);
 
+          // 진단 및 약물 정보
           doc.fontSize(14).text('진단명 / 약물 정보');
           doc.moveDown(0.7);
-
           doc.fontSize(12).text(`진단명 : ${diagnosisText}`);
           doc.moveDown(1);
-
           doc.fontSize(12).text('약물 정보:');
           doc.moveDown(0.3);
-
           if (
             medicationsData.length === 0 ||
             (medicationsData.length === 1 && medicationsData[0].medication === '없음')
@@ -145,57 +164,25 @@ router.get('/download-pdf/:id', (req, res) => {
           doc.text('-------------------------------------------------------------------------');
           doc.moveDown(1);
 
-          // (4) 운동 / 수면량
           doc.fontSize(14).text('운동 / 수면량');
           doc.moveDown(0.7);
           doc.text('-------------------------------------------------------------------------');
           doc.moveDown(1);
 
-          // 운동량 데이터
           doc.fontSize(12).text('운동 데이터:');
           doc.moveDown(0.5);
-          if (Array.isArray(activityData) && activityData.length > 0) {
-            activityData.forEach((item, idx) => {
-              doc.text(`▶ [${idx + 1}] ID: ${item.id || '-'}`);
-              doc.text(`   이름: ${item.name || '-'}`);
-              doc.text(`   날짜: ${item.birthDate || '-'}`);
-              doc.text(`   활동 칼로리: ${item.calActive || '-'}`);
-              doc.text(`   총 칼로리: ${item.calTotal || '-'}`);
-              doc.text(`   일일 움직임: ${item.dailyMovement || '-'}`);
-              doc.moveDown(1);
-            });
-          } else if (typeof activityData === 'string') {
-            // CSV 형태 그대로 표시
-            doc.text(activityData);
-          } else {
-            doc.text('운동량 데이터가 없습니다.');
-          }
-
+          doc.text(activityData); 
           doc.moveDown(1);
 
-          // 수면 데이터
           doc.fontSize(12).text('수면 데이터:');
           doc.moveDown(0.5);
-          if (Array.isArray(sleepData) && sleepData.length > 0) {
-            sleepData.forEach((item, idx) => {
-              doc.text(`▶ [${idx + 1}] ID: ${item.id || '-'}`);
-              doc.text(`   이름: ${item.name || '-'}`);
-              doc.text(`   취침 시간: ${item.bedTimeStart || '-'}`);
-              doc.text(`   기상 시간: ${item.bedTimeEnd || '-'}`);
-              doc.text(`   호흡 평균: ${item.breathAverage || '-'}`);
-              doc.moveDown(1);
-            });
-          } else if (typeof sleepData === 'string') {
-            doc.text(sleepData);
-          } else {
-            doc.text('수면 데이터가 없습니다.');
-          }
+          doc.text(sleepData); 
 
           doc.end();
         })
         .catch(err => {
           console.error('운동량 또는 수면 데이터 fetch 중 오류 발생: ', err);
-          // PDF가 이미 생성 중이므로 에러 메시지를 PDF에 기록한 후 종료
+          // 에러가 발생해도 PDF를 생성하여 에러 메시지 출력
           res.setHeader('Content-Disposition', 'attachment; filename=patientInfo.pdf');
           res.setHeader('Content-Type', 'application/pdf');
 
