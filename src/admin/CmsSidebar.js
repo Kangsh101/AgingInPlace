@@ -11,7 +11,7 @@ const CmsSidebar = ({ userRole }) => {
     { path: "/CmsPDFDown", label: "환자 정보 다운로드", basePaths: ["/CmsPDFDown"], role: ["admin", "doctor"] },
     { path: "/CmsAdddiagnosis", label: "진단명 추가", basePaths: ["/CmsAdddiagnosis", "/PatientDetail", "/patient"], role: ["admin", "doctor"] },
     { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria","/addpatientcriteria"], role: ["admin", "doctor"] },
-    { path: "/CmsCIST", label: "인지선별검사 추가", basePaths: ["/CmsCIST","/addquestioncist","/QuestionDetailCIST","/question_detail"], role: ["admin", "doctor"] },
+    { path: "/CmsCIST", label: "인지선별검사 문제 관리", basePaths: ["/CmsCIST","/addquestioncist","/QuestionDetailCIST","/question_detail"], role: ["admin", "doctor"] },
     { path: "/CmsQuestionList", label: "인지선별검사 정답", basePaths: ["/CmsQuestionList","/CmsUserQuestions"], role: ["admin", "doctor"] },
   ];
 
@@ -25,7 +25,7 @@ const CmsSidebar = ({ userRole }) => {
 
   return (
     <div className="cms-sidebar">
-      <h2 className='Cms-Aginginplace'>Aging in Place</h2>
+      <h2 className='Cms-Aginginplace'><Link to ="/">Aging in Place</Link></h2>
       <h2 className='CmsSidebar-h2'>관리자</h2>
       <ul>
         {visibleLinks.map((link, index) => (

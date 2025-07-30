@@ -135,7 +135,7 @@ const Passwordppl = () => {
                               name="email"
                               value={email}
                               onChange={handleEmailChange}
-                              placeholder="예) kangsh4969@naver.com"
+                              placeholder="예) ghdrlfehd@naver.com"
                               className="idfield2"
                             />
                           </div>
@@ -153,7 +153,7 @@ const Passwordppl = () => {
                               name="phoneNumber"
                               value={phoneNumber}
                               onChange={handlePhoneChange}
-                              placeholder="예) 01033604963"
+                              placeholder="예) 01012345678"
                               className="idfield2"
                             />
                           </div>

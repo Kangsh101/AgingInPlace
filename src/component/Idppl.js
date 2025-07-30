@@ -123,7 +123,7 @@ const Idppl = () => {
                       <div>
                         <label htmlFor="email" className='idpass-nowrap'>이메일</label>
                         <div className='idemail'>       
-                            <input type='text' id='email' name='email' value={email} onChange={handleEmailChange} placeholder='예) kangsh4969@naver.com' className='idfield2' />
+                            <input type='text' id='email' name='email' value={email} onChange={handleEmailChange} placeholder='예) ghdrlfehd@naver.com' className='idfield2' />
                             {/* <button onClick={handleSendVerificationCode} className='button' id='email-btt'>인증번호 받기</button> */}
                         </div>
                       </div>
@@ -134,7 +134,7 @@ const Idppl = () => {
                       <label htmlFor="phoneNumber" className='idpass-nowrap'>전화번호</label>
                       <div className='idemail2'>
                           
-                          <input type='text' id='phoneNumber' name='phoneNumber' value={phoneNumber} onChange={handlePhoneChange} placeholder='예) 01033604963' className='idfield2' />
+                          <input type='text' id='phoneNumber' name='phoneNumber' value={phoneNumber} onChange={handlePhoneChange} placeholder='예) 01012345678' className='idfield2' />
                           {/* <button onClick={handleSendVerificationCode} className='button' id='email-btt'>인증번호 받기</button> */}
                       </div>
                     </div>

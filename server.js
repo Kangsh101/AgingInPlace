@@ -142,6 +142,40 @@ const generateTemporaryPassword = (length = 8) => {
     });
   });
 
+app.post('/api/findUserPasswordByPhone', (req, res) => {
+  const { name, phoneNumber } = req.body;
+
+  const query = 'SELECT id FROM members WHERE name = ? AND phoneNumber = ?';
+  connection.query(query, [name, phoneNumber], (err, results) => {
+    if (err) {
+      console.error('DB 조회 실패:', err);
+      return res.status(500).json({ message: '서버 오류' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+
+    const userId = results[0].id;
+    const temporaryPassword = generateTemporaryPassword();
+
+    bcrypt.hash(temporaryPassword, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error('비밀번호 해싱 실패:', err);
+        return res.status(500).json({ message: '비밀번호 업데이트 실패' });
+      }
+
+      const updateQuery = 'UPDATE members SET password = ? WHERE id = ?';
+      connection.query(updateQuery, [hashedPassword, userId], (err) => {
+        if (err) {
+          console.error('DB 업데이트 실패:', err);
+          return res.status(500).json({ message: '비밀번호 업데이트 실패' });
+        }
+
+        res.status(200).json({ message: '임시 비밀번호가 발급되었습니다.', temporaryPassword });
+      });
+    });
+  });
+});
 
 app.post('/api/signup', (req, res) => {
   const {
@@ -2647,13 +2681,15 @@ app.post('/chart/rem', async (req, res) => {
   }
 });
 
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 
 const port = 5000;
 app.listen(port, () => {
