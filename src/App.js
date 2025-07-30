@@ -49,6 +49,8 @@ import FooPrivacyPolicy from './component/FooPrivacyPolicy';
 import FooNoEmailCollection from './component/FooNoEmailCollection';
 import FooTerms from './component/FooTerms';
 import CmsQuestionList from './admin/CmsQuestionList';
+import CmsScoreList from './admin/CmsScoreList';
+import CmsAddOfflineScore from './admin/CmsAddOfflineScore';
 import CmsUserQuestions from './admin/CmsUserQuestions';
 import CmsPDFDown from './admin/CmsPDFDown';
 
@@ -143,6 +145,8 @@ const handleLogin = (loginStatus, role) => {
           <Route path="/patient/:id" element={<><CmsNavipanel/><PatientDiagnosisList userRole={userRole} /></>} />
           <Route path="/patient/:id/add-diagnosis" element={<><CmsNavipanel/><PatientDetail userRole={userRole}/></>} />
           <Route path="/CmsQuestionList" element={<><CmsNavipanel/><CmsQuestionList userRole={userRole}/></>} />
+          <Route path="/CmsScoreList" element={<><CmsNavipanel/><CmsScoreList userRole={userRole}/></>} />
+          <Route path="/CmsAddOfflineScore" element={<><CmsNavipanel/><CmsAddOfflineScore userRole={userRole}/></>} />
           <Route path="/CmsPDFDown" element={<><CmsNavipanel/><CmsPDFDown userRole={userRole}/></>} />         
           <Route path="/CmsUserQuestions/:userId" element={<><CmsNavipanel/><CmsUserQuestions userRole={userRole}/></>} />
 

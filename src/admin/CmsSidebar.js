@@ -13,6 +13,7 @@ const CmsSidebar = ({ userRole }) => {
     { path: "/PatientCriteria", label: "환자 수면 / 운동량 추가", basePaths: ["/PatientCriteria","/addpatientcriteria"], role: ["admin", "doctor"] },
     { path: "/CmsCIST", label: "인지선별검사 문제 관리", basePaths: ["/CmsCIST","/addquestioncist","/QuestionDetailCIST","/question_detail"], role: ["admin", "doctor"] },
     { path: "/CmsQuestionList", label: "인지선별검사 정답", basePaths: ["/CmsQuestionList","/CmsUserQuestions"], role: ["admin", "doctor"] },
+    { path: "/CmsScoreList", label: "인지선별검사 점수", basePaths: ["/CmsScoreList","/CmsAddOfflineScore"], role: ["admin", "doctor"] },
   ];
 
   const visibleLinks = allLinks.filter(link => link.role.includes(userRole));

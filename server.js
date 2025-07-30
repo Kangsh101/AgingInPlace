@@ -2600,7 +2600,110 @@ app.delete('/api/user/:userId/questions', (req, res) => {
   });
 });
 
+// ==============================인지선별검사 점수 관리 api =====================================================================================
+// MMSE 점수 등록
+app.post('/api/mmse_score', (req, res) => {
+  const { user_id, username, score, test_type } = req.body;
 
+  if (!user_id || !username || score === undefined) {
+    return res.status(400).json({ error: 'user_id, username, score는 필수입니다.' });
+  }
+
+  const now = new Date();
+
+  const query = `
+    INSERT INTO mmse_score (member_id, username, mmse, test_type, created_at)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  connection.query(query, [user_id, username, score, test_type || 0, now], (err, result) => {
+    if (err) {
+      console.error('DB 오류:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+
+    res.status(201).json({ message: '등록 성공' });
+  });
+});
+
+// 회원 목록 조회
+app.get('/api/members', (req, res) => {
+  const query = 'SELECT id, name, role, id FROM members';
+
+  connection.query(query, (err, rows) => {
+    if (err) {
+      console.error('회원 목록 오류:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+
+    res.json(rows);
+  });
+});
+
+
+// 점수   조회
+app.get('/api/mmse_score', (req, res) => {
+  const query = `
+    SELECT 
+      ms.id,
+      ms.member_id,
+      m.name AS member_name,
+      ms.username,
+      ms.mmse,
+      ms.test_type,
+      ms.created_at
+    FROM mmse_score ms
+    LEFT JOIN members m ON ms.member_id = m.id
+    ORDER BY ms.created_at DESC
+  `;
+
+  connection.query(query, (err, rows) => {
+    if (err) {
+      console.error('DB 오류:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+
+    res.json(rows);
+  });
+});
+
+// 점수 수정 점수만 
+app.put('/api/mmse_score/:id', (req, res) => {
+  const { score } = req.body;
+  const id = req.params.id;
+
+  if (score === undefined || isNaN(score)) {
+    return res.status(400).json({ error: '유효한 점수를 입력하세요.' });
+  }
+
+  const query = 'UPDATE mmse_score SET mmse = ? WHERE id = ?';
+  connection.query(query, [score, id], (err, result) => {
+    if (err) {
+      console.error('수정 실패:', err);
+      return res.status(500).json({ error: 'DB 오류' });
+    }
+
+    res.json({ message: '수정 완료' });
+  });
+});
+
+// 점수 삭제
+app.delete('/api/mmse_score/:id', (req, res) => {
+  const id = req.params.id;
+
+  const query = 'DELETE FROM mmse_score WHERE id = ?';
+
+  connection.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('삭제 실패:', err);
+      return res.status(500).json({ error: 'DB 오류' });
+    }
+
+    res.json({ message: '삭제 완료' });
+  });
+});
+
+//==========================================================================================================================================
 app.post('/chart/calories2', async (req, res) => {
 
   try {
